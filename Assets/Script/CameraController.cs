@@ -1,0 +1,134 @@
+using System;
+using UnityEngine;
+
+public class CameraController : MonoBehaviour
+{
+    public float moveSpeed;
+    public float stopOffsetY;
+
+    //ground check for camera
+    public Transform groundCheckPoint;
+    public LayerMask groundLayer;
+    public float checkRadius = 0.3f;
+
+    private GameObject player;
+    private Rigidbody playerRig;
+    private Vector3 playerPos;
+    private PlayerController playerController;
+    private float delayTimer;
+    private bool leaveGround;
+    private int previousDir;
+    private Vector3 startTarget;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        player = GameObject.FindWithTag("Player");
+        playerRig = player.GetComponent<Rigidbody>();
+        playerController = player.GetComponent<PlayerController>();
+        delayTimer = 0f;
+        previousDir = -1;
+        startTarget = new Vector3(0,0,0);
+        leaveGround = false;
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        FollowPlayer();
+    }
+
+    /*void FollowPlayer()
+    {
+        playerPos = player.transform.position;
+        int dirX = playerController.direction ? 1 : -1;
+        float moveOffsetX = -0.1f * dirX;
+        float stopOffsetX = 0.2f * dirX;
+
+        if(previousDir != playerController.direction) delayTimer = 0f;
+
+        if(playerRig.linearVelocity.x != 0)
+        {
+            if(delayTimer > 0.2f)
+            {  
+                if(Math.Abs(transform.position.x- (playerPos.x+moveOffsetX)) > 0.05f){
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(playerPos.x+moveOffsetX, transform.position.y, transform.position.z), Time.deltaTime*moveSpeed);
+                }
+                else
+                transform.position = new Vector3(playerPos.x+moveOffsetX, transform.position.y, transform.position.z);
+            }
+            else delayTimer += Time.deltaTime;
+        }
+        else if(playerRig.linearVelocity.x == 0)
+        {
+            delayTimer = 0f;
+            if(Math.Abs(transform.position.x- (playerPos.x+stopOffsetX)) > 0.05f)
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(playerPos.x+stopOffsetX, transform.position.y, transform.position.z), Time.deltaTime*moveSpeed);
+            else
+            transform.position = new Vector3(playerPos.x+stopOffsetX, transform.position.y, transform.position.z);
+        }
+
+        previousDir = playerController.direction;
+    }*/
+    void FollowPlayer()
+    {
+        playerPos = player.transform.position;
+        int dirX = playerRig.linearVelocity.x > 0 ? 1 : -1;
+        int dirY = playerRig.linearVelocity.y > 0 ? 1: -1;
+        float offsetY = playerRig.linearVelocity.y * 0.1f;
+        offsetY = offsetY > 0.2f ? 0.2f : offsetY;
+
+        float moveOffsetX = -0.2f * dirX;
+        float stopOffsetX = 0.2f * dirX;
+        float moveOffsetY = offsetY * dirY;
+        
+        if(playerRig.linearVelocity.x != 0)
+        {   
+            Vector3 target = new Vector3(playerPos.x+moveOffsetX, transform.position.y, transform.position.z);
+            float targetX = Mathf.Lerp(transform.position.x, target.x, 0.5f*Time.deltaTime);
+            float targetX2 = Mathf.Lerp(transform.position.x, target.x, 3f*Time.deltaTime); //certain camera following
+            if(Math.Abs(transform.position.x - playerPos.x) > 0.3f) transform.position = new Vector3(targetX2, transform.position.y, transform.position.z);
+            else transform.position = new Vector3(targetX, transform.position.y, transform.position.z);
+        }
+        else if(playerRig.linearVelocity.x == 0)
+        {
+            startTarget = new Vector3(0,0,0);
+            if(Math.Abs(transform.position.x- (playerPos.x+stopOffsetX)) > 0.05f)
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(playerPos.x+stopOffsetX, transform.position.y, transform.position.z), Time.deltaTime*1.5f);
+            else
+            transform.position = new Vector3(playerPos.x+stopOffsetX, transform.position.y, transform.position.z);
+        }
+
+        if(playerRig.linearVelocity.y >= 0.00001 || playerRig.linearVelocity.y <= -0.00001)
+        {   
+            if(delayTimer > 0.2f)
+            {
+                if(!Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer) || leaveGround){
+                    leaveGround = true;
+                    Vector3 target = new Vector3(transform.position.x, playerPos.y+moveOffsetY, transform.position.z);
+                    float targetY = Mathf.Lerp(transform.position.y, target.y, 3f*Time.deltaTime);
+                    float targetY2 = Mathf.Lerp(transform.position.y, target.y, Math.Abs(playerRig.linearVelocity.y)*2f *Time.deltaTime);
+                    if(Math.Abs(transform.position.y - playerPos.y) > 0.21f) transform.position = new Vector3(transform.position.x, targetY2, transform.position.z);  
+                    else transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+                }
+            }
+            else delayTimer += Time.deltaTime;
+        }
+        else
+        {
+            delayTimer = 0;
+            leaveGround = false;
+            if(Math.Abs(transform.position.y- (playerPos.y+stopOffsetY)) > 0.005f)
+            {
+                float targetY = Mathf.Lerp(transform.position.y, playerPos.y+stopOffsetY, 3f*Time.deltaTime);
+                transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+            }
+            else{
+                transform.position = new Vector3(transform.position.x, playerPos.y+stopOffsetY, transform.position.z);
+            }
+        }
+        print(playerRig.linearVelocity.y);
+
+        //previousDir = playerRig.linearVelocity.y > 0? 1:-1;
+    }
+}
