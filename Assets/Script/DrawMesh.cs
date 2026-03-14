@@ -1,21 +1,30 @@
 using UnityEngine;
 using MouseInput;
+using UnityEngine.ProBuilder;
+using UnityEngine.ProBuilder.MeshOperations;
+using System.Collections.Generic;
+using System.Linq;
 
 public class DrawMesh : MonoBehaviour
 {
     public bool isComplete;
     public float existTime = 4.0f;
+    public float depth = 0.5f;
+    public CameraController cameraController;
 
     private Mesh mesh;
     private Vector3 lastMousePosition;
     private float smooth = 0.1f;
     private float sensitivity = 1000f;
     private float totalDistance = 0f;
-    private float currentThickness = 0.5f;
+    private float currentThickness = 0.01f;
     private bool isAct;
     private float timer;
     private GameObject particleSystem;
     [SerializeField] private float uvTiling = 2f; //貼圖重複度
+    private bool isExtrude;
+    private bool eligibleExtrude;
+    private bool canExtrude;
 
     private void Start()
     {
@@ -23,11 +32,20 @@ public class DrawMesh : MonoBehaviour
         isComplete = false;
         isAct = false;
         particleSystem = transform.GetChild(0).gameObject;
+        isExtrude = false;
+        eligibleExtrude = false;
+        cameraController = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
     }
 
     private void Update()
     {
         if(!isAct){
+            if (cameraController.eligibleExtrude)
+            {
+                eligibleExtrude = true;
+                cameraController.eligibleExtrude = false;
+            }
+
             if (mesh == null)
             {
                 mesh = new Mesh();
@@ -77,9 +95,9 @@ public class DrawMesh : MonoBehaviour
 
                 //筆畫粗細
                 float speed = moveDistance/Time.deltaTime;
-                float targetThickness = 0.5f - (speed/sensitivity);
-                if(targetThickness > 0.5f) targetThickness = 0.5f;
-                if(targetThickness < 0.1f) targetThickness = 0.1f;
+                float targetThickness = 0.4f - (speed/sensitivity);
+                if(targetThickness > 0.4f) targetThickness = 0.4f;
+                if(targetThickness < 0.01f) targetThickness = 0.01f;
                 currentThickness = Mathf.Lerp(currentThickness, targetThickness, 100f*Time.deltaTime);
                 
 
@@ -145,6 +163,18 @@ public class DrawMesh : MonoBehaviour
         }
         else
         {
+            if (cameraController.canExtrude && eligibleExtrude)
+            {
+                canExtrude = true;
+                eligibleExtrude = false;
+                cameraController.canExtrude = false;
+            }
+            else
+            {
+                eligibleExtrude = false;
+            }
+            if(canExtrude && !isExtrude) Extrude();
+
             timer += Time.deltaTime;
             if (!isComplete)
             {
@@ -192,5 +222,31 @@ public class DrawMesh : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void Extrude()
+    {
+        MeshFilter mf = GetComponent<MeshFilter>();
+        if(mf == null || mf.sharedMesh == null || mf.sharedMesh.vertexCount == 0) return;
+        Mesh sourceMesh = mf.sharedMesh; //ensure that mf.sharedMesh exist
+        
+        ProBuilderMesh pbMesh = GetComponent<ProBuilderMesh>();
+        if(pbMesh == null) pbMesh = gameObject.AddComponent<ProBuilderMesh>();
+        MeshRenderer mr = GetComponent<MeshRenderer>();
+
+        Material[] materials = (mr != null) ? mr.sharedMaterials : new Material[0];
+        var importer = new MeshImporter(sourceMesh, materials, pbMesh);
+        importer.Import();  
+
+        List<Face> allFaces = pbMesh.faces.ToList();
+        pbMesh.Extrude(allFaces, ExtrudeMethod.FaceNormal, depth);
+
+        pbMesh.ToMesh();
+        pbMesh.Refresh();
+        
+        MeshCollider col = GetComponent<MeshCollider>();
+        if(col == null) col = gameObject.AddComponent<MeshCollider>();
+        col.sharedMesh = mf.sharedMesh;
+        isExtrude = true;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -11,14 +12,20 @@ public class CameraController : MonoBehaviour
     public LayerMask groundLayer;
     public float checkRadius = 0.3f;
 
+    public bool eligibleExtrude;
+    public bool canExtrude;
+
     private GameObject player;
     private Rigidbody playerRig;
     private Vector3 playerPos;
     private PlayerController playerController;
     private float delayTimer;
     private bool leaveGround;
-    private int previousDir;
     private Vector3 startTarget;
+    private GameObject lastDrawPoint;
+    private bool onDrawPoint;
+    private GameObject[] drawPointList;
+    private int drawPointNum;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,9 +34,13 @@ public class CameraController : MonoBehaviour
         playerRig = player.GetComponent<Rigidbody>();
         playerController = player.GetComponent<PlayerController>();
         delayTimer = 0f;
-        previousDir = -1;
         startTarget = new Vector3(0,0,0);
         leaveGround = false;
+        onDrawPoint = false;
+        drawPointList = new GameObject[2];
+        drawPointNum = 0;
+        canExtrude = false;
+        eligibleExtrude = false;
     }
 
     // Update is called once per frame
@@ -37,39 +48,16 @@ public class CameraController : MonoBehaviour
     {
         FollowPlayer();
     }
-
-    /*void FollowPlayer()
+    void Update()
     {
-        playerPos = player.transform.position;
-        int dirX = playerController.direction ? 1 : -1;
-        float moveOffsetX = -0.1f * dirX;
-        float stopOffsetX = 0.2f * dirX;
-
-        if(previousDir != playerController.direction) delayTimer = 0f;
-
-        if(playerRig.linearVelocity.x != 0)
-        {
-            if(delayTimer > 0.2f)
-            {  
-                if(Math.Abs(transform.position.x- (playerPos.x+moveOffsetX)) > 0.05f){
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(playerPos.x+moveOffsetX, transform.position.y, transform.position.z), Time.deltaTime*moveSpeed);
-                }
-                else
-                transform.position = new Vector3(playerPos.x+moveOffsetX, transform.position.y, transform.position.z);
-            }
-            else delayTimer += Time.deltaTime;
+        MouseRay();
+        if(drawPointNum >=2){
+            canExtrude = true;
+            drawPointNum = 0;
+            drawPointList = new GameObject[2];
         }
-        else if(playerRig.linearVelocity.x == 0)
-        {
-            delayTimer = 0f;
-            if(Math.Abs(transform.position.x- (playerPos.x+stopOffsetX)) > 0.05f)
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(playerPos.x+stopOffsetX, transform.position.y, transform.position.z), Time.deltaTime*moveSpeed);
-            else
-            transform.position = new Vector3(playerPos.x+stopOffsetX, transform.position.y, transform.position.z);
-        }
+    }
 
-        previousDir = playerController.direction;
-    }*/
     void FollowPlayer()
     {
         playerPos = player.transform.position;
@@ -127,8 +115,52 @@ public class CameraController : MonoBehaviour
                 transform.position = new Vector3(transform.position.x, playerPos.y+stopOffsetY, transform.position.z);
             }
         }
-        print(playerRig.linearVelocity.y);
+    }
+    void MouseRay()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out RaycastHit hitObject))
+        {
+            DrawPoint dr = null;
+            if (hitObject.transform.CompareTag("DrawPoint"))
+            {
+                //drawPoint isAct (partical system and sprite change)
+                lastDrawPoint = hitObject.transform.gameObject;
+                dr = hitObject.transform.GetComponent<DrawPoint>();
+                if(dr !=null){
+                    if(dr.isAct != true) dr.isAct = true;
+                }
 
-        //previousDir = playerRig.linearVelocity.y > 0? 1:-1;
+                //drawPint isClick (connect drawMesh)
+                if (Input.GetMouseButtonDown(0))
+                {
+                    drawPointList[0] = lastDrawPoint;
+                    eligibleExtrude = true;
+                    drawPointNum++;
+                }
+                else if(Input.GetMouseButtonUp(0)){
+                    if(drawPointList[0] != lastDrawPoint) drawPointList[1] = lastDrawPoint;
+                    drawPointNum++;
+                }
+            }
+            else
+            {
+                if(lastDrawPoint != null) lastDrawPoint.GetComponent<DrawPoint>().isAct = false;
+                lastDrawPoint = null;
+                if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+                {
+                    drawPointNum = 0;
+                    drawPointList = new GameObject[2];
+                }
+            }
+        }
+        else
+        {
+            if(lastDrawPoint != null)
+            {
+                lastDrawPoint.GetComponent<DrawPoint>().isAct = false;
+                lastDrawPoint = null;
+            }
+        }
     }
 }

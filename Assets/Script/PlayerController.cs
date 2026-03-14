@@ -31,6 +31,9 @@ public class PlayerController : MonoBehaviour
     //jump
     private int jumpCount;
 
+    //draw
+    private bool isDrawing;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,16 +44,27 @@ public class PlayerController : MonoBehaviour
         currentMoveSpeed = 0f;
         direction = true;
         jumpCount = 0;
+        isDrawing = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
+        if (isGrounded)
+        {
+            jumpCount = 0;
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
+            isDrawing = true;
+            currentMoveSpeed = 0.09f;
             Instantiate(drawPrefab);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            isDrawing = false;
         }
     }
     void FixedUpdate()
@@ -65,11 +79,6 @@ public class PlayerController : MonoBehaviour
             Vector3 vel = rb.linearVelocity;
             vel.y = -0.5f;
             rb.linearVelocity = vel;
-        }
-
-        if (isGrounded)
-        {
-            jumpCount = 0;
         }
 
         Move();
@@ -88,12 +97,13 @@ public class PlayerController : MonoBehaviour
     public void MoveAction(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<float>();
+        print(moveInput);
         if(moveInput < 0 && direction) direction = false;
         else if(moveInput > 0 && !direction) direction = true;
     }
     void Move()
     {
-        if(Math.Abs(moveInput) < 0.01f){
+        if(Math.Abs(moveInput) < 0.01f || isDrawing){
             if (currentMoveSpeed != 0f)
             {
                 currentMoveSpeed -= accelerateSpeed * Time.deltaTime;
@@ -117,6 +127,8 @@ public class PlayerController : MonoBehaviour
     }
     public void JumpAction(InputAction.CallbackContext context)
     {
+        if(isDrawing) return;
+
         if (context.started && jumpCount <1)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
