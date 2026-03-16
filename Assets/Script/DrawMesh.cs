@@ -8,6 +8,7 @@ using System.Linq;
 public class DrawMesh : MonoBehaviour
 {
     public bool isComplete;
+    public bool isAct;
     public float existTime = 4.0f;
     public float depth = 0.5f;
     public CameraController cameraController;
@@ -18,7 +19,6 @@ public class DrawMesh : MonoBehaviour
     private float sensitivity = 1000f;
     private float totalDistance = 0f;
     private float currentThickness = 0.01f;
-    private bool isAct;
     private float timer;
     private GameObject particleSystem;
     [SerializeField] private float uvTiling = 2f; //貼圖重複度
@@ -248,5 +248,11 @@ public class DrawMesh : MonoBehaviour
         if(col == null) col = gameObject.AddComponent<MeshCollider>();
         col.sharedMesh = mf.sharedMesh;
         isExtrude = true;
+    }
+
+    public void DrawMeshDestory()
+    {
+        Destroy(mesh);
+        Destroy(gameObject);
     }
 }
