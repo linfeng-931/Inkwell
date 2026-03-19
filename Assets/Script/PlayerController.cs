@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     public bool direction;
     public float moveSpeed;
     public float jumpForce;
+    public Animator animator;
+    public PlayerAni playerAni;
+    public ParticleSystem footEffect;
 
     [Header("Collision Setting")]
     public Transform groundCheckPoint;
@@ -30,6 +33,8 @@ public class PlayerController : MonoBehaviour
 
     //jump
     private int jumpCount;
+    private float jumpDelay;
+    private float jumpDelayTimer;
 
     //draw
     private bool isDrawing;
@@ -38,22 +43,35 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        action = "Idle";
+        action = "action";
         timer = 0f;
         rb = GetComponent<Rigidbody>();
         currentMoveSpeed = 0f;
-        direction = true;
+        direction = false;
         jumpCount = 0;
         isDrawing = false;
+        jumpDelay = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
-        if (isGrounded)
+        if (isGrounded && rb.linearVelocity.y < 0.1f)
         {
             jumpCount = 0;
+            if((animator.GetInteger(action) == 2 ||animator.GetInteger(action) == 3) && jumpDelay>0.2f){
+                playerAni.ResumeAni();
+                if(rb.linearVelocity.x < 0.1f){
+                    SwitchAni(0);
+                    footEffect.Play();
+                }
+                else{
+                    SwitchAni(1);
+                    footEffect.Play();
+                }
+                jumpDelay = 0;
+            }
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -73,6 +91,7 @@ public class PlayerController : MonoBehaviour
         if (!isGrounded)
         {
             rb.AddForce(Vector3.down * gravityValue * gravityValue * Time.deltaTime, ForceMode.Acceleration);
+            jumpDelay+=Time.deltaTime;
         }
         else if(rb.linearVelocity.y < 0)
         {
@@ -97,13 +116,19 @@ public class PlayerController : MonoBehaviour
     public void MoveAction(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<float>();
-        print(moveInput);
-        if(moveInput < 0 && direction) direction = false;
-        else if(moveInput > 0 && !direction) direction = true;
+        if(moveInput < 0 && direction){
+            direction = false;
+            transform.localScale = new Vector3(-1f*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        }
+        else if(moveInput > 0 && !direction){
+            direction = true;
+            transform.localScale = new Vector3(-1f*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        }
     }
     void Move()
     {
         if(Math.Abs(moveInput) < 0.01f || isDrawing){
+            if(jumpCount==0 && isGrounded) SwitchAni(0);
             if (currentMoveSpeed != 0f)
             {
                 currentMoveSpeed -= accelerateSpeed * Time.deltaTime;
@@ -118,7 +143,7 @@ public class PlayerController : MonoBehaviour
             currentMoveSpeed += accelerateSpeed * Time.deltaTime;
             if(currentMoveSpeed > moveSpeed) currentMoveSpeed = moveSpeed;
         }
-
+        if(jumpCount == 0) SwitchAni(1);
         rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
     }
     void Dash()
@@ -129,10 +154,19 @@ public class PlayerController : MonoBehaviour
     {
         if(isDrawing) return;
 
-        if (context.started && jumpCount <1)
+        if (context.started && jumpCount <2)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpCount++;
+            if(jumpCount == 1){
+                footEffect.Play();
+                SwitchAni(2);
+            }
+            else if(jumpCount == 2){
+                footEffect.Play();
+                playerAni.ResumeAni();
+                SwitchAni(3);
+            }
         }
         if (context.canceled)
         {
@@ -153,5 +187,10 @@ public class PlayerController : MonoBehaviour
     void Draw()
     {
         
+    }
+
+    void SwitchAni(int act)
+    {
+        animator.SetInteger("action", act);
     }
 }

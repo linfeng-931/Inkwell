@@ -25,6 +25,7 @@ public class DrawMesh : MonoBehaviour
     private bool isExtrude;
     private bool eligibleExtrude;
     private bool canExtrude;
+    private float zFace = -1f; 
 
     private void Start()
     {
@@ -95,8 +96,8 @@ public class DrawMesh : MonoBehaviour
 
                 //筆畫粗細
                 float speed = moveDistance/Time.deltaTime;
-                float targetThickness = 0.4f - (speed/sensitivity);
-                if(targetThickness > 0.4f) targetThickness = 0.4f;
+                float targetThickness = 0.3f - (speed/sensitivity);
+                if(targetThickness > 0.3f) targetThickness = 0.3f;
                 if(targetThickness < 0.01f) targetThickness = 0.01f;
                 currentThickness = Mathf.Lerp(currentThickness, targetThickness, 100f*Time.deltaTime);
                 
@@ -247,6 +248,8 @@ public class DrawMesh : MonoBehaviour
         MeshCollider col = GetComponent<MeshCollider>();
         if(col == null) col = gameObject.AddComponent<MeshCollider>();
         col.sharedMesh = mf.sharedMesh;
+        transform.position = transform.position;
+        gameObject.layer = 3;
         isExtrude = true;
     }
 
