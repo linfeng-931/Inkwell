@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour
 {
     public float moveSpeed;
     public float stopOffsetY;
+    public int drawKey = 1;
 
     //ground check for camera
     public Transform groundCheckPoint;
@@ -132,13 +133,13 @@ public class CameraController : MonoBehaviour
                 }
 
                 //drawPint isClick (connect drawMesh)
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(drawKey))
                 {
                     drawPointList[0] = lastDrawPoint;
                     eligibleExtrude = true;
                     drawPointNum++;
                 }
-                else if(Input.GetMouseButtonUp(0)){
+                else if(Input.GetMouseButtonUp(drawKey)){
                     if(drawPointList[0] != lastDrawPoint) drawPointList[1] = lastDrawPoint;
                     drawPointNum++;
                 }
@@ -147,7 +148,7 @@ public class CameraController : MonoBehaviour
             {
                 if(lastDrawPoint != null) lastDrawPoint.GetComponent<DrawPoint>().isAct = false;
                 lastDrawPoint = null;
-                if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+                if(Input.GetMouseButtonDown(drawKey) || Input.GetMouseButtonUp(drawKey))
                 {
                     drawPointNum = 0;
                     drawPointList = new GameObject[2];

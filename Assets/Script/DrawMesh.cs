@@ -12,6 +12,7 @@ public class DrawMesh : MonoBehaviour
     public float existTime = 4.0f;
     public float depth = 0.5f;
     public CameraController cameraController;
+    public int drawKey = 1;
 
     private Mesh mesh;
     private Vector3 lastMousePosition;
@@ -85,7 +86,7 @@ public class DrawMesh : MonoBehaviour
                 particleSystem.SetActive(true);
             }
 
-            if (Input.GetMouseButton(0) && mesh != null)
+            if (Input.GetMouseButton(drawKey) && mesh != null)
             {
                 Vector3 currentMousePos = MouseUtils.GetMouseWorldPosition();
                 float moveDistance = Vector3.Distance(currentMousePos, lastMousePosition);
@@ -157,7 +158,7 @@ public class DrawMesh : MonoBehaviour
 
                 lastMousePosition = MouseUtils.GetMouseWorldPosition();
             }
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(drawKey))
             {
                 isAct = true;
             }
@@ -248,7 +249,7 @@ public class DrawMesh : MonoBehaviour
         MeshCollider col = GetComponent<MeshCollider>();
         if(col == null) col = gameObject.AddComponent<MeshCollider>();
         col.sharedMesh = mf.sharedMesh;
-        transform.position = transform.position;
+        transform.position = transform.position + new Vector3(0, 0, 1);
         gameObject.layer = 3;
         isExtrude = true;
     }

@@ -5,7 +5,7 @@ using MouseInput;
 
 public class BulletSkill : MonoBehaviour
 {
-    public int actButton = 0;
+    public int actButton = 1;
     public float maxScale;
     public float minScale;
     public float enlargeSpeed = 1f;
@@ -49,6 +49,7 @@ public class BulletSkill : MonoBehaviour
                 timer+=Time.deltaTime;
                 if(Vector2.Distance(Mouse.current.position.value, mousePos) > 10f)
                 {
+                    print("true");
                     timer = 0f;
                     startTimer = false;
                 }

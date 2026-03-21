@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public PlayerAni playerAni;
     public ParticleSystem footEffect;
+    public float dashForce;
+    public GameObject dashObj;
+    public GameObject PlayerFace;
 
     [Header("Collision Setting")]
     public Transform groundCheckPoint;
@@ -21,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [Header("Other Setting")]
     public GameObject drawPrefab;
     public float gravityValue;
+    public int drawKey;
 
     private float timer;
     private string action; //dash, jump, run, attack, skill, draw, idle
@@ -33,8 +37,22 @@ public class PlayerController : MonoBehaviour
 
     //jump
     private int jumpCount;
-    private float jumpDelay;
-    private float jumpDelayTimer;
+    private float jumpDelay; //use to ani control(jump to idle)
+    private float jumpDelayTimer; //use to delay time of next jump
+
+    //dash
+    private bool isDash;
+    private float dashDelay;
+    private float dashUnused;
+
+    //attack
+    private int attackStep;
+    private bool canAttack;
+    private float attackDelay;
+    private float attackKeep;
+    private bool isAttack;
+    private Vector3 oriPos;
+    private int previousAct;
 
     //draw
     private bool isDrawing;
@@ -51,13 +69,22 @@ public class PlayerController : MonoBehaviour
         jumpCount = 0;
         isDrawing = false;
         jumpDelay = 0;
+        isDash = false;
+        dashDelay = 0f;
+        attackStep = 0;
+        attackDelay = 0;
+        canAttack = true;
+        attackKeep = 0;
+        isAttack = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
-        if (isGrounded && rb.linearVelocity.y < 0.1f)
+
+        //cancel jump
+        if (isGrounded && rb.linearVelocity.y < 0.1f && jumpCount!=0)
         {
             jumpCount = 0;
             if((animator.GetInteger(action) == 2 ||animator.GetInteger(action) == 3) && jumpDelay>0.2f){
@@ -74,21 +101,25 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        //draw action
+        if (Input.GetMouseButtonDown(drawKey))
         {
             isDrawing = true;
             currentMoveSpeed = 0.09f;
             Instantiate(drawPrefab);
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(drawKey))
         {
             isDrawing = false;
         }
+
+        Attack();
+        if(jumpDelayTimer<0.3f) jumpDelayTimer+=Time.deltaTime;
     }
     void FixedUpdate()
     {
         //Gravity
-        if (!isGrounded)
+        if (!isGrounded && !isDash)
         {
             rb.AddForce(Vector3.down * gravityValue * gravityValue * Time.deltaTime, ForceMode.Acceleration);
             jumpDelay+=Time.deltaTime;
@@ -101,6 +132,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Move();
+        Dash();
     }
 
     void OnDrawGizmos()
@@ -127,6 +159,7 @@ public class PlayerController : MonoBehaviour
     }
     void Move()
     {
+        if(isDash || isAttack) return;
         if(Math.Abs(moveInput) < 0.01f || isDrawing){
             if(jumpCount==0 && isGrounded) SwitchAni(0);
             if (currentMoveSpeed != 0f)
@@ -146,28 +179,58 @@ public class PlayerController : MonoBehaviour
         if(jumpCount == 0) SwitchAni(1);
         rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
     }
+    public void DashAction(InputAction.CallbackContext context)
+    {
+        if(dashDelay!=0f) {
+            dashUnused = 0f;
+            return;
+        }
+        if(dashUnused <0.3f) return;
+
+        isDash = true;
+        playerAni.ResumeAni();
+        dashObj.SetActive(true);
+        PlayerFace.SetActive(false);
+        rb.linearVelocity = direction? new Vector3(dashForce, 0):new Vector3(-1*dashForce, 0);
+    }
     void Dash()
     {
-        
+        if(!isDash){
+            dashUnused += Time.deltaTime;
+            return;
+        }
+
+        dashDelay+=Time.deltaTime;
+        if(dashDelay > 0.5f){
+            isDash = false;
+            dashDelay = 0f;
+            dashObj.SetActive(false);
+            PlayerFace.SetActive(true);
+        }
     }
     public void JumpAction(InputAction.CallbackContext context)
     {
-        if(isDrawing) return;
+        if(isDrawing && isDash) return;
+
+        if(jumpDelayTimer<0.25f) return;
 
         if (context.started && jumpCount <2)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpCount++;
             if(jumpCount == 1){
+                jumpDelayTimer = 0f;
                 footEffect.Play();
                 SwitchAni(2);
             }
             else if(jumpCount == 2){
+                jumpDelayTimer = 0f;
                 footEffect.Play();
                 playerAni.ResumeAni();
                 SwitchAni(3);
             }
         }
+
         if (context.canceled)
         {
             if (rb.linearVelocity.y > 0)
@@ -176,12 +239,51 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    public void Jump()
-    {
-        
-    }
     void Attack()
     {
+        if(isDash) return;
+
+        if (Input.GetMouseButtonDown(0) && !isDash && canAttack && attackStep!=3)
+        {
+            int aniInt = animator.GetInteger(action);
+            if(aniInt != 4 && aniInt != 5 && aniInt!=6) previousAct = aniInt;
+            attackStep+=1;
+            attackDelay = 0f;
+            attackKeep = 0f;
+            SwitchAni(3+attackStep);
+            canAttack = false;
+            isAttack = true;
+            oriPos = transform.position;
+            rb.linearVelocity = direction ? new Vector3(10f, 0, 0): new Vector3(-10f, 0, 0);
+        }
+        if(!isAttack) return;
+        if(Vector3.Distance(oriPos, transform.position)>0.2f) rb.linearVelocity = new Vector3(0, 0, 0);
+
+        if(!isGrounded) playerAni.ResumeAni(); //跳躍時的攻擊問題
+
+        //delay between steps
+        if(attackDelay > 0.3f)
+        {
+            canAttack = true;
+            attackDelay = 0f;
+            if(attackStep == 3) attackStep = 0;
+        }
+        else
+        {
+            attackDelay += Time.deltaTime;
+        }
+
+        //cancel attack
+        if(attackKeep > 0.6f)
+        {
+            isAttack = false;
+            attackKeep = 0;
+            attackStep = 0;
+            SwitchAni(previousAct);
+        }
+        else{
+            attackKeep+=Time.deltaTime;
+        }
         
     }
     void Draw()
