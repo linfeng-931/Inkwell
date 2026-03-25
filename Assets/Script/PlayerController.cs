@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [Header("Action Setting")]
     public bool direction;
     public float moveSpeed;
+    public float currentMoveSpeed; //be used to control mapRotate
+    public float moveInput;
     public float jumpForce;
     public Animator animator;
     public PlayerAni playerAni;
@@ -31,9 +33,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
 
     //move
-    private float currentMoveSpeed;
     private float accelerateSpeed = 80f;
-    private float moveInput;
 
     //jump
     private int jumpCount;
