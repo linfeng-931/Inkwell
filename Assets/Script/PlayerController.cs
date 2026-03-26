@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public float currentMoveSpeed; //be used to control mapRotate
     public float moveInput;
+    public bool isDash;
     public float jumpForce;
     public Animator animator;
     public PlayerAni playerAni;
@@ -41,7 +42,6 @@ public class PlayerController : MonoBehaviour
     private float jumpDelayTimer; //use to delay time of next jump
 
     //dash
-    private bool isDash;
     private float dashDelay;
     private float dashUnused;
 

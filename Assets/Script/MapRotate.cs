@@ -4,15 +4,18 @@ public class MapRotate : MonoBehaviour
 {
     private GameObject[] case1;
     private PlayerController playerController;
+    private GameObject player;
     private bool flag;
     private int currentArea;
+    private Vector3 startPos;
     private Vector3 center;
     private float speed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        player = GameObject.FindWithTag("Player");
+        playerController = player.GetComponent<PlayerController>();
         case1 = GameObject.FindGameObjectsWithTag("CameraCase1");
     }
 
@@ -29,6 +32,7 @@ public class MapRotate : MonoBehaviour
                     currentArea = i;
                     center = case1[i].transform.position;
                     speed = case1[i].GetComponent<CameraChangeArea>().speed;
+                    startPos = player.transform.position;
                 }
             }
         }
@@ -47,6 +51,9 @@ public class MapRotate : MonoBehaviour
     {
         if(!flag) return;
 
-        transform.RotateAround(center, Vector3.up, playerController.currentMoveSpeed*speed*playerController.moveInput* Time.deltaTime);
+        float moveDistance = startPos.x - player.transform.position.x;
+        transform.RotateAround(center, Vector3.up, -1f*moveDistance*speed);
+        startPos = player.transform.position;
+        
     }
 }
