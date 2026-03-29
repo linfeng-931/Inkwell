@@ -4,6 +4,7 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UIElements;
 
 public class DrawMesh : MonoBehaviour
 {
@@ -13,6 +14,16 @@ public class DrawMesh : MonoBehaviour
     public float depth = 0.5f;
     public CameraController cameraController;
     public int drawKey = 1;
+
+    [Header("Shader Settings")]
+    public Material[] shaders;
+    private MeshRenderer meshRenderer;
+
+    [Header("Collider Settings")]
+    public float colliderDepth = 10f;
+    private List<BoxCollider> colliders = new List<BoxCollider>();
+    private GameObject colliderContainer;
+    private List<Vector3> pathPoints = new List<Vector3>();
 
     private Mesh mesh;
     private Vector3 lastMousePosition;
@@ -27,16 +38,27 @@ public class DrawMesh : MonoBehaviour
     private bool eligibleExtrude;
     private bool canExtrude;
     private float zFace = -1f; 
+    private bool hasCollider;
 
     private void Start()
     {
+        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.material = shaders[0];
         timer = 0f;
         isComplete = false;
         isAct = false;
         particleSystem = transform.GetChild(0).gameObject;
         isExtrude = false;
         eligibleExtrude = false;
+        hasCollider = false;
         cameraController = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
+
+        //Collider
+        colliderContainer = new GameObject("ColliderContainer");
+        colliderContainer.transform.SetParent(this.transform);
+        colliderContainer.transform.localPosition = Vector3.zero;
+        colliderContainer.transform.localRotation = Quaternion.identity;
+        colliderContainer.layer = 3;
     }
 
     private void Update()
@@ -86,12 +108,34 @@ public class DrawMesh : MonoBehaviour
                 particleSystem.SetActive(true);
             }
 
+            //for collider
+             if (Input.GetMouseButtonDown(drawKey))
+            {
+                pathPoints.Clear();
+                pathPoints.Add(MouseUtils.GetMouseWorldPosition());
+            }
+            //
+
             if (Input.GetMouseButton(drawKey) && mesh != null)
             {
                 Vector3 currentMousePos = MouseUtils.GetMouseWorldPosition();
                 float moveDistance = Vector3.Distance(currentMousePos, lastMousePosition);
                 //可調整平滑度
                 if(moveDistance < smooth) return;
+
+                //for collider
+                if(pathPoints.Count > 0)
+                {
+                    if(Vector3.Distance(currentMousePos, pathPoints[pathPoints.Count -1]) > smooth)
+                    {
+                        pathPoints.Add(currentMousePos);
+                    }
+                }
+                else
+                {
+                    pathPoints.Add(currentMousePos);
+                }
+                //
 
                 totalDistance += moveDistance;
 
@@ -158,9 +202,12 @@ public class DrawMesh : MonoBehaviour
 
                 lastMousePosition = MouseUtils.GetMouseWorldPosition();
             }
+
             if (Input.GetMouseButtonUp(drawKey))
             {
                 isAct = true;
+                meshRenderer.material = shaders[1];
+                GenerateSegmentColliders();
             }
         }
         else
@@ -175,7 +222,9 @@ public class DrawMesh : MonoBehaviour
             {
                 eligibleExtrude = false;
             }
-            if(canExtrude && !isExtrude) Extrude();
+            if(canExtrude && !isExtrude){
+                Extrude();
+            }
 
             timer += Time.deltaTime;
             if (!isComplete)
@@ -258,5 +307,32 @@ public class DrawMesh : MonoBehaviour
     {
         Destroy(mesh);
         Destroy(gameObject);
+    }
+
+    private void GenerateSegmentColliders()
+    {
+        if(pathPoints.Count < 2) return;
+        for(int i = 0; i< pathPoints.Count - 1; i++)
+        {
+            
+            Vector3 start = pathPoints[i];
+            Vector3 end = pathPoints[i+1];
+
+            Vector3 center = (start+end) /2f;
+            Vector3 direction = end - start;
+            float length = direction.magnitude;
+
+            if(length < 0.001f) continue;
+
+            GameObject segment = new GameObject("Collider_" + i);
+            segment.transform.SetParent(colliderContainer.transform);
+            segment.transform.position = center;
+
+            segment.transform.right = direction.normalized;
+
+            BoxCollider box = segment.AddComponent<BoxCollider>();
+            box.size = new Vector3(length, 0.2f, colliderDepth);
+            box.isTrigger = true;
+        }
     }
 }

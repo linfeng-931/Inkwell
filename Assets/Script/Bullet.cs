@@ -4,7 +4,7 @@ public class Bullet : MonoBehaviour
 {
     public Vector3 target;
     public float speed;
-    public float isAct;
+    public int type = 0; //0player, 1enemy
 
     private bool end;
     private float timer;
@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        transform.position = GameObject.FindWithTag("Player").transform.position;
+        if(type == 0) transform.position = GameObject.FindWithTag("Player").transform.position;
         end = false;
         timer = 0f;
         existTimer = 0f;
@@ -55,9 +55,19 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player")) return;
-        transform.GetChild(1).gameObject.SetActive(true);
-        transform.GetChild(0).gameObject.SetActive(false);
-        end = true;
+        if(type == 0)
+        {
+            if(other.CompareTag("Player")) return;
+            transform.GetChild(1).gameObject.SetActive(true);
+            transform.GetChild(0).gameObject.SetActive(false);
+            end = true;
+        }
+        else if(type == 1)
+        {
+            if(other.CompareTag("Enemy")) return;
+            transform.GetChild(1).gameObject.SetActive(true);
+            transform.GetChild(0).gameObject.SetActive(false);
+            end = true;
+        }
     }
 }

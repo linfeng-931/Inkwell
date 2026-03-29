@@ -4758,7 +4758,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &1487378788513968388
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4804,6 +4804,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -4835,7 +4836,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &3596964329211238198
 GameObject:
   m_ObjectHideFlags: 0
@@ -4926,6 +4926,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8961991322267136606
 MonoBehaviour:
@@ -4944,4 +4945,9 @@ MonoBehaviour:
   existTime: 4
   depth: 1
   cameraController: {fileID: 0}
+  drawKey: 1
+  shaders:
+  - {fileID: 2100000, guid: 9d0534760542d4bce8b8af98acb7cf80, type: 2}
+  - {fileID: -876546973899608171, guid: 632dea8921c974f79bc691a2d29b3620, type: 3}
+  colliderDepth: 10
   uvTiling: 10
