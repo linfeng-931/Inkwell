@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public float dashForce;
     public GameObject dashObj;
     public GameObject PlayerFace;
+    public float attackStepDelay = 0.2f;
 
     [Header("Collision Setting")]
     public Transform groundCheckPoint;
@@ -297,7 +298,7 @@ public class PlayerController : MonoBehaviour
         if(!isGrounded) playerAni.ResumeAni(); //跳躍時的攻擊問題
 
         //delay between steps
-        if(attackDelay > 0.3f)
+        if(attackDelay > attackStepDelay)
         {
             canAttack = true;
             attackDelay = 0f;
@@ -309,7 +310,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //cancel attack
-        if(attackKeep > 0.6f)
+        if(attackKeep > 0.5f)
         {
             isAttack = false;
             attackKeep = 0;
