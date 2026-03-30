@@ -26,8 +26,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Other Setting")]
     public GameObject drawPrefab;
+    public float costOfDraw;
     public float gravityValue;
     public int drawKey;
+    public PlayerStatus playerStatus;
 
     private float timer;
     private string action; //dash, jump, run, attack, skill, draw, idle
@@ -56,6 +58,11 @@ public class PlayerController : MonoBehaviour
 
     //draw
     private bool isDrawing;
+    private float drawTimer;
+
+    //hurt
+    private bool isHurt;
+    private float hurtTimer;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -76,6 +83,8 @@ public class PlayerController : MonoBehaviour
         canAttack = true;
         attackKeep = 0;
         isAttack = false;
+        drawTimer = 0f;
+        hurtTimer = 0f;
     }
 
     // Update is called once per frame
@@ -105,16 +114,39 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(drawKey))
         {
             isDrawing = true;
+            playerStatus.isUsingEnergy = true;
             currentMoveSpeed = 0.09f;
             Instantiate(drawPrefab);
         }
         if (Input.GetMouseButtonUp(drawKey))
         {
+            playerStatus.isUsingEnergy = false;
             isDrawing = false;
+            drawTimer = 0f;
+        }
+
+        if (isDrawing)
+        {
+            drawTimer += Time.deltaTime;
+            if (drawTimer >= 0.05f)
+            {
+                playerStatus.energy -= (int)(costOfDraw);
+                drawTimer = 0f;
+            } 
         }
 
         Attack();
         if(jumpDelayTimer<0.3f) jumpDelayTimer+=Time.deltaTime;
+
+        if (isHurt)
+        {
+            if(Vector3.Distance(oriPos, transform.position)>0.5f) rb.linearVelocity = new Vector3(0, 0, 0);
+            hurtTimer+= Time.deltaTime;
+            if(hurtTimer > 0.5f){
+                isHurt = false;
+                hurtTimer = 0f;
+            }
+        }
     }
     void FixedUpdate()
     {
@@ -159,7 +191,7 @@ public class PlayerController : MonoBehaviour
     }
     void Move()
     {
-        if(isDash || isAttack) return;
+        if(isDash || isAttack || isHurt) return;
         if(Math.Abs(moveInput) < 0.01f || isDrawing){
             if(jumpCount==0 && isGrounded) SwitchAni(0);
             if (currentMoveSpeed != 0f)
@@ -178,9 +210,12 @@ public class PlayerController : MonoBehaviour
         }
         if(jumpCount == 0) SwitchAni(1);
         rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
+        playerStatus.RaiseEnegry(currentMoveSpeed);
     }
     public void DashAction(InputAction.CallbackContext context)
     {
+        if(isHurt) return;
+
         if(dashDelay!=0f) {
             dashUnused = 0f;
             return;
@@ -210,7 +245,7 @@ public class PlayerController : MonoBehaviour
     }
     public void JumpAction(InputAction.CallbackContext context)
     {
-        if(isDrawing && isDash) return;
+        if(isDrawing || isDash || isHurt) return;
 
         if(jumpDelayTimer<0.25f) return;
 
@@ -241,7 +276,7 @@ public class PlayerController : MonoBehaviour
     }
     void Attack()
     {
-        if(isDash) return;
+        if(isDash || isHurt) return;
 
         if (Input.GetMouseButtonDown(0) && !isDash && canAttack && attackStep!=3)
         {
@@ -289,6 +324,14 @@ public class PlayerController : MonoBehaviour
     void Draw()
     {
         
+    }
+    public void Hurt(int damage)
+    {
+        if(isHurt) return;
+        isHurt = true;
+        oriPos = transform.position;
+        rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
+        playerStatus.blood -= damage;
     }
 
     void SwitchAni(int act)
