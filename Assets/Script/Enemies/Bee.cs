@@ -5,10 +5,8 @@ public class Bee : EnemyControl
     public float attackDelay;
     public GameObject needle;
 
-    private float delayMoveTime;
-    private float delayMoveTimer;
-    private Vector3 moveStartPos;
     
+    private Vector3 moveStartPos;
     private GameObject currentNeedle;   
     private bool canAttack;
     private float attackTimer;
@@ -18,9 +16,6 @@ public class Bee : EnemyControl
     {
         base.Start();
         delayMoveTime = 1.5f;
-        delayMoveTimer = 0f;
-        isMoving = false;
-        isTracing = false;
         canAttack = false;
         attackTimer = 0f;
         createNeedle = true;

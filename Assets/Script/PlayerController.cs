@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
     //hurt
     private bool isHurt;
     private float hurtTimer;
+    private int hurtType;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -143,11 +144,28 @@ public class PlayerController : MonoBehaviour
 
         if (isHurt)
         {
-            if(Vector3.Distance(oriPos, transform.position)>0.5f) rb.linearVelocity = new Vector3(0, 0, 0);
-            hurtTimer+= Time.deltaTime;
-            if(hurtTimer > 0.5f){
-                isHurt = false;
-                hurtTimer = 0f;
+            if(hurtType == 0)
+            {
+                if(Vector3.Distance(oriPos, transform.position)>0.5f) rb.linearVelocity = new Vector3(0, 0, 0);
+                hurtTimer+= Time.deltaTime;
+                if(hurtTimer > 0.5f){
+                    isHurt = false;
+                    hurtTimer = 0f;
+                }
+            } 
+            else if(hurtType == 1)
+            {
+                if(hurtTimer < 0.5f)
+                {
+                    hurtTimer+= Time.deltaTime;
+                }
+                else
+                {
+                    if(isGrounded){
+                        isHurt = false;
+                        hurtTimer = 0;
+                    }
+                }
             }
         }
     }
@@ -334,12 +352,16 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-    public void Hurt(int damage)
+    public void Hurt(int damage, int type, float x)
     {
         if(isHurt || isDash) return;
         isHurt = true;
+        hurtType = type;
         oriPos = transform.position;
-        rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
+        if(type == 0){
+            if(x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
+            else rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
+        }
         playerStatus.blood -= damage;
     }
 

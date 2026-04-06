@@ -6,6 +6,7 @@ public abstract class EnemyControl : MonoBehaviour
     public float blood;
     public int speed;
     public bool canRepel;
+    public bool repelPlayer;
     public float moveRange;
     public float idleRange;
     public float detectionRange;
@@ -16,11 +17,13 @@ public abstract class EnemyControl : MonoBehaviour
     protected Rigidbody rig;
     protected bool isMoving;
     protected bool isTracing;
+    protected float delayMoveTime;
+    protected float delayMoveTimer;
+    protected int dir;
 
     private PlayerController playerController;
     private bool flag;
     private Animator animator;
-    private int dir;
     private float repelSpeed = 30f;
     private bool isHurt;
     private float hurtTimer;
@@ -37,13 +40,16 @@ public abstract class EnemyControl : MonoBehaviour
         hurtTimer = 0f;
         isHurt = false;
         startPos = transform.position;
+        isMoving = false;
+        isTracing = false;
+        delayMoveTimer = 0f;
         //animator = GetComponent<Animator>();
     }
 
     protected virtual void Update()
     {
         if(isDead) return;
-        print(true);
+
         //update direction
         if(rig.linearVelocity.y > 0) dir = 1;
         else if(rig.linearVelocity.y < 0) dir = -1;
@@ -65,7 +71,17 @@ public abstract class EnemyControl : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            playerController.Hurt(damage);
+            if(repelPlayer){
+                Rigidbody playerRb = player.GetComponent<Rigidbody>();
+                playerRb.linearVelocity = Vector3.zero;
+                Vector3 forceDir = rig.linearVelocity.x>0 ? new Vector3(1, 1, 0) : new Vector3(-1, 1, 0);
+                playerRb.AddForce(forceDir * 4f, ForceMode.Impulse);
+                playerController.Hurt(damage, 1, 0);
+            }
+            else
+            {
+                playerController.Hurt(damage, 0, rig.linearVelocity.x);
+            }
         }
         else if (collision.gameObject.CompareTag("Weapon"))
         {

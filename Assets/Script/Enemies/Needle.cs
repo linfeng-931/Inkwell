@@ -38,7 +38,7 @@ public class Needle : MonoBehaviour
         }
         else
         {
-            playerController.Hurt(1);
+            playerController.Hurt(1, 0, needleRig.linearVelocity.x);
         }
     }
 
