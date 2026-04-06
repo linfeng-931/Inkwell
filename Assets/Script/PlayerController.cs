@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     public GameObject dashObj;
     public GameObject PlayerFace;
     public float attackStepDelay = 0.2f;
+    public BoxCollider attackCollider;
+    public GameObject attackPratical;
 
     [Header("Collision Setting")]
     public Transform groundCheckPoint;
@@ -291,8 +293,14 @@ public class PlayerController : MonoBehaviour
             isAttack = true;
             oriPos = transform.position;
             rb.linearVelocity = direction ? new Vector3(10f, 0, 0): new Vector3(-10f, 0, 0);
+            attackCollider.enabled = true;
+            attackPratical.SetActive(true);
         }
-        if(!isAttack) return;
+        if(!isAttack){
+            attackCollider.enabled = false;
+            attackPratical.SetActive(false);
+            return;
+        }
         if(Vector3.Distance(oriPos, transform.position)>0.2f) rb.linearVelocity = new Vector3(0, 0, 0);
 
         if(!isGrounded) playerAni.ResumeAni(); //跳躍時的攻擊問題
@@ -328,7 +336,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Hurt(int damage)
     {
-        if(isHurt) return;
+        if(isHurt || isDash) return;
         isHurt = true;
         oriPos = transform.position;
         rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);

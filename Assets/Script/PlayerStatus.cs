@@ -11,6 +11,7 @@ public class PlayerStatus : MonoBehaviour
     public float energyRangeX_max;
     public float energyRangeX_min;
     public Vector3 currentPlayerPos;
+    public float damage;
 
     private GameObject blood_full;
     private GameObject inkbar_full;
@@ -54,7 +55,6 @@ public class PlayerStatus : MonoBehaviour
     public void RaiseEnegry(float lx)
     {
         if(energyRaiseTimer<0.1f) return;
-        print(lx);
         energyRaiseTimer = 0f;
         if(!isUsingEnergy && energy< 100)
         {
