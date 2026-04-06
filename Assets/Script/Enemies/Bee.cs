@@ -2,9 +2,17 @@ using UnityEngine;
 
 public class Bee : EnemyControl
 {
+    public float attackDelay;
+    public GameObject needle;
+
     private float delayMoveTime;
     private float delayMoveTimer;
     private Vector3 moveStartPos;
+    
+    private GameObject currentNeedle;   
+    private bool canAttack;
+    private float attackTimer;
+    private bool createNeedle;
 
     protected override void Start()
     {
@@ -13,6 +21,9 @@ public class Bee : EnemyControl
         delayMoveTimer = 0f;
         isMoving = false;
         isTracing = false;
+        canAttack = false;
+        attackTimer = 0f;
+        createNeedle = true;
     }
 
     protected override void Update()
@@ -26,6 +37,7 @@ public class Bee : EnemyControl
         }
 
         Move();
+        Attack();
         if (Vector3.Distance(player.transform.position, transform.position) <= detectionRange)
         {
             isTracing = true;
@@ -88,9 +100,9 @@ public class Bee : EnemyControl
         }
         else
         {
-            if (Vector3.Distance(player.transform.position, transform.position) > detectionRange * 0.5f)
+            if (Vector3.Distance(player.transform.position, transform.position) > detectionRange * 0.7f)
             {
-                Vector3 toTarget = (player.transform.position - transform.position).normalized;
+                Vector3 toTarget = ((player.transform.position+new Vector3(0, 1f, 0)) - transform.position).normalized;
                 rig.linearVelocity = speed * 0.2f * toTarget;
             }
             else
@@ -131,8 +143,33 @@ public class Bee : EnemyControl
                     }
                 }
             }
-
+        }
+    }
+    void Attack()
+    {
+        if(!isTracing || !canAttack)
+        {
+            if(attackTimer <= attackDelay && !canAttack)
+            {
+                attackTimer += Time.deltaTime;
+                if(attackTimer >= attackDelay * 0.5f && createNeedle)
+                {
+                    currentNeedle = Instantiate(needle, transform, false);
+                    currentNeedle.transform.localPosition = new Vector3(0, -0.63f, 0);
+                    createNeedle = false;
+                }
+            }
+            else if(!canAttack)
+            {
+                canAttack = true;  
+                attackTimer = 0f;
+            }
+            
+            return;
         }
 
+        currentNeedle.GetComponent<Needle>().Shoot();
+        createNeedle = true;
+        canAttack = false;
     }
 }
