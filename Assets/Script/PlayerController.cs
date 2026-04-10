@@ -403,8 +403,14 @@ public class PlayerController : MonoBehaviour
             else rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
         }
         
-        if(x > 0) transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
-        else transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+        if(x > 0){
+            direction = false;
+            transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+        }
+        else{
+            direction = true;
+            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+        }
 
         playerStatus.blood -= damage;
     }
