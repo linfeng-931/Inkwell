@@ -229,11 +229,11 @@ public class PlayerController : MonoBehaviour
     {
         if(isDash || isAttack || isHurt) return;
 
-        if(moveInput < 0){
+        if(moveInput < 0 && direction){
             direction = false;
             transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
         }
-        else if(moveInput > 0){
+        else if(moveInput > 0 && !direction){
             direction = true;
             transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
         }

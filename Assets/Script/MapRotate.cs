@@ -11,12 +11,16 @@ public class MapRotate : MonoBehaviour
     private Vector3 center;
     private float speed;
 
+    private Quaternion originalRotation;
+    public float returnSpeed = 4f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GameObject.FindWithTag("Player");
         playerController = player.GetComponent<PlayerController>();
         case1 = GameObject.FindGameObjectsWithTag("CameraCase1");
+        originalRotation = transform.rotation;
     }
 
     // Update is called once per frame
@@ -33,6 +37,7 @@ public class MapRotate : MonoBehaviour
                     center = case1[i].transform.position;
                     speed = case1[i].GetComponent<CameraChangeArea>().speed;
                     startPos = player.transform.position;
+                    originalRotation = case1[i].GetComponent<CameraChangeArea>().oriQua;
                 }
             }
         }
@@ -44,7 +49,7 @@ public class MapRotate : MonoBehaviour
             }
         }  
 
-        Rotate();
+        HandleRotation();
     }
 
     void Rotate()
@@ -55,5 +60,28 @@ public class MapRotate : MonoBehaviour
         transform.RotateAround(center, Vector3.up, -1f*moveDistance*speed);
         startPos = player.transform.position;
         
+    }
+    void HandleRotation()
+    {
+        if (flag)
+        {
+            // 正在區域內：隨玩家移動旋轉
+            float moveDistance = startPos.x - player.transform.position.x;
+            transform.RotateAround(center, Vector3.up, -1f * moveDistance * speed);
+            startPos = player.transform.position;
+        }
+        else
+        {
+            // 不在區域內：緩慢插值回原位
+            // 如果角度差距很小，就直接等於原始值，避免微小抖動
+            if (Quaternion.Angle(transform.rotation, originalRotation) > 0.01f)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, Time.deltaTime * returnSpeed);
+            }
+            else
+            {
+                transform.rotation = originalRotation;
+            }
+        }
     }
 }

@@ -37,7 +37,6 @@ public class Needle : MonoBehaviour
             other.transform.root.gameObject.GetComponent<DrawMesh>().isComplete = true; 
 
             Destroy(gameObject);
-            print(true);
             return;
         }
         if (!other.CompareTag("Player") && !other.CompareTag("Weapon"))
