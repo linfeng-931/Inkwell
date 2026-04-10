@@ -31,7 +31,16 @@ public class Needle : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player"))
+        if (other.CompareTag("DrawMesh"))
+        {
+            //destory drawMesh
+            other.transform.root.gameObject.GetComponent<DrawMesh>().isComplete = true; 
+
+            Destroy(gameObject);
+            print(true);
+            return;
+        }
+        if (!other.CompareTag("Player") && !other.CompareTag("Weapon"))
         {
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             needleCol.enabled = false;

@@ -98,6 +98,7 @@ public abstract class EnemyControl : MonoBehaviour
     {
         isHurt = true;
         blood -= damage;
+        print("Hurt");
         if(blood <= 0){
             isDead = true;
             gameObject.layer = LayerMask.NameToLayer("Body");

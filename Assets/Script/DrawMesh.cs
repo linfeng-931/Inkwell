@@ -325,6 +325,7 @@ public class DrawMesh : MonoBehaviour
             if(length < 0.001f) continue;
 
             GameObject segment = new GameObject("Collider_" + i);
+            segment.tag = "DrawMesh";
             segment.transform.SetParent(colliderContainer.transform);
             segment.transform.position = center;
 

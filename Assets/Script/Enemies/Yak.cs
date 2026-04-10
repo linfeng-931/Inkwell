@@ -26,6 +26,9 @@ public class Yak : EnemyControl
     protected override void Update()
     {
         base.Update();
+
+        if(isDead) return;
+        
         if (Vector3.Distance(player.transform.position, transform.position) <= detectionRange)
         {
             if(!isTracing) rig.linearVelocity = new Vector3(0, 0, 0);
