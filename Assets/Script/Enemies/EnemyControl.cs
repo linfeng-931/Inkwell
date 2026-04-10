@@ -72,11 +72,12 @@ public abstract class EnemyControl : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             if(repelPlayer){
+                if(playerController.isHurt) return;
                 Rigidbody playerRb = player.GetComponent<Rigidbody>();
                 playerRb.linearVelocity = Vector3.zero;
                 Vector3 forceDir = rig.linearVelocity.x>0 ? new Vector3(1, 1, 0) : new Vector3(-1, 1, 0);
                 playerRb.AddForce(forceDir * 4f, ForceMode.Impulse);
-                playerController.Hurt(damage, 1, 0);
+                playerController.Hurt(damage, 1, rig.linearVelocity.x);
             }
             else
             {

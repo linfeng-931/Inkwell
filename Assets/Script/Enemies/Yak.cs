@@ -117,7 +117,7 @@ public class Yak : EnemyControl
 
             case 2: //ing
                 rig.linearVelocity = speed * 5f * attackTarget;
-                if (Vector3.Distance(transform.position, moveStartPos) >= moveRange * 1.5f)
+                if (Vector3.Distance(transform.position, moveStartPos) >= moveRange * 1.8f)
                 {
                     isMoving = false;
                     rig.linearVelocity = new Vector3(0, 0, 0);

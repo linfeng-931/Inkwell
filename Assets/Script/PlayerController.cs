@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public float attackStepDelay = 0.2f;
     public BoxCollider attackCollider;
     public GameObject attackPratical;
+     public bool isHurt;
 
     [Header("Collision Setting")]
     public Transform groundCheckPoint;
@@ -70,7 +71,6 @@ public class PlayerController : MonoBehaviour
     private float drawTimer;
 
     //hurt
-    private bool isHurt;
     private float hurtTimer;
     private int hurtType;
 
@@ -176,8 +176,8 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     if(isGrounded){
-                        isHurt = false;
                         hurtTimer = 0;
+                        isHurt = false;
                     }
                 }
             }
@@ -190,6 +190,10 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Vector3.down * gravityValue * gravityValue * Time.deltaTime, ForceMode.Acceleration);
             jumpDelay+=Time.deltaTime;
+            if(jumpCount == 0 && !isHurt && !isDead)
+            {
+                SwitchAni(6);
+            }
         }
         else if(rb.linearVelocity.y < 0)
         {
@@ -218,22 +222,25 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = ctx.ReadValue<float>();
         
-        if(isDead) return;
-        if(moveInput < 0 && direction){
-            direction = false;
-            transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
-        }
-        else if(moveInput > 0 && !direction){
-            direction = true;
-            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
-        }
+        if(isDead || isHurt) return;
+        
     }
     void Move()
     {
         if(isDash || isAttack || isHurt) return;
 
+        if(moveInput < 0){
+            direction = false;
+            transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+        }
+        else if(moveInput > 0){
+            direction = true;
+            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+        }
+
         if(Math.Abs(moveInput) < 0.01f || isDrawing){
             if(jumpCount==0 && isGrounded) SwitchAni(0);
+
             if (currentMoveSpeed != 0f)
             {
                 currentMoveSpeed -= accelerateSpeed * Time.deltaTime;
@@ -248,7 +255,7 @@ public class PlayerController : MonoBehaviour
             currentMoveSpeed += accelerateSpeed * Time.deltaTime;
             if(currentMoveSpeed > moveSpeed) currentMoveSpeed = moveSpeed;
         }
-        if(jumpCount == 0) SwitchAni(1);
+        if(jumpCount == 0 && isGrounded) SwitchAni(1);
         rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
         playerStatus.RaiseEnegry(currentMoveSpeed);
     }
@@ -383,16 +390,22 @@ public class PlayerController : MonoBehaviour
     }
     public void Hurt(int damage, int type, float x)
     {
-        if(isHurt || isDash) return;
+        if(isHurt || isDash || isDead) return;
+
         isHurt = true;
         hurtTimer = 0f;
         hurtType = type;
-        SwitchAni(-1);
+        if(type == 0) SwitchAni(-1);
+        if(type == 1) SwitchAni(5);
         oriPos = transform.position;
         if(type == 0){
             if(x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
             else rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
         }
+        
+        if(x > 0) transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+        else transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+
         playerStatus.blood -= damage;
     }
 
@@ -413,7 +426,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void SwitchAni(int act)
+    public void SwitchAni(int act)
     {
         if (animator.GetInteger(action) == act) return;
 
