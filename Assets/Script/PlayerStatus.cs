@@ -38,6 +38,8 @@ public class PlayerStatus : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(blood < 0) blood = 0;
+
         inkbar_emptyTrans.position = new Vector3(energyRangeX_max-(energyRangeX_max-energyRangeX_min)*(1f-(energy/100f)), inkbar_emptyTrans.position.y, inkbar_emptyTrans.position.z);
         if (maxBlood != blood)
         {

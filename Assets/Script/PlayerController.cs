@@ -11,12 +11,12 @@ public class PlayerController : MonoBehaviour
     public float moveInput;
     public bool isDash;
     public float jumpForce;
-    public Animator animator;
     public PlayerAni playerAni;
     public ParticleSystem footEffect;
     public float dashForce;
     public GameObject dashObj;
-    public GameObject PlayerFace;
+    public GameObject dashObj1;
+    public GameObject dashObj2;
     public float attackStepDelay = 0.2f;
     public BoxCollider attackCollider;
     public GameObject attackPratical;
@@ -26,6 +26,11 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
     public float checkRadius = 0.3f;
     public bool isGrounded;
+
+    [Header("Animator Control")]
+    public Animator OtherAni;
+    public Animator animator;
+    public GameObject PlayerFace;
 
     [Header("Other Setting")]
     public GameObject drawPrefab;
@@ -40,6 +45,7 @@ public class PlayerController : MonoBehaviour
 
     //move
     private float accelerateSpeed = 80f;
+    private float xScale;
 
     //jump
     private int jumpCount;
@@ -68,6 +74,10 @@ public class PlayerController : MonoBehaviour
     private float hurtTimer;
     private int hurtType;
 
+    //dead
+    private bool isDead;
+    private float deadTimer;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -89,15 +99,19 @@ public class PlayerController : MonoBehaviour
         isAttack = false;
         drawTimer = 0f;
         hurtTimer = 0f;
+        deadTimer = 0f;
+        xScale = transform.localScale.x;
     }
 
     // Update is called once per frame
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
+        Dead();
+        if(isDead) return;
 
         //cancel jump
-        if (isGrounded && rb.linearVelocity.y < 0.1f && jumpCount!=0)
+        if (isGrounded && rb.linearVelocity.y < 0.1f && jumpCount!=0 && !isHurt)
         {
             jumpCount = 0;
             if((animator.GetInteger(action) == 2 ||animator.GetInteger(action) == 3) && jumpDelay>0.2f){
@@ -184,6 +198,8 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = vel;
         }
 
+        if(isDead || isHurt) return;
+
         Move();
         Dash();
     }
@@ -201,18 +217,21 @@ public class PlayerController : MonoBehaviour
     public void MoveAction(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<float>();
+        
+        if(isDead) return;
         if(moveInput < 0 && direction){
             direction = false;
-            transform.localScale = new Vector3(-1f*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
         }
         else if(moveInput > 0 && !direction){
             direction = true;
-            transform.localScale = new Vector3(-1f*transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
         }
     }
     void Move()
     {
         if(isDash || isAttack || isHurt) return;
+
         if(Math.Abs(moveInput) < 0.01f || isDrawing){
             if(jumpCount==0 && isGrounded) SwitchAni(0);
             if (currentMoveSpeed != 0f)
@@ -235,7 +254,7 @@ public class PlayerController : MonoBehaviour
     }
     public void DashAction(InputAction.CallbackContext context)
     {
-        if(isHurt) return;
+        if(isHurt || isDead) return;
 
         if(dashDelay!=0f) {
             dashUnused = 0f;
@@ -245,8 +264,11 @@ public class PlayerController : MonoBehaviour
 
         isDash = true;
         playerAni.ResumeAni();
-        dashObj.SetActive(true);
+        OtherAni.SetInteger(action, 1);
         PlayerFace.SetActive(false);
+        dashObj.SetActive(true);
+        dashObj1.SetActive(true);
+        dashObj2.SetActive(true);
         rb.linearVelocity = direction? new Vector3(dashForce, 0):new Vector3(-1*dashForce, 0);
     }
     void Dash()
@@ -257,16 +279,23 @@ public class PlayerController : MonoBehaviour
         }
 
         dashDelay+=Time.deltaTime;
+
+        if(dashDelay > 0.4f)
+        {
+            OtherAni.SetInteger(action, 0);
+        }
         if(dashDelay > 0.5f){
             isDash = false;
             dashDelay = 0f;
-            dashObj.SetActive(false);
             PlayerFace.SetActive(true);
+            dashObj.SetActive(false);
+            dashObj1.SetActive(false);
+            dashObj2.SetActive(false);
         }
     }
     public void JumpAction(InputAction.CallbackContext context)
     {
-        if(isDrawing || isDash || isHurt) return;
+        if(isDrawing || isDash || isHurt || isDead) return;
 
         if(jumpDelayTimer<0.25f) return;
 
@@ -356,7 +385,9 @@ public class PlayerController : MonoBehaviour
     {
         if(isHurt || isDash) return;
         isHurt = true;
+        hurtTimer = 0f;
         hurtType = type;
+        SwitchAni(-1);
         oriPos = transform.position;
         if(type == 0){
             if(x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
@@ -365,8 +396,51 @@ public class PlayerController : MonoBehaviour
         playerStatus.blood -= damage;
     }
 
+    public void Dead()
+    {
+        if(playerStatus.blood == 0)
+        {
+            isDead = true;
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            SwitchAni(-2);
+        }
+        if(!isDead) return;
+
+        deadTimer += Time.deltaTime;
+        if(deadTimer > 2f)
+        {
+            Reset();
+        }
+    }
+
     void SwitchAni(int act)
     {
-        animator.SetInteger("action", act);
+        if (animator.GetInteger(action) == act) return;
+
+        animator.SetInteger(action, act);
+    }
+
+    void Reset()
+    {
+        playerStatus.blood = playerStatus.maxBlood;
+        timer = 0f;
+        currentMoveSpeed = 0f;
+        direction = false;
+        jumpCount = 0;
+        isDrawing = false;
+        jumpDelay = 0;
+        isDash = false;
+        dashDelay = 0f;
+        attackStep = 0;
+        attackDelay = 0;
+        canAttack = true;
+        attackKeep = 0;
+        isAttack = false;
+        drawTimer = 0f;
+        hurtTimer = 0f;
+        SwitchAni(0);
+        isDead = false;
+        deadTimer = 0f;
+        transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
     }
 }
