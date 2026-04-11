@@ -22,21 +22,35 @@ public class BulletSkill : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private bool isShoot;
     private Vector3 target;
+    private PlayerStatus playerStatus;
+    private float delayTimer;
+    private bool delayTime;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isAct = false;
+        delayTime = false;
         startTimer = false;
         targetStyle = 0;
         spriteRenderer = GetComponent<SpriteRenderer>();
         enlargeFlag = false;
+        delayTimer = 0f;
+        playerStatus = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStatus>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        TargetPointStyle();
+        if (delayTime)
+        {
+            delayTimer += Time.deltaTime;
+            if(delayTimer > 0.9f) delayTime = false;
+            return;
+        }
+
         if (!isAct)
         {
             if (Input.GetMouseButtonDown(actButton))
@@ -49,7 +63,6 @@ public class BulletSkill : MonoBehaviour
                 timer+=Time.deltaTime;
                 if(Vector2.Distance(Mouse.current.position.value, mousePos) > 10f)
                 {
-                    print("true");
                     timer = 0f;
                     startTimer = false;
                 }
@@ -59,6 +72,7 @@ public class BulletSkill : MonoBehaviour
                     targetStyle = 1;
                     spriteRenderer.enabled = true;
                     startTimer = false;
+                    playerStatus.isUsingEnergy = false;
                     timer = 0;
                     drawMeshes = new List<GameObject>(GameObject.FindGameObjectsWithTag("DrawMesh"));
                     foreach(GameObject drawMesh in drawMeshes)
@@ -67,7 +81,6 @@ public class BulletSkill : MonoBehaviour
                         if (!drawMesh1.isAct)
                         {
                             drawMesh1.DrawMeshDestory();
-                            break;
                         }
                     }
                 }
@@ -82,10 +95,11 @@ public class BulletSkill : MonoBehaviour
                 enlargeFlag = false;
                 transform.GetChild(0).gameObject.SetActive(false);
                 target = MouseUtils.GetMouseWorldPosition();
+                delayTimer = 0f;
+                delayTime = true;
             }
         }
-        if(targetStyle!=3) transform.position = MouseUtils.GetMouseWorldPosition();
-        TargetPointStyle();
+        if(targetStyle!=3) transform.position = MouseUtils.GetMouseWorldPosition(); 
     }
 
     private void TargetPointStyle()
@@ -146,15 +160,15 @@ public class BulletSkill : MonoBehaviour
                     spriteRenderer.color = c;
 
                     if(transform.localScale.x >= maxScale*2f){
+                        spriteRenderer.enabled = false;
+                        transform.GetChild(1).gameObject.SetActive(false);
                         transform.localScale = new Vector3(maxScale*2f, maxScale*2f, 1f);
                         enlargeFlag = false;
                         targetStyle = 0;
-                        spriteRenderer.enabled = false;
                         isAct = false;
                         spriteRenderer.sprite = sprites[0];
                         c.a = 1;
-                        spriteRenderer.color = c;
-                        transform.GetChild(1).gameObject.SetActive(false);
+                        spriteRenderer.color = c;  
                     }
                 }
                 break;

@@ -16,12 +16,10 @@ public class PlayerAni : MonoBehaviour
     }
     public void PauseAni()
     {
-        print("hi");
         animator.speed = 0f;
     }
     public void ResumeAni()
     {
-        print("bye");
         animator.speed = 1f;
     }
 }
