@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b2e57ebe76e6f6a49a99cf1e7f9b02a6
+guid: 969bb3dc3d26c254e88cd2bfa955e6c1
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,8 +7,33 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: round_platform
-    second: {fileID: 2100000, guid: f81b47db263ae1a4c8c0ac9adf8b307a, type: 2}
+      name: bookcover_b
+    second: {fileID: 2100000, guid: 14036ea527cbd51449b4a22f653150d8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bookcover_br
+    second: {fileID: 2100000, guid: e807b114a01eeab49a85dffef6513887, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bookcover_g
+    second: {fileID: 2100000, guid: bd832ca450f062341878fd62d435dcdf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bookcover_r
+    second: {fileID: 2100000, guid: 203c0b101bafc764e97a7590e150aa20, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bookpile_paper
+    second: {fileID: 2100000, guid: c4792e8b95ac8204586bdf8e3be7e9ce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: page
+    second: {fileID: 2100000, guid: 5581fdbee7cab3c46854bc004e84cec5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -76,7 +101,7 @@ ModelImporter:
     useFileScale: 1
     strictVertexDataChecks: 0
   tangentSpace:
-    normalSmoothAngle: 60
+    normalSmoothAngle: 180
     normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
