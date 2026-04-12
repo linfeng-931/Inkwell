@@ -143,12 +143,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 55279617}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7276141847644656087}
+  m_Father: {fileID: 3103083817945181816}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &79357943 stripped
 GameObject:
@@ -909,12 +909,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1087362651}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7276141847644656087}
+  m_Father: {fileID: 3103083817945181816}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1087362653
 MonoBehaviour:
@@ -7323,6 +7323,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2693744127909485885, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
+      propertyPath: mainDirectionalLight
+      value: 
+      objectReference: {fileID: 2081506099}
     - target: {fileID: 5758505504365379488, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.32
@@ -7382,6 +7386,11 @@ PrefabInstance:
       addedObject: {fileID: 1087362652}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
+--- !u!4 &3103083817945181816 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5758505504365379488, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
+  m_PrefabInstance: {fileID: 3103083817945181815}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3125886078533141464
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8160,11 +8169,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!4 &7276141847644656087 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5758505504365379488, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
-  m_PrefabInstance: {fileID: 3103083817945181815}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7336340987295186394
 RectTransform:
   m_ObjectHideFlags: 0
