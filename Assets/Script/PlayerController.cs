@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
     private bool isAttack;
     private Vector3 oriPos;
     private int previousAct;
+    private bool skyAttack;
 
     //draw
     private bool isDrawing;
@@ -101,6 +102,7 @@ public class PlayerController : MonoBehaviour
         hurtTimer = 0f;
         deadTimer = 0f;
         xScale = transform.localScale.x;
+        skyAttack = true;
     }
 
     // Update is called once per frame
@@ -109,6 +111,11 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
         Dead();
         if(isDead) return;
+
+        if (isGrounded && !skyAttack)
+        {
+            skyAttack = true;
+        }
 
         //cancel jump
         if (isGrounded && rb.linearVelocity.y < 0.1f && jumpCount!=0 && !isHurt)
@@ -192,7 +199,7 @@ public class PlayerController : MonoBehaviour
             jumpDelay+=Time.deltaTime;
             if(jumpCount == 0 && !isHurt && !isDead)
             {
-                SwitchAni(6);
+                SwitchAni(8);
             }
         }
         else if(rb.linearVelocity.y < 0)
@@ -335,7 +342,7 @@ public class PlayerController : MonoBehaviour
     {
         if(isDash || isHurt) return;
 
-        if (Input.GetMouseButtonDown(0) && !isDash && canAttack && attackStep!=3)
+        if (Input.GetMouseButtonDown(0) && !isDash && canAttack && attackStep!=3 && skyAttack)
         {
             int aniInt = animator.GetInteger(action);
             if(aniInt != 4 && aniInt != 5 && aniInt!=6) previousAct = aniInt;
@@ -364,7 +371,10 @@ public class PlayerController : MonoBehaviour
         {
             canAttack = true;
             attackDelay = 0f;
-            if(attackStep == 3) attackStep = 0;
+            if(attackStep == 3){
+                attackStep = 0;
+                if(!isGrounded) skyAttack = false;
+            }
         }
         else
         {
@@ -377,6 +387,7 @@ public class PlayerController : MonoBehaviour
             isAttack = false;
             attackKeep = 0;
             attackStep = 0;
+            if(!isGrounded) skyAttack = false;
             SwitchAni(previousAct);
         }
         else{
@@ -396,7 +407,7 @@ public class PlayerController : MonoBehaviour
         hurtTimer = 0f;
         hurtType = type;
         if(type == 0) SwitchAni(-1);
-        if(type == 1) SwitchAni(5);
+        if(type == 1) SwitchAni(7);
         oriPos = transform.position;
         if(type == 0){
             if(x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
@@ -459,6 +470,7 @@ public class PlayerController : MonoBehaviour
         hurtTimer = 0f;
         SwitchAni(0);
         isDead = false;
+        skyAttack = true;
         deadTimer = 0f;
         transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
     }
