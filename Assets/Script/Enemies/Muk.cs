@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class Muk : EnemyControl
 {
-    public Transform axis;
-    public Transform head;
     public GameObject mud;
+    public float attackDelayTime;
 
     private int attackStep;
     private float attackTimer;
@@ -16,8 +15,6 @@ public class Muk : EnemyControl
     {
         base.Start();
         attackStep = 0;
-        oriQuaternion = head.transform.localRotation;
-        oriPosition = head.transform.localPosition;
         canAttack = false;
     }
 
@@ -33,6 +30,7 @@ public class Muk : EnemyControl
         {
             dir = 1;   
         }
+        transform.localScale = new Vector3(-1*dir*scale, scale, scale);
 
         if (Vector3.Distance(player.transform.position, transform.position) < detectionRange)
         {
@@ -43,8 +41,10 @@ public class Muk : EnemyControl
         if (!canAttack)
         {
             attackTimer += Time.deltaTime;
-            if(attackTimer>=0.5f){
+            if(attackTimer>=attackDelayTime){
                 canAttack = true;
+                animator.SetInteger("action", 1);
+                attackStep = 0;
                 attackTimer = 0f;
             }
         }
@@ -57,48 +57,28 @@ public class Muk : EnemyControl
     {
         if (!isTracing || !canAttack) return;
 
-        Vector3 currentAngles = transform.localEulerAngles;
-        currentAngles.y = dir == 1? 180f:0f; 
-        transform.localEulerAngles = currentAngles;
-
-        Vector3 relativeBack = transform.TransformDirection(Vector3.back);
-        Vector3 relativeForward = transform.TransformDirection(Vector3.forward);
-
         switch (attackStep)
         {
-            case 0:
-                head.RotateAround(axis.position, relativeBack, speed * Time.deltaTime);
-                if (head.localEulerAngles.z <= 290f && head.localEulerAngles.z > 180f)
-                {
-                    head.localRotation = Quaternion.Euler(0, 0, 290f);
-                    attackStep += 1;
-                }
-                break;
-
             case 1:
-                attackTimer += Time.deltaTime;
-                if(attackTimer >= 0.2f)
-                {
-                    Instantiate(mud, transform.position, new Quaternion(0,0,0,0));
-                    attackTimer = 0f;
-                    attackStep += 1;
-                }
+                Instantiate(mud, transform.position, new Quaternion(0,0,0,0));
+                attackTimer = 0f;
+                attackStep += 1;
                 break;
 
             case 2:
-                head.RotateAround(axis.position, relativeForward, speed * Time.deltaTime);
-                if (head.localEulerAngles.z > 355f || head.localEulerAngles.z <= 3f)
-                {
-                    head.localRotation = oriQuaternion;
-                    head.localPosition = oriPosition;
-                    canAttack = false; 
-                    attackTimer = 0f;
-                    attackStep = 0;
-                }
+                canAttack = false; 
+                attackTimer = 0f;
+                attackStep = 0;
+                animator.SetInteger("action", 0);
                 break;
 
             default:
                 break;
         }
+    }
+
+    public void AddStep()
+    {
+        attackStep += 1;
     }
 }

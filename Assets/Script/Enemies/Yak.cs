@@ -51,6 +51,7 @@ public class Yak : EnemyControl
 
         if (!isTracing)
         {
+            transform.localScale = new Vector3(dir*scale, scale, scale);
             if (!isMoving)
             {
                 delayMoveTimer += Time.deltaTime;
@@ -63,6 +64,7 @@ public class Yak : EnemyControl
                     rig.linearVelocity = speed * Direction;
                     moveStartPos = transform.position;
                     isMoving = true;
+                    animator.SetInteger("action", 1);
                 }
             }
             else
@@ -72,6 +74,7 @@ public class Yak : EnemyControl
                 {
                     isMoving = false;
                     rig.linearVelocity = new Vector3(0, 0, 0);
+                    animator.SetInteger("action", 0);
                 }
             }
         }
@@ -92,53 +95,68 @@ public class Yak : EnemyControl
     }
     void Attack()
     {
+        print(attackStep);
         switch (attackStep)
         {
             case 0:
                 rig.linearVelocity = new Vector3(0, 0, 0);
+                Vector3 Direction = (player.transform.position - transform.position).normalized;
+                transform.localScale = Direction.x > 0 ? new Vector3(-1*scale, scale, scale): new Vector3(scale, scale, scale);
+                animator.SetInteger("action", 0);
                 attackTimer += Time.deltaTime;
                 if (attackTimer >= attackDelayTime)
                 {
                     attackTimer = 0f;
                     attackStep += 1;
+                    animator.SetInteger("action", 2);
                 }
                 return;
 
             case 1: //ready
-                attackTimer += Time.deltaTime;
-                if (attackTimer >= stepOneTime)
-                {
-                    repelPlayer = true;
-                    attackTimer = 0f;
-                    attackStep += 1;
-                    moveStartPos = transform.position;
-                    attackTarget = (player.transform.position - transform.position).normalized;
-                    attackTarget = new Vector3(attackTarget.x, 0, attackTarget.z);
-                    rig.linearVelocity = speed * 5f * attackTarget;
-                }
                 break;
 
             case 2: //ing
                 rig.linearVelocity = speed * 5f * attackTarget;
+                attackTimer += Time.deltaTime;
                 if (Vector3.Distance(transform.position, moveStartPos) >= moveRange * 1.8f)
                 {
                     isMoving = false;
                     rig.linearVelocity = new Vector3(0, 0, 0);
                     attackStep += 1;
+                    animator.SetInteger("action", 0);
+                }
+                else if(attackTimer > 8f)
+                {
+                    isMoving = false;
+                    rig.linearVelocity = new Vector3(0, 0, 0);
+                    attackStep += 1;
+                    animator.SetInteger("action", 0);
+                    attackTimer = 0f;
                 }
                 break;
 
             case 3: //stop
-                attackTimer += Time.deltaTime;
-                repelPlayer = false;
-                if (attackTimer >= stepThreeTime)
-                {
-                    attackTimer = 0f;
-                    attackStep = 0;
-                }
+                attackTimer = 0f;
+                attackStep = 0;
                 break;
             default:
                 break;
         }
+    }
+
+    public void Ready()
+    {
+        repelPlayer = true;
+        attackTimer = 0f;
+        attackStep += 1;
+        moveStartPos = transform.position;
+        attackTarget = (player.transform.position - transform.position).normalized;
+        attackTarget = new Vector3(attackTarget.x, 0, attackTarget.z);
+        rig.linearVelocity = speed * 5f * attackTarget;
+    }
+    public void Stop()
+    {
+        attackTimer = 0f;
+        attackStep = 0;
     }
 }
