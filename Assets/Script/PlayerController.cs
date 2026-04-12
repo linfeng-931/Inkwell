@@ -192,7 +192,7 @@ public class PlayerController : MonoBehaviour
             jumpDelay+=Time.deltaTime;
             if(jumpCount == 0 && !isHurt && !isDead)
             {
-                SwitchAni(6);
+                SwitchAni(8);
             }
         }
         else if(rb.linearVelocity.y < 0)
@@ -396,7 +396,7 @@ public class PlayerController : MonoBehaviour
         hurtTimer = 0f;
         hurtType = type;
         if(type == 0) SwitchAni(-1);
-        if(type == 1) SwitchAni(5);
+        if(type == 1) SwitchAni(7);
         oriPos = transform.position;
         if(type == 0){
             if(x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
