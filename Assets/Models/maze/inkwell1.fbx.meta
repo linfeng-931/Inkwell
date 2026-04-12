@@ -3,7 +3,32 @@ guid: 3b028c093bb769e45b9fdc5c8527c1ca
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: b33ec044d6e0b0b4baf9bb8fee4a3649, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: cc5a3f079e43b764a866a87232eea0e9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: chain
+    second: {fileID: 2100000, guid: 95f0ee6d3b0fdd6499905bdb554a3bde, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: inkwell1_cover
+    second: {fileID: 2100000, guid: ed82ad5f86035e14eb3a663245ff59fc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: inkwell1_paper
+    second: {fileID: 2100000, guid: ccec19a8cacacd648b72c3baff7d28ea, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -71,8 +96,8 @@ ModelImporter:
     useFileScale: 1
     strictVertexDataChecks: 0
   tangentSpace:
-    normalSmoothAngle: 60
-    normalImportMode: 0
+    normalSmoothAngle: 30
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
