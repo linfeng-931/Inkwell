@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: blackMaterials
+  m_Name: paper3
   m_Shader: {fileID: -6465566751694194690, guid: d2f91465ec99a41cca1de94d4dce60e0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -20,7 +20,7 @@ Material:
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties: _Variation _VariationColorA
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -126,26 +126,26 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _StrokeBlendingNoiseScale: 500
-    - _StrokeBlendingNoiseStrength: 0.355
+    - _StrokeBlendingNoiseStrength: 0.044
     - _StrokeRandomness: 1
-    - _StrokeScale: 5.96
+    - _StrokeScale: 10.77
     - _Surface: 0
     - _UVSec: 0
     - _UseBlendingNoise: 1
-    - _Variation: 0.33
+    - _Variation: 0.147
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+    - _BaseColor: {r: 0.94716984, g: 0.90983903, b: 0.8631755, a: 1}
     - _Color: {r: 0.9063317, g: 0.9063317, b: 0.9063317, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _VariationColorA: {r: 0, g: 0, b: 0, a: 0}
-    - _VariationColorB: {r: 1, g: 1, b: 1, a: 0}
+    - _VariationColorA: {r: 0.4490565, g: 0.42430183, b: 0.38551077, a: 0}
+    - _VariationColorB: {r: 1, g: 0.95759255, b: 0.91886795, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &2656894523926481578
+--- !u!114 &1401083047436995156
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
