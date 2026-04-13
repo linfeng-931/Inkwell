@@ -53,7 +53,6 @@ public class Yak : EnemyControl
                 delayMoveTimer += Time.deltaTime;
                 if (delayMoveTimer >= delayMoveTime)
                 {
-                    delayMoveTimer = 0f;
                     isMoving = true;
                     Direction = dir == 1 ? new Vector3(1, 0, 0) : new Vector3(-1, 0, 0);
                     dir *= -1;
@@ -61,6 +60,7 @@ public class Yak : EnemyControl
                     moveStartPos = transform.position;
                     isMoving = true;
                     animator.SetInteger("action", 1);
+                    
                 }
             }
             else
@@ -85,6 +85,9 @@ public class Yak : EnemyControl
                 Vector3 Direction = (player.transform.position - transform.position).normalized;
                 Vector3 finalTarget = new Vector3(Direction.x, 0, Direction.z);
                 rig.linearVelocity = finalTarget * speed * 1.2f;
+                animator.SetInteger("action", 1);
+                dir = finalTarget.x > 0 ? -1: 1;
+                transform.localScale = new Vector3(dir*scale, scale, scale);
                 isMoving = true;
             }
         }
