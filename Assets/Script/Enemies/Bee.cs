@@ -79,7 +79,7 @@ public class Bee : EnemyControl
                         Direction = new Vector3(random2D.x, finalY, 0);
                     }
 
-
+                    transform.localScale = new Vector3(dir*scale, scale, scale);
                     rig.linearVelocity = speed * Direction;
                     moveStartPos = transform.position;
                 }
@@ -99,6 +99,7 @@ public class Bee : EnemyControl
             {
                 Vector3 toTarget = ((player.transform.position+new Vector3(0, 1f, 0)) - transform.position).normalized;
                 rig.linearVelocity = speed * 0.2f * toTarget;
+                transform.localScale = new Vector3(dir*scale, scale, scale);
             }
             else
             {
@@ -124,7 +125,8 @@ public class Bee : EnemyControl
                             Direction = new Vector3(random2D.x, finalY, 0);
                         }
 
-
+                        float toTarget = ((player.transform.position+new Vector3(0, 1f, 0)) - transform.position).normalized.x;
+                        transform.localScale = new Vector3(-1*toTarget*scale, scale, scale);
                         rig.linearVelocity = speed * Direction;
                         moveStartPos = transform.position;
                     }
@@ -147,7 +149,11 @@ public class Bee : EnemyControl
             if(attackTimer <= attackDelay && !canAttack)
             {
                 attackTimer += Time.deltaTime;
-                if(attackTimer >= attackDelay * 0.5f && createNeedle)
+                if(attackTimer >= attackDelay * 0.98f)
+                {
+                    animator.SetInteger("action", 1);
+                }
+                if(attackTimer >= attackDelay * 0.99f && createNeedle)
                 {
                     currentNeedle = Instantiate(needle, transform, false);
                     currentNeedle.transform.localPosition = new Vector3(0, -0.63f, 0);
@@ -158,6 +164,7 @@ public class Bee : EnemyControl
             {
                 canAttack = true;  
                 attackTimer = 0f;
+                 animator.SetInteger("action", 0);
             }
             
             return;

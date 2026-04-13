@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class EnemyControl : MonoBehaviour
@@ -10,6 +11,7 @@ public abstract class EnemyControl : MonoBehaviour
     public float moveRange;
     public float idleRange;
     public float detectionRange;
+    public GameObject[] otherCollider;
 
     protected GameObject player;
     protected Vector3 startPos;
@@ -20,10 +22,11 @@ public abstract class EnemyControl : MonoBehaviour
     protected float delayMoveTime;
     protected float delayMoveTimer;
     protected int dir;
+    protected Animator animator;
+    protected float scale;
 
     private PlayerController playerController;
     private bool flag;
-    private Animator animator;
     private float repelSpeed = 30f;
     private bool isHurt;
     private float hurtTimer;
@@ -43,7 +46,8 @@ public abstract class EnemyControl : MonoBehaviour
         isMoving = false;
         isTracing = false;
         delayMoveTimer = 0f;
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
+        scale = Math.Abs(transform.localScale.x);
     }
 
     protected virtual void Update()
@@ -51,8 +55,12 @@ public abstract class EnemyControl : MonoBehaviour
         if(isDead) return;
 
         //update direction
-        if(rig.linearVelocity.y > 0) dir = 1;
-        else if(rig.linearVelocity.y < 0) dir = -1;
+        if(rig.linearVelocity.y > 0){
+            dir = 1;
+        }
+        else if(rig.linearVelocity.y < 0){
+            dir = -1;
+        }
 
         //hurtDelay
         if (isHurt)
@@ -102,6 +110,13 @@ public abstract class EnemyControl : MonoBehaviour
         if(blood <= 0){
             isDead = true;
             gameObject.layer = LayerMask.NameToLayer("Body");
+            if(otherCollider != null)
+            {
+                foreach (var item in otherCollider)
+                {
+                    item.layer = LayerMask.NameToLayer("Body");
+                }
+            }
             GetComponent<Collider>().isTrigger = false;
             rig.useGravity = true;
             rig.AddForce(Vector3.down * 20f, ForceMode.Acceleration);

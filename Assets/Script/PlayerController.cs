@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public float attackStepDelay = 0.2f;
     public BoxCollider attackCollider;
     public GameObject attackPratical;
-     public bool isHurt;
+    public bool isHurt;
 
     [Header("Collision Setting")]
     public Transform groundCheckPoint;
@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     public float gravityValue;
     public int drawKey;
     public PlayerStatus playerStatus;
+    public GameObject swirlParticle;
 
     private float timer;
     private string action; //dash, jump, run, attack, skill, draw, idle
@@ -79,6 +80,9 @@ public class PlayerController : MonoBehaviour
     private bool isDead;
     private float deadTimer;
 
+    //swirl
+    private bool isSwirl;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -111,6 +115,18 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
         Dead();
         if(isDead) return;
+
+        if(isSwirl){
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                swirlParticle.SetActive(false);
+                isSwirl = false;
+                PlayerFace.SetActive(true);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                SwitchAni(2);
+            }
+            else return;
+        }
 
         if (isGrounded && !skyAttack)
         {
@@ -192,6 +208,10 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if(isSwirl){
+            return;
+        }
+
         //Gravity
         if (!isGrounded && !isDash)
         {
@@ -221,6 +241,22 @@ public class PlayerController : MonoBehaviour
         {
             Gizmos.color = isGrounded? Color.green : Color.red;
             Gizmos.DrawSphere(groundCheckPoint.position, checkRadius);
+        }
+    }
+
+    //Collider/ Trigger
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Swirl"))
+        {
+            jumpCount = 0;
+            rb.linearVelocity = new Vector3(0, 0, 0);
+            isSwirl = true;
+            Vector3 pos = other.gameObject.transform.position;
+            pos.z = transform.position.z;
+            transform.position = pos;
+            swirlParticle.SetActive(true);
+            PlayerFace.SetActive(false);
         }
     }
 
