@@ -1,21 +1,22 @@
 using UnityEngine;
 
-public class Yak : EnemyControl
+public class Silverfish : EnemyControl
 {
+    public GameObject attackCollider;
+
     private int attackStep;
     private float attackTimer;
     private float attackDelayTime;
     private Vector3 moveStartPos;
-    private Vector3 attackTarget;
     private Vector3 Direction;
 
     protected override void Start()
     {
         base.Start();
-        delayMoveTime = 2f;
+        delayMoveTime = 1f;
         attackStep = 0;
         attackTimer = 0f;
-        attackDelayTime = 2f;
+        attackDelayTime = 1f;
     }
 
     // Update is called once per frame
@@ -45,6 +46,7 @@ public class Yak : EnemyControl
             return;
         }
 
+        transform.localScale = new Vector3(dir*scale, scale, scale);
         if (!isTracing)
         {
             transform.localScale = new Vector3(dir*scale, scale, scale);
@@ -76,7 +78,7 @@ public class Yak : EnemyControl
         }
         else
         {
-            if (Vector3.Distance(player.transform.position, transform.position) < detectionRange * 0.7f)
+            if (Vector3.Distance(player.transform.position, transform.position) < 0.6f)
             {
                 Attack();
             }
@@ -84,8 +86,11 @@ public class Yak : EnemyControl
             {
                 Vector3 Direction = (player.transform.position - transform.position).normalized;
                 Vector3 finalTarget = new Vector3(Direction.x, 0, Direction.z);
-                rig.linearVelocity = finalTarget * speed * 1.2f;
+                rig.linearVelocity = finalTarget * speed;
                 isMoving = true;
+                animator.SetInteger("action", 1);
+                transform.localScale = new Vector3(-1*finalTarget.x*scale, scale, scale);
+                dir = (-1*finalTarget.x) > 0? 1 : -1;
             }
         }
     }
@@ -97,6 +102,7 @@ public class Yak : EnemyControl
                 rig.linearVelocity = new Vector3(0, 0, 0);
                 Vector3 Direction = (player.transform.position - transform.position).normalized;
                 transform.localScale = Direction.x > 0 ? new Vector3(-1*scale, scale, scale): new Vector3(scale, scale, scale);
+                dir = (-1*Direction.x) > 0? 1 : -1;
                 animator.SetInteger("action", 0);
                 attackTimer += Time.deltaTime;
                 if (attackTimer >= attackDelayTime)
@@ -106,34 +112,6 @@ public class Yak : EnemyControl
                     animator.SetInteger("action", 2);
                 }
                 return;
-
-            case 1: //ready
-                break;
-
-            case 2: //ing
-                rig.linearVelocity = speed * 5f * attackTarget;
-                attackTimer += Time.deltaTime;
-                if (Vector3.Distance(transform.position, moveStartPos) >= moveRange * 1.8f)
-                {
-                    isMoving = false;
-                    rig.linearVelocity = new Vector3(0, 0, 0);
-                    attackStep += 1;
-                    animator.SetInteger("action", 0);
-                }
-                else if(attackTimer > 8f)
-                {
-                    isMoving = false;
-                    rig.linearVelocity = new Vector3(0, 0, 0);
-                    attackStep += 1;
-                    animator.SetInteger("action", 0);
-                    attackTimer = 0f;
-                }
-                break;
-
-            case 3: //stop
-                attackTimer = 0f;
-                attackStep = 0;
-                break;
             default:
                 break;
         }
@@ -141,17 +119,21 @@ public class Yak : EnemyControl
 
     public void Ready()
     {
-        repelPlayer = true;
         attackTimer = 0f;
-        attackStep += 1;
-        moveStartPos = transform.position;
-        attackTarget = (player.transform.position - transform.position).normalized;
-        attackTarget = new Vector3(attackTarget.x, 0, attackTarget.z);
-        rig.linearVelocity = speed * 5f * attackTarget;
+        attackCollider.SetActive(true);
+    }
+    public void Ready_End()
+    {
+        animator.SetInteger("action", 0);
     }
     public void Stop()
     {
         attackTimer = 0f;
         attackStep = 0;
     }
+    public void DisCollider()
+    {
+        attackCollider.SetActive(false);    
+    }
 }
+
