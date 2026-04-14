@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
     public int drawKey;
     public PlayerStatus playerStatus;
     public GameObject swirlParticle;
+    public bool isStory;
+    public bool isStory2;
+    public bool isInteract;
 
     private float timer;
     private string action; //dash, jump, run, attack, skill, draw, idle
@@ -91,7 +94,6 @@ public class PlayerController : MonoBehaviour
         timer = 0f;
         rb = GetComponent<Rigidbody>();
         currentMoveSpeed = 0f;
-        direction = false;
         jumpCount = 0;
         isDrawing = false;
         jumpDelay = 0;
@@ -107,6 +109,8 @@ public class PlayerController : MonoBehaviour
         deadTimer = 0f;
         xScale = transform.localScale.x;
         skyAttack = true;
+        direction = true;
+        transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
     }
 
     // Update is called once per frame
@@ -114,7 +118,7 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
         Dead();
-        if(isDead) return;
+        if(isDead || isStory || isStory2 || isInteract) return;
 
         if(isSwirl){
             if (Input.GetKeyDown(KeyCode.Space))
@@ -229,9 +233,10 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = vel;
         }
 
-        if(isDead || isHurt) return;
+        if(isDead || isHurt || isInteract) return;
 
         Move();
+        Walk();
         Dash();
     }
 
@@ -270,7 +275,7 @@ public class PlayerController : MonoBehaviour
     }
     void Move()
     {
-        if(isDash || isAttack || isHurt) return;
+        if(isDash || isAttack || isHurt || isStory || isInteract) return;
 
         if(moveInput < 0 && direction){
             direction = false;
@@ -302,9 +307,42 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
         playerStatus.RaiseEnegry(currentMoveSpeed);
     }
+    void Walk()
+    {
+        if(!isStory) return;
+        if(moveInput < 0 && direction){
+            direction = false;
+            transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+        }
+        else if(moveInput > 0 && !direction){
+            direction = true;
+            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+        }
+
+        if(Math.Abs(moveInput) < 0.01f || isDrawing){
+            if(jumpCount==0 && isGrounded) SwitchAni(0);
+
+            if (currentMoveSpeed != 0f)
+            {
+                currentMoveSpeed -= accelerateSpeed * Time.deltaTime;
+                if(currentMoveSpeed < 0f) currentMoveSpeed = 0f;
+            }
+            rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
+            return;
+        }
+
+        if(currentMoveSpeed < moveSpeed * 0.4f)
+        {
+            currentMoveSpeed += accelerateSpeed * Time.deltaTime;
+            if(currentMoveSpeed > moveSpeed * 0.4f) currentMoveSpeed = moveSpeed * 0.4f;
+        }
+        if(jumpCount == 0 && isGrounded) SwitchAni(11);
+        rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
+        playerStatus.RaiseEnegry(currentMoveSpeed);
+    }
     public void DashAction(InputAction.CallbackContext context)
     {
-        if(isHurt || isDead) return;
+        if(isHurt || isDead || isStory || isStory2 || isInteract) return;
 
         if(dashDelay!=0f) {
             dashUnused = 0f;
@@ -345,7 +383,7 @@ public class PlayerController : MonoBehaviour
     }
     public void JumpAction(InputAction.CallbackContext context)
     {
-        if(isDrawing || isDash || isHurt || isDead) return;
+        if(isDrawing || isDash || isHurt || isDead || isStory || isStory2 || isInteract) return;
 
         if(jumpDelayTimer<0.25f) return;
 
@@ -376,7 +414,7 @@ public class PlayerController : MonoBehaviour
     }
     void Attack()
     {
-        if(isDash || isHurt) return;
+        if(isDash || isHurt || isStory || isStory2 || isInteract) return;
 
         if (Input.GetMouseButtonDown(0) && !isDash && canAttack && attackStep!=3 && skyAttack)
         {
@@ -437,7 +475,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Hurt(int damage, int type, float x)
     {
-        if(isHurt || isDash || isDead) return;
+        if(isHurt || isDash || isDead || isStory || isStory2 || isInteract) return;
 
         isHurt = true;
         hurtTimer = 0f;
