@@ -6,7 +6,7 @@ public class CameraChangeArea : MonoBehaviour
     public float speed;
     public GameObject Map;
     public Quaternion oriQua;
-    public RotatePoint[] rotatePoint;
+    public float radius = 5f;
 
     private bool isRotate;
 
@@ -15,39 +15,24 @@ public class CameraChangeArea : MonoBehaviour
         flag = false;
         isRotate = false;
     }
-    void Update()
+
+    void AutoGetRadiusFromMesh(GameObject cylinderObj)
     {
-        RotateStatus();
+        Bounds bounds = cylinderObj.GetComponent<Renderer>().bounds;
         
-        if (isRotate && !flag)
-        {
-            flag = true;
-            oriQua = Map.transform.rotation;
-        }
-        else if(!isRotate && flag)
-        {
-            flag = false;
-        }
+        radius = bounds.extents.x; 
+        
+        Debug.Log("自動偵測半徑為: " + radius);
     }
 
-    void RotateStatus()
-    {
-        int i = 0;
-        foreach (RotatePoint rp in rotatePoint)
-        {
-            if(rp.flag) i++;
-        }
-
-        if(i%2 == 0) isRotate = false;
-        else isRotate = true;
-    }
-
-    /*void OnTriggerEnter(Collider other)
+    
+    void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player") && !flag)
         {
             flag = true;
             oriQua = Map.transform.rotation;
+            AutoGetRadiusFromMesh(gameObject);
         }
     }
     void OnTriggerExit(Collider other)
@@ -56,5 +41,5 @@ public class CameraChangeArea : MonoBehaviour
         {
             flag = false;
         }
-    }*/
+    }
 }
