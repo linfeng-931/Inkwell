@@ -6356,9 +6356,6 @@ MonoBehaviour:
   speed: 1
   Map: {fileID: 2088639403}
   oriQua: {x: 0, y: 0, z: 0, w: 0}
-  rotatePoint:
-  - {fileID: 0}
-  - {fileID: 0}
   radius: 30
 --- !u!4 &1156015521
 Transform:
@@ -6946,7 +6943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c23df22e7976448c09d6f177af50d294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneManagement
-  TargetScene: Ch1_Map_1
+  TargetScene: Story_Ch1_Felow
   changeSceneAnimator: {fileID: 717382716}
   canChange: 0
 --- !u!65 &1396254336
@@ -6979,7 +6976,7 @@ Transform:
   m_GameObject: {fileID: 1396254334}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31, y: 5.80885, z: 0}
+  m_LocalPosition: {x: 10.44, y: 6.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
