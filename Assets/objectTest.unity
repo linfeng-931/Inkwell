@@ -30847,13 +30847,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 835201006}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06603746, y: 0.07825296, z: 0.0051950053, w: 0.9947304}
-  m_LocalPosition: {x: 384, y: 65, z: 47}
+  m_LocalRotation: {x: 0.06096601, y: -0, z: -0, w: 0.9981399}
+  m_LocalPosition: {x: -0.8, y: 2.3, z: -4.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 7.502, y: 9.074, z: 1.195}
+  m_LocalEulerAnglesHint: {x: 6.991, y: 0, z: 0}
 --- !u!114 &835201010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46950,7 +46950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1570401567
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47549,7 +47549,7 @@ SpriteRenderer:
   m_Size: {x: 3.32, y: 6.17}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1822318037
 Transform:
@@ -47667,6 +47667,9 @@ MonoBehaviour:
   drawKey: 1
   playerStatus: {fileID: 1822318044}
   swirlParticle: {fileID: 0}
+  isStory: 0
+  isStory2: 0
+  isInteract: 0
 --- !u!114 &1822318041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53395,6 +53398,10 @@ PrefabInstance:
     - target: {fileID: 6789400325638412503, guid: 83456e4e6cd67f14abeb60c98fc36ea2, type: 3}
       propertyPath: m_Name
       value: cloud
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789400325638412503, guid: 83456e4e6cd67f14abeb60c98fc36ea2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
