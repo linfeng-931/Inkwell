@@ -20471,7 +20471,7 @@ MonoBehaviour:
   speed: 6
   Map: {fileID: 1850622194}
   oriQua: {x: 0, y: 0, z: 0, w: 0}
-  rotatePoint: []
+  radius: 5
 --- !u!1 &637252961 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4832743196247158789, guid: 17c50ff6269644245b51c3b5fa42710e, type: 3}
@@ -47973,6 +47973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapRotate
   returnSpeed: 5
+  rotateThreshold: 5
 --- !u!1 &1865012066
 GameObject:
   m_ObjectHideFlags: 0
