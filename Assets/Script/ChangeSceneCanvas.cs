@@ -21,7 +21,7 @@ public class ChangeSceneCanvas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (musicFade)
+        if (musicFade && audioSource != null)
         {
             float volume = audioSource.volume;
             volume -= Time.deltaTime * fadeSpeed;
