@@ -10,6 +10,7 @@ public class MapRotate : MonoBehaviour
     private Vector3 startPos;
     private Vector3 center;
     private float speed;
+    private float totalRotatedAngle = 0f;
 
     private Quaternion originalRotation;
     public float returnSpeed = 4f;
@@ -66,9 +67,14 @@ public class MapRotate : MonoBehaviour
         if (flag)
         {
             // 正在區域內：隨玩家移動旋轉
-            float moveDistance = startPos.x - player.transform.position.x;
+            /*float moveDistance = startPos.x - player.transform.position.x;
             transform.RotateAround(center, Vector3.up, -1f * moveDistance * speed);
-            startPos = player.transform.position;
+            startPos = player.transform.position;*/
+            float currentXMovement = startPos.x - player.transform.position.x;
+            float targetTotalAngle = currentXMovement * speed;
+            float angleToRotate = targetTotalAngle - totalRotatedAngle;
+            transform.RotateAround(center, Vector3.up, -angleToRotate);
+            totalRotatedAngle += angleToRotate;
         }
         else
         {
@@ -77,10 +83,12 @@ public class MapRotate : MonoBehaviour
             if (Quaternion.Angle(transform.rotation, originalRotation) > 0.01f)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, Time.deltaTime * returnSpeed);
+                totalRotatedAngle = 0f;
             }
             else
             {
                 transform.rotation = originalRotation;
+                totalRotatedAngle = 0f;
             }
         }
     }
