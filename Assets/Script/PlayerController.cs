@@ -357,6 +357,7 @@ public class PlayerController : MonoBehaviour
         }
         if(dashUnused <0.3f) return;
 
+        
         isDash = true;
         playerAni.ResumeAni();
         OtherAni.SetInteger(action, 1);
@@ -497,11 +498,11 @@ public class PlayerController : MonoBehaviour
         
         if(x > 0){
             direction = false;
-            transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
         }
         else{
             direction = true;
-            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
         }
 
         playerStatus.blood -= damage;

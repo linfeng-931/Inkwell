@@ -15,7 +15,7 @@ public class ChangeSceneCanvas : MonoBehaviour
     {
         musicFade = false;
         fadeSpeed = 1f;
-        _SceneName = sceneManagement[0].TargetScene;
+        _SceneName = null;
     }
 
     // Update is called once per frame
@@ -33,15 +33,17 @@ public class ChangeSceneCanvas : MonoBehaviour
 
     public void SceneSwitch()
     {
-        foreach(SceneManagement i in sceneManagement)
-        {
-            if(i.canChange) _SceneName = i.TargetScene;
+        if(_SceneName != null){
+            SceneManager.LoadScene(_SceneName, LoadSceneMode.Single);
         }
-        SceneManager.LoadScene(_SceneName, LoadSceneMode.Single);
     }
 
     public void MusicFade()
     {
-        musicFade = true;
+        foreach(SceneManagement i in sceneManagement)
+        {
+            if(i.canChange) _SceneName = i.TargetScene;
+        }
+        if(_SceneName != null) musicFade = true;
     }
 }
