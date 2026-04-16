@@ -230,7 +230,7 @@ public class PlayerController : MonoBehaviour
             jumpDelay+=Time.deltaTime;
             if(jumpCount == 0 && !isHurt && !isDead)
             {
-                SwitchAni(8);
+                if(!isGoTarget) SwitchAni(8);
             }
         }
         else if(rb.linearVelocity.y < 0)

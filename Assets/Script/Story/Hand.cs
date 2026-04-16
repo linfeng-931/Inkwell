@@ -41,46 +41,40 @@ public class Hand : MonoBehaviour
         if (handReady)
         {
             timer += Time.deltaTime;
-            if(timer > 0.15)
+            hand.transform.position = Vector3.MoveTowards(hand.transform.position, handEndPos+Vector3.down*10f, Time.deltaTime*3f);
+            if(timer > 0.1f) Time.timeScale = 0.3f;
+            if(timer > 0.7f)
             {
                 foreach(Rigidbody rig in buildingRig)
                 {
                     rig.useGravity = true;
+                    rig.isKinematic = false;
                 }
+                playerController.enabled = false;
+                player.GetComponent<Rigidbody>().linearVelocity = Vector3.down * 5f;
                 playerAnimator.SetInteger("action", 7);
             }
         }
         if (isAct)
         {   
             float dis = Math.Abs(player.transform.position.x - targetX);
-            if(dis < 3.5f && step == 0)
+            if(dis < 5f && step == 0)
             {
                 particleSystemHole.Play();
                 step++;
             }
-            if(dis < 3f && step == 1)
+            if(dis < 3.5f && step == 1)
             {
-                var shape = particleSystemHole.shape;
-                shape.rotation = new Vector3(90f, shape.rotation.y, 0f);
-                step++;
-                hand.SetActive(true);
+                ParticleRotate();
             }
             if(step == 2)
             {
-                hand.transform.position = Vector3.MoveTowards(hand.transform.position, handEndPos, Time.deltaTime*2f);
+                hand.transform.position = Vector3.MoveTowards(hand.transform.position, handEndPos, Time.deltaTime*10f);
                 if(Vector3.Distance(hand.transform.position, handEndPos) <= 0.1f)
                 {
                     handReady = true;
                     hand.transform.position = handEndPos;
                     handAni.speed = 1;
-                }
-            }
-            if(dis < 2.4f)
-            {
-                Time.timeScale = 0.5f;
-                foreach(Rigidbody rig in buildingRig)
-                {
-                    rig.useGravity = true;
                 }
             }
         }
@@ -93,6 +87,18 @@ public class Hand : MonoBehaviour
             isAct = true;
             playerController.isInteract = true;
             playerController.SetUpForInteraction(new Vector3(targetX, 0, 0), 1);
+        }
+    }
+
+    void ParticleRotate()
+    {
+        var shape = particleSystemHole.shape;
+        shape.rotation += new Vector3(90f, 0, 0)*Time.deltaTime;
+
+        if(shape.rotation.x >= 90f){
+            shape.rotation = new Vector3(90f, shape.rotation.y, 0);
+            hand.SetActive(true);
+            step++;
         }
     }
 }
