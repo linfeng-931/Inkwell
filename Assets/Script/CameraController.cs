@@ -120,12 +120,14 @@ public class CameraController : MonoBehaviour
     void MouseRay()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
         if(Physics.Raycast(ray, out RaycastHit hitObject))
         {
             DrawPoint dr = null;
             if (hitObject.transform.CompareTag("DrawPoint"))
             {
                 //drawPoint isAct (partical system and sprite change)
+                Debug.Log("打中了: " + hitObject.transform.name);
                 lastDrawPoint = hitObject.transform.gameObject;
                 dr = hitObject.transform.GetComponent<DrawPoint>();
                 if(dr !=null){

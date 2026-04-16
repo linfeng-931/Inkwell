@@ -296,7 +296,7 @@ public class DrawMesh : MonoBehaviour
         pbMesh.Refresh();
         
         isExtrude = true;
-        transform.position += new Vector3(0, 0, 1);
+        transform.position += new Vector3(0, 0, 0.1f);
 
         // 子物件負責物理
         GameObject physProxy = new GameObject(gameObject.name + "_PhysicsProxy");

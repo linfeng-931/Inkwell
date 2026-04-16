@@ -17,6 +17,7 @@ public class Silverfish : EnemyControl
         attackStep = 0;
         attackTimer = 0f;
         attackDelayTime = 1f;
+        disDir = true;
     }
 
     // Update is called once per frame
@@ -49,16 +50,15 @@ public class Silverfish : EnemyControl
         transform.localScale = new Vector3(dir*scale, scale, scale);
         if (!isTracing)
         {
-            transform.localScale = new Vector3(dir*scale, scale, scale);
             if (!isMoving)
             {
                 delayMoveTimer += Time.deltaTime;
                 if (delayMoveTimer >= delayMoveTime)
                 {
                     delayMoveTimer = 0f;
-                    isMoving = true;
-                    Direction = dir == 1 ? new Vector3(1, 0, 0) : new Vector3(-1, 0, 0);
                     dir *= -1;
+                    Direction = dir == -1 ? new Vector3(1, 0, 0) : new Vector3(-1, 0, 0);
+                    transform.localScale = new Vector3(dir*scale, scale, scale);
                     rig.linearVelocity = speed * Direction;
                     moveStartPos = transform.position;
                     isMoving = true;

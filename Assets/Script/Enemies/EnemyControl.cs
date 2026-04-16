@@ -28,6 +28,7 @@ public abstract class EnemyControl : MonoBehaviour
     protected int dir;
     protected Animator animator;
     protected float scale;
+    protected bool disDir;
 
     private PlayerController playerController;
     private bool flag;
@@ -53,6 +54,7 @@ public abstract class EnemyControl : MonoBehaviour
         animator = GetComponent<Animator>();
         scale = Math.Abs(transform.localScale.x);
         isGrounded = false;
+        disDir = false;
     }
 
     protected virtual void Update()
@@ -62,13 +64,16 @@ public abstract class EnemyControl : MonoBehaviour
         if(groundCheckPoint != null) isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
 
         //update direction
-        if(rig.linearVelocity.y > 0){
-            dir = 1;
+        if (!disDir)
+        {
+            if(rig.linearVelocity.y > 0){
+                dir = 1;
+            }
+            else if(rig.linearVelocity.y < 0){
+                dir = -1;
+            }
         }
-        else if(rig.linearVelocity.y < 0){
-            dir = -1;
-        }
-
+    
         //hurtDelay
         if (isHurt)
         {

@@ -9,6 +9,7 @@ public class Elevator : MonoBehaviour
     public bool startAct;
     public bool endAct;
     public bool dir; //true-up or false-down
+    public bool disScript;
 
     private Animator animator;
     private GameObject player;
@@ -30,22 +31,28 @@ public class Elevator : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {      
-        if(isAct && !changeStatus){
-            cameraController.enabled = false;
-            playerController.enabled = false;
-            playerAnimator.SetInteger("action", 0);
-
-            if(playerController.transform.parent != this.transform)
-            {
-                playerController.transform.SetParent(this.transform);
-            }
-            changeStatus = true;
-        }
-        if (isAct)
+    {
+        if (!disScript)
         {
-            player.transform.position = point.position;
+            if(isAct && !changeStatus){
+                cameraController.enabled = false;
+                playerController.enabled = false;
+                playerAnimator.SetInteger("action", 0);
+
+                if(playerController.transform.parent != this.transform)
+                {
+                    playerController.transform.SetParent(this.transform);
+                }
+                    changeStatus = true;
+            }
+            if (isAct)
+            {
+                player.transform.position = point.position;
+            }
         }
+        
+
+        EndAct();
     }
 
     public void StartAct()
@@ -68,10 +75,14 @@ public class Elevator : MonoBehaviour
     {
         if(!endAct) return;
 
-        //+interation 判斷
-        if(!playerController.isGoTarget && playerController.isInteract)
+        if (interaction.canInteract)
         {
-            
-        }
+            isAct = true;
+            changeStatus = false;
+            animator.SetTrigger("isAct");
+            dir = !dir;
+            animator.SetBool("dir", dir);
+            endAct = false;
+        } 
     }
 }

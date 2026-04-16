@@ -86,7 +86,7 @@ public class MapRotate : MonoBehaviour
             lastPlayerX = player.transform.position.x;
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -0.1f);
         }
-        else
+        else if(!case1[currentArea].GetComponent<CameraChangeArea>().isOutTunnel)
         {
             if (Quaternion.Angle(transform.rotation, originalRotation) > 0.01f)
             {

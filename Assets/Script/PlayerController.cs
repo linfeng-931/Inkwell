@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
     //draw
     private bool isDrawing;
     private float drawTimer;
+    private Transform mapParent;
 
     //hurt
     private float hurtTimer;
@@ -117,6 +118,7 @@ public class PlayerController : MonoBehaviour
         direction = true;
         isGoTarget = false;
         transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+        mapParent = GameObject.FindGameObjectWithTag("Map").transform;
     }
 
     // Update is called once per frame
@@ -168,7 +170,17 @@ public class PlayerController : MonoBehaviour
             isDrawing = true;
             playerStatus.isUsingEnergy = true;
             currentMoveSpeed = 0.09f;
-            Instantiate(drawPrefab);
+            if(mapParent!= null)
+            {
+                GameObject newObj = Instantiate(drawPrefab);
+                newObj.transform.SetParent(mapParent, true);
+                newObj.transform.localScale = new Vector3(
+                    1f / mapParent.lossyScale.x, 
+                    1f / mapParent.lossyScale.y, 
+                    1f / mapParent.lossyScale.z
+                );
+            }
+            else Instantiate(drawPrefab);
         }
         if (Input.GetMouseButtonUp(drawKey))
         {

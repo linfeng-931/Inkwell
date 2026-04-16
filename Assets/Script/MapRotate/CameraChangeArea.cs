@@ -3,17 +3,16 @@ using UnityEngine;
 public class CameraChangeArea : MonoBehaviour
 {
     public bool flag;
+    public bool isOutTunnel;
     public float speed;
     public GameObject Map;
     public Quaternion oriQua;
     public float radius = 5f;
 
-    private bool isRotate;
 
     void Start()
     {
         flag = false;
-        isRotate = false;
     }
 
     void AutoGetRadiusFromMesh(GameObject cylinderObj)
@@ -41,5 +40,11 @@ public class CameraChangeArea : MonoBehaviour
         {
             flag = false;
         }
+    }
+
+    public void ExitArea()
+    {
+        flag = false;
+        isOutTunnel = true;
     }
 }
