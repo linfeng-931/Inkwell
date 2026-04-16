@@ -57,6 +57,7 @@ public class Yak : EnemyControl
                     isMoving = true;
                     dir *= -1;
                     Direction = dir == 1 ? new Vector3(1, 0, 0) : new Vector3(-1, 0, 0);
+                    transform.localScale = new Vector3(dir*scale, scale, scale);
                     rig.linearVelocity = speed * Direction;
                     moveStartPos = transform.position;
                     isMoving = true;
@@ -74,7 +75,7 @@ public class Yak : EnemyControl
                 }
             }
         }
-        /*else
+        else
         {
             if (Vector3.Distance(player.transform.position, transform.position) < detectionRange * 0.7f)
             {
@@ -97,7 +98,7 @@ public class Yak : EnemyControl
                 rig.linearVelocity = new Vector3(0, 0, 0);
                 animator.SetInteger("action", 0);
             }
-        }*/
+        }
     }
     void Attack()
     {

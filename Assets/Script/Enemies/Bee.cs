@@ -30,6 +30,11 @@ public class Bee : EnemyControl
             rig.linearVelocity = new Vector3(0, rig.linearVelocity.y, 0);
             return;
         }
+        if (isHurt)
+        {
+            isMoving = false;
+            return;
+        }
 
         Move();
         Attack();
@@ -126,7 +131,7 @@ public class Bee : EnemyControl
                         }
 
                         float toTarget = ((player.transform.position+new Vector3(0, 1f, 0)) - transform.position).normalized.x;
-                        transform.localScale = new Vector3(-1*toTarget*scale, scale, scale);
+                        transform.localScale = toTarget > 0 ? new Vector3(-1*scale, scale, scale):new Vector3(scale, scale, scale);
                         rig.linearVelocity = speed * Direction;
                         moveStartPos = transform.position;
                     }

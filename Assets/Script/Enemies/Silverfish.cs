@@ -25,7 +25,7 @@ public class Silverfish : EnemyControl
     {
         base.Update();
 
-        if(isDead) return;
+        if(isDead || isHurt) return;
         
         if (Vector3.Distance(player.transform.position, transform.position) <= detectionRange)
         {

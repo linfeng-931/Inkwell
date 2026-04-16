@@ -15,7 +15,7 @@ public class Muk : EnemyControl
     {
         base.Start();
         attackStep = 0;
-        canAttack = false;
+        canAttack = true;
     }
 
     protected override void Update()
@@ -41,13 +41,28 @@ public class Muk : EnemyControl
         if (!canAttack)
         {
             attackTimer += Time.deltaTime;
+            if (attackTimer >= attackDelayTime)
+            {
+                canAttack = true;
+                attackTimer = 0f;
+            }
+        }
+
+        if (canAttack && isTracing && attackStep == 0)
+        {
+            animator.SetInteger("action", 1); 
+        }
+
+        /*if (!canAttack)
+        {
+            attackTimer += Time.deltaTime;
             if(attackTimer>=attackDelayTime){
                 canAttack = true;
                 animator.SetInteger("action", 1);
                 attackStep = 0;
                 attackTimer = 0f;
             }
-        }
+        }*/
     }
 
     protected override void Move()
@@ -55,14 +70,15 @@ public class Muk : EnemyControl
 
     void Attack()
     {
-        if (!isTracing || !canAttack) return;
+        if (!isTracing) return;
 
         switch (attackStep)
         {
             case 1:
                 Instantiate(mud, transform.position, new Quaternion(0,0,0,0));
+                print(true);
                 attackTimer = 0f;
-                attackStep += 1;
+                attackStep = 2;
                 break;
 
             case 2:
@@ -79,6 +95,6 @@ public class Muk : EnemyControl
 
     public void AddStep()
     {
-        attackStep += 1;
+        attackStep = 1;
     }
 }

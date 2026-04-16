@@ -8837,11 +8837,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6511908951819869753, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -69.26
+      value: 7.78
       objectReference: {fileID: 0}
     - target: {fileID: 6511908951819869753, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.96
+      value: -0.46
       objectReference: {fileID: 0}
     - target: {fileID: 6511908951819869753, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13464,6 +13464,7 @@ Transform:
   - {fileID: 1396307734}
   - {fileID: 2128416775}
   - {fileID: 1903001214}
+  - {fileID: 2133441535}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2088639405
@@ -13781,6 +13782,75 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5854576174487289698, guid: dcc978c3844066944b49f06d2ea2ae7a, type: 3}
   m_PrefabInstance: {fileID: 2132569363}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2133441534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2133441535}
+  - component: {fileID: 2133441537}
+  - component: {fileID: 2133441536}
+  m_Layer: 11
+  m_Name: Hazard (2)
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2133441535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133441534}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.3335641, z: -0, w: 0.94272745}
+  m_LocalPosition: {x: -33.15, y: 14.79, z: 6.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2088639404}
+  m_LocalEulerAnglesHint: {x: 0, y: 38.97, z: 0}
+--- !u!114 &2133441536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133441534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3f2f5a06366b4e3ea7f0d7346bf7ae4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnvironmentHazard
+  checkPoint: {fileID: 279521697}
+  fadeAni: {fileID: 717382716}
+  reStart: 0
+--- !u!65 &2133441537
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133441534}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.920933, y: 1.0946312, z: 4.9704456}
+  m_Center: {x: -1.639035, y: -6.5356045, z: 0.24210241}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

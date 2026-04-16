@@ -15,6 +15,8 @@ public abstract class EnemyControl : MonoBehaviour
     public Transform groundCheckPoint;
     public LayerMask groundLayer;
     public float checkRadius = 0.5f;
+    public ParticleSystem particleHurt;
+    public GameObject particleDead;
 
     protected bool isGrounded;
     protected GameObject player;
@@ -29,12 +31,13 @@ public abstract class EnemyControl : MonoBehaviour
     protected Animator animator;
     protected float scale;
     protected bool disDir;
+    protected bool isHurt;
 
     private PlayerController playerController;
     private bool flag;
     private float repelSpeed = 30f;
-    private bool isHurt;
     private float hurtTimer;
+    private Vector3 oriPos;
 
 
     protected virtual void Start()
@@ -78,6 +81,15 @@ public abstract class EnemyControl : MonoBehaviour
         if (isHurt)
         {
             hurtTimer+=Time.deltaTime;
+            if(oriPos != null)
+            {
+                if(Vector3.Distance(oriPos, transform.position) > 1f)
+                {
+                    hurtTimer = 0f;
+                    isHurt = false;
+                    rig.linearVelocity = new Vector3(0, 0, 0);
+                }
+            }
             if(hurtTimer > 0.2f)
             {
                 hurtTimer = 0f;
@@ -118,9 +130,12 @@ public abstract class EnemyControl : MonoBehaviour
     {
         isHurt = true;
         blood -= damage;
-        print("Hurt");
+        particleHurt.Play();
+
         if(blood <= 0){
             isDead = true;
+            particleDead.SetActive(true);
+            gameObject.GetComponent<SpriteRenderer>().enabled = false;
             gameObject.layer = LayerMask.NameToLayer("Body");
             if(otherCollider != null)
             {
@@ -134,8 +149,9 @@ public abstract class EnemyControl : MonoBehaviour
             rig.AddForce(Vector3.down * 20f, ForceMode.Acceleration);
         }
 
-        if (canRepel)
+        if (canRepel && blood > 0)
         {
+            oriPos = transform.position;
             rig.linearVelocity = new Vector3(repelSpeed*dir, 0, 0);
         }
     }
