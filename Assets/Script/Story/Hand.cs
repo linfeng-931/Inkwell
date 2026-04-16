@@ -97,6 +97,7 @@ public class Hand : MonoBehaviour
 
         if(shape.rotation.x >= 90f){
             shape.rotation = new Vector3(90f, shape.rotation.y, 0);
+            shape.scale += new Vector3(1, 10f*Time.deltaTime, 1);
             hand.SetActive(true);
             step++;
         }

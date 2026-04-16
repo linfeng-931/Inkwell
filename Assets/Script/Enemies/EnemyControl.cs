@@ -12,7 +12,11 @@ public abstract class EnemyControl : MonoBehaviour
     public float idleRange;
     public float detectionRange;
     public GameObject[] otherCollider;
+    public Transform groundCheckPoint;
+    public LayerMask groundLayer;
+    public float checkRadius = 0.5f;
 
+    protected bool isGrounded;
     protected GameObject player;
     protected Vector3 startPos;
     protected bool isDead;
@@ -48,11 +52,14 @@ public abstract class EnemyControl : MonoBehaviour
         delayMoveTimer = 0f;
         animator = GetComponent<Animator>();
         scale = Math.Abs(transform.localScale.x);
+        isGrounded = false;
     }
 
     protected virtual void Update()
     {
         if(isDead) return;
+
+        if(groundCheckPoint != null) isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
 
         //update direction
         if(rig.linearVelocity.y > 0){

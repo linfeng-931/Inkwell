@@ -10,7 +10,11 @@
             "m_Id": "48fc226fc2744c1aa3b9b88570773f5e"
         }
     ],
-    "m_Keywords": [],
+    "m_Keywords": [
+        {
+            "m_Id": "0e66666aa12c4617ab5ffd2355f112ae"
+        }
+    ],
     "m_Dropdowns": [],
     "m_CategoryData": [
         {
@@ -385,6 +389,34 @@
         "e32": 0.0,
         "e33": 1.0
     }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
+    "m_ObjectId": "0e66666aa12c4617ab5ffd2355f112ae",
+    "m_Guid": {
+        "m_GuidSerialized": "0feb3f08-fef6-429b-992d-8b013a7b95f1"
+    },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
+    "m_Name": "RECEIVE_FOG_OFF",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "RECEIVE_FOG_OFF",
+    "m_DefaultReferenceName": "_RECEIVE_FOG_OFF",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_KeywordType": 0,
+    "m_KeywordDefinition": 1,
+    "m_KeywordScope": 0,
+    "m_KeywordStages": 63,
+    "m_Entries": [],
+    "m_Value": 1,
+    "m_IsEditable": true
 }
 
 {
@@ -899,6 +931,9 @@
         },
         {
             "m_Id": "48fc226fc2744c1aa3b9b88570773f5e"
+        },
+        {
+            "m_Id": "0e66666aa12c4617ab5ffd2355f112ae"
         }
     ]
 }

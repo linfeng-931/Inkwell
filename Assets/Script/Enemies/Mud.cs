@@ -26,18 +26,36 @@ public class Mud : MonoBehaviour
         float displacementY = targetPos.y - startPos.y;
         Vector3 displacementXZ = new Vector3(targetPos.x - startPos.x, 0, targetPos.z - startPos.z);
 
-        //Vy
-        float gravity = Physics.gravity.y;
-        float velocityY = Mathf.Sqrt(-2 * gravity * launchHeight);
+        float gravity = Physics.gravity.y; 
+        float finalLaunchHeight = Mathf.Max(launchHeight, displacementY + 0.5f);
 
-        //t
-        float time = (-velocityY - Mathf.Sqrt(velocityY * velocityY - 2 * gravity * displacementY)) / gravity;
+        // Vy
+        float velocityY = Mathf.Sqrt(-2 * gravity * finalLaunchHeight);
 
-        //Vx
-        Vector3 velocityXZ = displacementXZ / time;
+        // t
+        float discriminant = velocityY * velocityY + 2 * gravity * (startPos.y - targetPos.y);
 
-        Vector3 finalVelocity = new Vector3(velocityXZ.x, velocityY, velocityXZ.z);
-        rig.AddForce(finalVelocity, ForceMode.VelocityChange);
+        if (discriminant < 0)
+        {
+            discriminant = 0;
+        }
+
+        float time = (-velocityY - Mathf.Sqrt(discriminant)) / gravity;
+
+        if (time > 0.001f)
+        {
+            Vector3 velocityXZ = displacementXZ / time;
+            Vector3 finalVelocity = new Vector3(velocityXZ.x, velocityY, velocityXZ.z);
+
+            if (!float.IsNaN(finalVelocity.x) && !float.IsNaN(finalVelocity.z))
+            {
+                rig.AddForce(finalVelocity, ForceMode.VelocityChange);
+            }
+        }
+        else
+        {
+            rig.AddForce(Vector3.up * velocityY, ForceMode.VelocityChange);
+        }
     }
 
     void OnTriggerEnter(Collider other)

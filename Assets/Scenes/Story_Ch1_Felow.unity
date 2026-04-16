@@ -1698,7 +1698,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -2083,7 +2083,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 90, z: 0}
-    m_Scale: {x: 1, y: 1, z: 1}
+    m_Scale: {x: 1, y: 0, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -14462,6 +14462,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.00000021344344
       objectReference: {fileID: 0}
+    - target: {fileID: 8753162857759718916, guid: c461d4abfe554654192a42799a7dbb43, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ec5bed0cdd6db0a4d99dea4c65da0c3f, type: 2}
+    - target: {fileID: 8753162857759718916, guid: c461d4abfe554654192a42799a7dbb43, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ec5bed0cdd6db0a4d99dea4c65da0c3f, type: 2}
     - target: {fileID: 9096309219316179172, guid: c461d4abfe554654192a42799a7dbb43, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -22.635506

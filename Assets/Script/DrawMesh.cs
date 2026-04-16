@@ -295,12 +295,20 @@ public class DrawMesh : MonoBehaviour
         pbMesh.ToMesh();
         pbMesh.Refresh();
         
-        MeshCollider col = GetComponent<MeshCollider>();
-        if(col == null) col = gameObject.AddComponent<MeshCollider>();
-        col.sharedMesh = mf.sharedMesh;
-        transform.position = transform.position + new Vector3(0, 0, 1);
-        gameObject.layer = 3;
         isExtrude = true;
+        transform.position += new Vector3(0, 0, 1);
+
+        // 子物件負責物理
+        GameObject physProxy = new GameObject(gameObject.name + "_PhysicsProxy");
+        physProxy.transform.SetParent(this.transform);
+        physProxy.transform.localPosition = Vector3.zero;
+        physProxy.transform.localRotation = Quaternion.identity;
+        physProxy.transform.localScale = Vector3.one;
+
+        physProxy.layer = 3; 
+
+        MeshCollider col = physProxy.AddComponent<MeshCollider>();
+        col.sharedMesh = mf.sharedMesh;
     }
 
     public void DrawMeshDestory()

@@ -68,7 +68,7 @@ public class Silverfish : EnemyControl
             else
             {
                 rig.linearVelocity = speed * Direction;
-                if (Vector3.Distance(transform.position, moveStartPos) >= idleRange)
+                if (Vector3.Distance(transform.position, moveStartPos) >= idleRange || !isGrounded)
                 {
                     isMoving = false;
                     rig.linearVelocity = new Vector3(0, 0, 0);
@@ -82,15 +82,21 @@ public class Silverfish : EnemyControl
             {
                 Attack();
             }
-            else
+            else if(isGrounded)
             {
                 Vector3 Direction = (player.transform.position - transform.position).normalized;
                 Vector3 finalTarget = new Vector3(Direction.x, 0, Direction.z);
                 rig.linearVelocity = finalTarget * speed;
                 isMoving = true;
                 animator.SetInteger("action", 1);
-                transform.localScale = new Vector3(-1*finalTarget.x*scale, scale, scale);
+                transform.localScale = (-1*finalTarget.x) > 0? new Vector3(scale, scale, scale) : new Vector3(-1f*scale, scale, scale);
                 dir = (-1*finalTarget.x) > 0? 1 : -1;
+            }
+            else if (!isGrounded)
+            {
+                isMoving = false;
+                rig.linearVelocity = new Vector3(0, 0, 0);
+                animator.SetInteger("action", 0);
             }
         }
     }

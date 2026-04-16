@@ -13,7 +13,7 @@ public class Yak : EnemyControl
     {
         base.Start();
         delayMoveTime = 2f;
-        attackStep = 0;
+        attackStep = -1;
         attackTimer = 0f;
         attackDelayTime = 2f;
     }
@@ -39,7 +39,7 @@ public class Yak : EnemyControl
 
     protected override void Move()
     {
-        if (attackStep != 0) 
+        if (attackStep > 0) 
         {
             Attack();
             return;
@@ -53,20 +53,20 @@ public class Yak : EnemyControl
                 delayMoveTimer += Time.deltaTime;
                 if (delayMoveTimer >= delayMoveTime)
                 {
+                    delayMoveTimer = 0f;
                     isMoving = true;
-                    Direction = dir == 1 ? new Vector3(1, 0, 0) : new Vector3(-1, 0, 0);
                     dir *= -1;
+                    Direction = dir == 1 ? new Vector3(1, 0, 0) : new Vector3(-1, 0, 0);
                     rig.linearVelocity = speed * Direction;
                     moveStartPos = transform.position;
                     isMoving = true;
                     animator.SetInteger("action", 1);
-                    
                 }
             }
             else
             {
                 rig.linearVelocity = speed * Direction;
-                if (Vector3.Distance(transform.position, moveStartPos) >= idleRange)
+                if (Vector3.Distance(transform.position, moveStartPos) >= idleRange || !isGrounded)
                 {
                     isMoving = false;
                     rig.linearVelocity = new Vector3(0, 0, 0);
@@ -74,13 +74,14 @@ public class Yak : EnemyControl
                 }
             }
         }
-        else
+        /*else
         {
             if (Vector3.Distance(player.transform.position, transform.position) < detectionRange * 0.7f)
             {
+                if(attackStep == -1) attackStep = 0;
                 Attack();
             }
-            else
+            else if(isGrounded)
             {
                 Vector3 Direction = (player.transform.position - transform.position).normalized;
                 Vector3 finalTarget = new Vector3(Direction.x, 0, Direction.z);
@@ -90,7 +91,13 @@ public class Yak : EnemyControl
                 transform.localScale = new Vector3(dir*scale, scale, scale);
                 isMoving = true;
             }
-        }
+            else if (!isGrounded)
+            {
+                isMoving = false;
+                rig.linearVelocity = new Vector3(0, 0, 0);
+                animator.SetInteger("action", 0);
+            }
+        }*/
     }
     void Attack()
     {
@@ -116,7 +123,7 @@ public class Yak : EnemyControl
             case 2: //ing
                 rig.linearVelocity = speed * 5f * attackTarget;
                 attackTimer += Time.deltaTime;
-                if (Vector3.Distance(transform.position, moveStartPos) >= moveRange * 1.8f)
+                if (Vector3.Distance(transform.position, moveStartPos) >= moveRange * 1.8f || !isGrounded)
                 {
                     isMoving = false;
                     rig.linearVelocity = new Vector3(0, 0, 0);
