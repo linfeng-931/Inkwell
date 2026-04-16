@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     public bool isStory;
     public bool isStory2;
     public bool isInteract;
+    public bool isGoTarget;
 
     private float timer;
     private string action; //dash, jump, run, attack, skill, draw, idle
@@ -86,6 +87,10 @@ public class PlayerController : MonoBehaviour
     //swirl
     private bool isSwirl;
 
+    //interaction
+    private Vector3 interactTarget;
+    private int toTargetType;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -110,6 +115,7 @@ public class PlayerController : MonoBehaviour
         xScale = transform.localScale.x;
         skyAttack = true;
         direction = true;
+        isGoTarget = false;
         transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
     }
 
@@ -118,6 +124,7 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
         Dead();
+        GoTarget();
         if(isDead || isStory || isStory2 || isInteract) return;
 
         if(isSwirl){
@@ -223,7 +230,7 @@ public class PlayerController : MonoBehaviour
             jumpDelay+=Time.deltaTime;
             if(jumpCount == 0 && !isHurt && !isDead)
             {
-                SwitchAni(8);
+                if(!isGoTarget) SwitchAni(8);
             }
         }
         else if(rb.linearVelocity.y < 0)
@@ -517,6 +524,40 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void SetUpForInteraction(Vector3 target, int type)
+    {
+        interactTarget = target;
+        isInteract = true;
+        isGoTarget = true;
+        toTargetType = type;
+        if(type == 0) SwitchAni(11);
+        else if(type == 1) SwitchAni(1);
+    }
+    void GoTarget()
+    {
+        if(!isGoTarget) return;
+
+        if(toTargetType == 0)
+        {
+            Vector3 dirTarget = (interactTarget - transform.position).normalized;
+            rb.linearVelocity = new Vector3(moveSpeed*0.4f*dirTarget.x, rb.linearVelocity.y, rb.linearVelocity.z);
+            if(Math.Abs(interactTarget.x-transform.position.x) < 0.1f)
+            {
+                isGoTarget = false;
+            }
+        }
+        else if(toTargetType == 1)
+        {
+            Vector3 dirTarget = (interactTarget - transform.position).normalized;
+            rb.linearVelocity = new Vector3(moveSpeed*dirTarget.x, rb.linearVelocity.y, rb.linearVelocity.z);
+            if(Math.Abs(interactTarget.x-transform.position.x) < 0.1f)
+            {
+                isGoTarget = false;
+            }
+        }
+        
+    }
+
     public void SwitchAni(int act)
     {
         if (animator.GetInteger(action) == act) return;
@@ -546,6 +587,7 @@ public class PlayerController : MonoBehaviour
         isDead = false;
         skyAttack = true;
         deadTimer = 0f;
+        isGoTarget = false;
         transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
     }
 }
