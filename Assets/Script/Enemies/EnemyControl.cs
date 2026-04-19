@@ -11,7 +11,7 @@ public abstract class EnemyControl : MonoBehaviour
     public float moveRange;
     public float idleRange;
     public float detectionRange;
-    public GameObject[] otherCollider;
+    public GameObject[] otherObj;
     public Transform groundCheckPoint;
     public LayerMask groundLayer;
     public float checkRadius = 0.5f;
@@ -57,14 +57,22 @@ public abstract class EnemyControl : MonoBehaviour
         animator = GetComponent<Animator>();
         scale = Math.Abs(transform.localScale.x);
         isGrounded = false;
-        disDir = false;
     }
 
     protected virtual void Update()
     {
         if(isDead) return;
 
-        if(groundCheckPoint != null) isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
+        if(groundCheckPoint != null){
+            isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
+            if (!isGrounded && rig.linearVelocity != Vector3.zero)
+            {
+                isMoving = false;
+                rig.linearVelocity = new Vector3(0, 0, 0);
+                animator.SetInteger("action", 0);
+                isTracing = false;
+            }
+        }
 
         //update direction
         if (!disDir)
@@ -137,11 +145,12 @@ public abstract class EnemyControl : MonoBehaviour
             particleDead.SetActive(true);
             gameObject.GetComponent<SpriteRenderer>().enabled = false;
             gameObject.layer = LayerMask.NameToLayer("Body");
-            if(otherCollider != null)
+            if(otherObj != null)
             {
-                foreach (var item in otherCollider)
+                foreach (var item in otherObj)
                 {
                     item.layer = LayerMask.NameToLayer("Body");
+                    if(item.GetComponent<SpriteRenderer>() != null) item.GetComponent<SpriteRenderer>().enabled = false;
                 }
             }
             GetComponent<Collider>().isTrigger = false;

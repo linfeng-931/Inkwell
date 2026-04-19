@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     [Header("Collision Setting")]
     public Transform groundCheckPoint;
     public LayerMask groundLayer;
+    public LayerMask otherGroundLayer;
     public float checkRadius = 0.3f;
     public bool isGrounded;
 
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour
     private float timer;
     private string action; //dash, jump, run, attack, skill, draw, idle
     private Rigidbody rb;
+    private int combinedLayerMask;
 
     //move
     private float accelerateSpeed = 80f;
@@ -119,12 +121,13 @@ public class PlayerController : MonoBehaviour
         isGoTarget = false;
         transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
         mapParent = GameObject.FindGameObjectWithTag("Map").transform;
+        combinedLayerMask = groundLayer | otherGroundLayer;
     }
 
     // Update is called once per frame
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
+        isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, combinedLayerMask);
         Dead();
         GoTarget();
         if(isDead || isStory || isStory2 || isInteract) return;

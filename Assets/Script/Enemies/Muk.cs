@@ -20,6 +20,8 @@ public class Muk : EnemyControl
 
     protected override void Update()
     {
+        if(isDead) return;
+        
         base.Update();
 
         if((player.transform.position.x - transform.position.x) < 0)
@@ -52,17 +54,6 @@ public class Muk : EnemyControl
         {
             animator.SetInteger("action", 1); 
         }
-
-        /*if (!canAttack)
-        {
-            attackTimer += Time.deltaTime;
-            if(attackTimer>=attackDelayTime){
-                canAttack = true;
-                animator.SetInteger("action", 1);
-                attackStep = 0;
-                attackTimer = 0f;
-            }
-        }*/
     }
 
     protected override void Move()

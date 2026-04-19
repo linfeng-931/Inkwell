@@ -104,7 +104,7 @@ Transform:
   m_GameObject: {fileID: 70192783374562865}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.33, y: 5.24, z: -5.94}
+  m_LocalPosition: {x: 38.97, y: 2.07, z: -5.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1727,6 +1727,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 4378d3e78fc42425f9cb4cddf466fb66, type: 2}
+    - target: {fileID: 1166796769976342746, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
+      propertyPath: otherGroundLayer.m_Bits
+      value: 8192
+      objectReference: {fileID: 0}
     - target: {fileID: 1356121302652301512, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1813,11 +1817,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5758505504365379488, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -17.789999
+      value: 39.120003
       objectReference: {fileID: 0}
     - target: {fileID: 5758505504365379488, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.2400007
+      value: 2.2199998
       objectReference: {fileID: 0}
     - target: {fileID: 5758505504365379488, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1881,7 +1885,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 4378d3e78fc42425f9cb4cddf466fb66, type: 2}
     - target: {fileID: 6569083932468495679, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: energyRangeX_max
-      value: 248
+      value: 352
+      objectReference: {fileID: 0}
+    - target: {fileID: 6569083932468495679, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
+      propertyPath: energyRangeX_min
+      value: 130
       objectReference: {fileID: 0}
     - target: {fileID: 6570160318611228294, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: m_Layer
