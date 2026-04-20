@@ -313,7 +313,9 @@ public class DrawMesh : MonoBehaviour
 
     public void DrawMeshDestory()
     {
-        Destroy(this.transform.root.gameObject);
+        //Destroy(this.transform.root.gameObject);
+        isAct = true;
+        isComplete = true;
     }
 
     private void GenerateSegmentColliders()

@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public GameObject dashObj;
     public GameObject dashObj1;
     public GameObject dashObj2;
-    public float attackStepDelay = 0.2f;
+    public float attackStepDelay = 0.1f;
     public BoxCollider attackCollider;
     public GameObject attackPratical;
     public bool isHurt;
@@ -120,7 +120,8 @@ public class PlayerController : MonoBehaviour
         direction = true;
         isGoTarget = false;
         transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
-        mapParent = GameObject.FindGameObjectWithTag("Map").transform;
+        if(GameObject.FindGameObjectWithTag("Map")!=null) mapParent = GameObject.FindGameObjectWithTag("Map").transform;
+        else mapParent = null;
         combinedLayerMask = groundLayer | otherGroundLayer;
     }
 
@@ -459,19 +460,22 @@ public class PlayerController : MonoBehaviour
             attackPratical.SetActive(false);
             return;
         }
-        if(Vector3.Distance(oriPos, transform.position)>0.2f) rb.linearVelocity = new Vector3(0, 0, 0);
+        if(Vector3.Distance(oriPos, transform.position)>0.5f) rb.linearVelocity = new Vector3(0, 0, 0);
 
         if(!isGrounded) playerAni.ResumeAni(); //跳躍時的攻擊問題
 
         //delay between steps
-        if(attackDelay > attackStepDelay)
+        if(attackStep == 3 && attackDelay > attackStepDelay + 0.1f)
         {
             canAttack = true;
             attackDelay = 0f;
-            if(attackStep == 3){
-                attackStep = 0;
-                if(!isGrounded) skyAttack = false;
-            }
+            attackStep = 0;
+            if(!isGrounded) skyAttack = false;
+        }
+        else if(attackDelay > attackStepDelay && attackStep != 3)
+        {
+            canAttack = true;
+            attackDelay = 0f;
         }
         else
         {
@@ -479,7 +483,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //cancel attack
-        if(attackKeep > 0.5f)
+        if(attackKeep > 0.45f)
         {
             isAttack = false;
             attackKeep = 0;
@@ -506,18 +510,19 @@ public class PlayerController : MonoBehaviour
         if(type == 0) SwitchAni(-1);
         if(type == 1) SwitchAni(7);
         oriPos = transform.position;
+        print(x);
         if(type == 0){
             if(x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
             else rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
         }
         
         if(x > 0){
-            direction = false;
             transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
-        }
-        else{
             direction = true;
+        }
+        else if(x < 0){
             transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+            direction = false;
         }
 
         playerStatus.blood -= damage;

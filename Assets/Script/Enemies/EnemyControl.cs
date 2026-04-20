@@ -115,13 +115,14 @@ public abstract class EnemyControl : MonoBehaviour
                 if(playerController.isHurt) return;
                 Rigidbody playerRb = player.GetComponent<Rigidbody>();
                 playerRb.linearVelocity = Vector3.zero;
-                Vector3 forceDir = rig.linearVelocity.x>0 ? new Vector3(1, 1, 0) : new Vector3(-1, 1, 0);
+                float x = transform.position.x - player.transform.position.x;
+                Vector3 forceDir = x<0 ? new Vector3(1, 1, 0) : new Vector3(-1, 1, 0);
                 playerRb.AddForce(forceDir * 4f, ForceMode.Impulse);
-                playerController.Hurt(damage, 1, rig.linearVelocity.x);
+                playerController.Hurt(damage, 1, transform.position.x - player.transform.position.x);
             }
             else
             {
-                playerController.Hurt(damage, 0, rig.linearVelocity.x);
+                playerController.Hurt(damage, 0, transform.position.x - player.transform.position.x);
             }
         }
         else if (collision.gameObject.CompareTag("Weapon"))

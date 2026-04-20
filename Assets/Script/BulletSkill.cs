@@ -47,7 +47,7 @@ public class BulletSkill : MonoBehaviour
         if (delayTime)
         {
             delayTimer += Time.deltaTime;
-            if(delayTimer > 0.9f) delayTime = false;
+            if(delayTimer > 0.5f) delayTime = false;
             return;
         }
 
@@ -66,7 +66,7 @@ public class BulletSkill : MonoBehaviour
                     timer = 0f;
                     startTimer = false;
                 }
-                if(timer > 1f)
+                if(timer > 0.8f)
                 {
                     isAct = true;
                     targetStyle = 1;
