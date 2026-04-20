@@ -127,7 +127,11 @@ public abstract class EnemyControl : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Weapon"))
         {
-            if(!isHurt) Hurt(player.GetComponent<PlayerStatus>().damage);
+            if (!isHurt)
+            {
+                Hurt(player.GetComponent<PlayerStatus>().damage);
+                print("bul");
+            }
         }
         else
         {

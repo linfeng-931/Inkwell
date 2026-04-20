@@ -57,7 +57,7 @@ public class Bullet : MonoBehaviour
     {
         if(type == 0)
         {
-            if(other.CompareTag("Player")) return;
+            if(other.CompareTag("Player") || other.CompareTag("Body")) return;
             transform.GetChild(1).gameObject.SetActive(true);
             transform.GetChild(0).gameObject.SetActive(false);
             end = true;
