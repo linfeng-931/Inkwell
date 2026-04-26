@@ -28,7 +28,7 @@ public class DrawMesh : MonoBehaviour
     private Mesh mesh;
     private Vector3 lastMousePosition;
     private float smooth = 0.1f;
-    private float sensitivity = 1000f;
+    private float sensitivity = 500f;
     private float totalDistance = 0f;
     private float currentThickness = 0.01f;
     private float timer;
@@ -120,6 +120,7 @@ public class DrawMesh : MonoBehaviour
             {
                 Vector3 currentMousePos = MouseUtils.GetMouseWorldPosition();
                 float moveDistance = Vector3.Distance(currentMousePos, lastMousePosition);
+                Vector3 moveVector = currentMousePos - lastMousePosition;
                 //可調整平滑度
                 if(moveDistance < smooth) return;
 
@@ -139,12 +140,25 @@ public class DrawMesh : MonoBehaviour
 
                 totalDistance += moveDistance;
 
-                //筆畫粗細
-                float speed = moveDistance/Time.deltaTime;
-                float targetThickness = 0.3f - (speed/sensitivity);
-                if(targetThickness > 0.3f) targetThickness = 0.3f;
-                if(targetThickness < 0.01f) targetThickness = 0.01f;
-                currentThickness = Mathf.Lerp(currentThickness, targetThickness, 100f*Time.deltaTime);
+                float deltaX = Mathf.Abs(moveVector.x);
+                float deltaY = Mathf.Abs(moveVector.y);
+
+                float speed = moveDistance / Time.deltaTime;
+
+                float baseThickness = 0.05f + (speed / sensitivity);
+
+                //0 代表完全水平，1 代表完全垂直
+                float t = deltaY / (deltaX + deltaY + 0.0001f);
+
+                float horizontalWeight = 0.05f;
+                float verticalWeight = 3.0f;
+
+                float directionalMultiplier = Mathf.Lerp(horizontalWeight, verticalWeight, t);
+                float targetThickness = baseThickness * directionalMultiplier;
+
+                print("speed = "+speed+", targetThickness = "+targetThickness);
+                targetThickness = Mathf.Clamp(targetThickness, 0.05f, 0.35f);
+                currentThickness = Mathf.Lerp(currentThickness, targetThickness, 10f*Time.deltaTime);
                 
 
                 Vector3[] vertices = new Vector3[mesh.vertices.Length + 2];

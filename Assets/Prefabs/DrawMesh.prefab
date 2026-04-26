@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7255357473306522788
 Transform:
   m_ObjectHideFlags: 0
@@ -287,8 +287,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2
-      minScalar: 0.5
+      scalar: 1
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4904,7 +4904,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: 632dea8921c974f79bc691a2d29b3620, type: 3}
+  - {fileID: 2100000, guid: 0fe9bbeda8f514ddcafd49611709fca2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4948,6 +4948,6 @@ MonoBehaviour:
   drawKey: 1
   shaders:
   - {fileID: 2100000, guid: 9d0534760542d4bce8b8af98acb7cf80, type: 2}
-  - {fileID: -876546973899608171, guid: 632dea8921c974f79bc691a2d29b3620, type: 3}
+  - {fileID: 2100000, guid: 0fe9bbeda8f514ddcafd49611709fca2, type: 2}
   colliderDepth: 10
   uvTiling: 10
