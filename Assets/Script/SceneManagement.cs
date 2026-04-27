@@ -11,6 +11,7 @@ public class SceneManagement : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            
             changeSceneAnimator.SetTrigger("changeScene");
             canChange = true;
         }
