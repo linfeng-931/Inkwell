@@ -12,7 +12,9 @@ public class PlayerController : MonoBehaviour
     public bool isDash;
     public float jumpForce;
     public PlayerAni playerAni;
-    public ParticleSystem footEffect;
+    public ParticleSystem jumpEffect0;
+    public ParticleSystem jumpEffect1;
+    public ParticleSystem dropEffect;
     public float dashForce;
     public GameObject dashObj;
     public GameObject dashObj1;
@@ -158,11 +160,11 @@ public class PlayerController : MonoBehaviour
                 playerAni.ResumeAni();
                 if(rb.linearVelocity.x < 0.1f){
                     SwitchAni(0);
-                    footEffect.Play();
+                    dropEffect.Play();
                 }
                 else{
                     SwitchAni(1);
-                    footEffect.Play();
+                    dropEffect.Play();
                 }
                 jumpDelay = 0;
             }
@@ -417,12 +419,14 @@ public class PlayerController : MonoBehaviour
             jumpCount++;
             if(jumpCount == 1){
                 jumpDelayTimer = 0f;
-                footEffect.Play();
+                jumpEffect0.Play();
+                jumpEffect1.Play();
                 SwitchAni(2);
             }
             else if(jumpCount == 2){
                 jumpDelayTimer = 0f;
-                footEffect.Play();
+                jumpEffect0.Play();
+                jumpEffect1.Play();
                 playerAni.ResumeAni();
                 SwitchAni(3);
             }

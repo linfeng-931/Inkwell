@@ -17,9 +17,12 @@ public class CameraChangeArea : MonoBehaviour
 
     void AutoGetRadiusFromMesh(GameObject cylinderObj)
     {
-        Bounds bounds = cylinderObj.GetComponent<Renderer>().bounds;
-        
-        radius = bounds.extents.x; 
+        Renderer cylinderRenderer = cylinderObj.GetComponent<Renderer>();
+        Bounds bounds;
+        if(cylinderRenderer != null){
+            bounds = cylinderRenderer.bounds;
+            radius = bounds.extents.x; 
+        }
         
         Debug.Log("自動偵測半徑為: " + radius);
     }
@@ -30,7 +33,7 @@ public class CameraChangeArea : MonoBehaviour
         if(other.CompareTag("Player") && !flag)
         {
             flag = true;
-            oriQua = Map.transform.rotation;
+            if(Map != null) oriQua = Map.transform.rotation;
             AutoGetRadiusFromMesh(gameObject);
         }
     }
