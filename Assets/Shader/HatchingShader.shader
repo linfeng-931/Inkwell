@@ -23,7 +23,7 @@ Shader "Custom/Hatching_RealLit"
         Tags { 
             "RenderType" = "Transparent" 
             "RenderPipeline" = "UniversalPipeline" 
-            "Queue" = "Transparent+1"
+            "Queue" = "Transparent"
         }
 
         Pass
