@@ -27,7 +27,7 @@ public class Mark : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             ColorBlock cb = button.colors;
             cb.normalColor = colors[1];
             button.colors = cb;
-            transform.localScale = Vector3.one * 0.9f;
+            transform.localScale = Vector3.one * 0.8f;
         }
         oriSwitchLayerDelay = switchLayerDelay;
         oriSwitchLayerDelayClose = switchLayerDelayClose;
