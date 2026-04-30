@@ -144,10 +144,15 @@ public class CurrentPage : MonoBehaviour
             timer1 += Time.unscaledDeltaTime;
             if(timer1 >= subPageDelayTime)
             {
-                Transform main = subPages[majorIndex].transform.GetChild(currentSubPage);
-                Transform last = subPages[majorIndex].transform.GetChild(lastSubPage);
-                last.gameObject.SetActive(false);
-                main.gameObject.SetActive(true);
+                Transform main = null;
+                Transform last = null;
+                if(currentSubPage > 0 && currentSubPage < subPages[majorIndex].transform.childCount)
+                    main = subPages[majorIndex].transform.GetChild(currentSubPage);
+                if(currentSubPage > 0 && currentSubPage < subPages[majorIndex].transform.childCount)
+                    last = subPages[majorIndex].transform.GetChild(lastSubPage);
+
+                if(last != null) last.gameObject.SetActive(false);
+                if(main != null) main.gameObject.SetActive(true);
                 lastSubPage = currentSubPage;
 
                 timer1 = 0f;
