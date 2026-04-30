@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public int cameraStatus; //0 normal, 1 close
+
     public float moveSpeed;
     public float stopOffsetY;
     public int drawKey = 1;
@@ -16,6 +18,13 @@ public class CameraController : MonoBehaviour
     public bool eligibleExtrude;
     public bool canExtrude;
 
+    [Header("Closer Camera")]
+    public float maxDis;
+    public float closerSpeed;
+
+    private float oriZ;
+    private int closerStep;
+
     private GameObject player;
     private Rigidbody playerRig;
     private Vector3 playerPos;
@@ -27,6 +36,9 @@ public class CameraController : MonoBehaviour
     private bool onDrawPoint;
     private GameObject[] drawPointList;
     private int drawPointNum;
+
+    //closer camera
+    private float closerTimer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -42,6 +54,10 @@ public class CameraController : MonoBehaviour
         drawPointNum = 0;
         canExtrude = false;
         eligibleExtrude = false;
+        cameraStatus = 0;
+        closerTimer = 0f;
+        oriZ = transform.position.z;
+        closerStep = 0;
     }
 
     // Update is called once per frame
@@ -57,6 +73,7 @@ public class CameraController : MonoBehaviour
             drawPointNum = 0;
             drawPointList = new GameObject[2];
         }
+        CameraDistance();
     }
 
     void FollowPlayer()
@@ -165,5 +182,42 @@ public class CameraController : MonoBehaviour
                 lastDrawPoint = null;
             }
         }
+    }
+
+    void CameraDistance()
+    {
+        if(cameraStatus != 1) return;
+        
+        switch (closerStep)
+        {
+            case 0:
+                transform.position += new Vector3(0, 0, Time.deltaTime * closerSpeed);
+                if(transform.position.z >= maxDis)
+                {
+                    transform.position = new Vector3(transform.position.x, transform.position.y, maxDis);
+                    closerStep++;
+                }
+                break;
+            case 1:
+                closerTimer += Time.deltaTime;
+                if(closerTimer >= 0.5f)
+                {
+                    closerStep++;
+                    closerTimer = 0f;
+                }
+                break;
+            case 2:
+                transform.position -= new Vector3(0, 0, Time.deltaTime * closerSpeed);
+                if(transform.position.z <= oriZ)
+                {
+                    transform.position = new Vector3(transform.position.x, transform.position.y, oriZ);
+                    cameraStatus = 0;
+                    closerStep = 0;
+                }
+                break;
+            default:
+                break;
+        }
+        
     }
 }
