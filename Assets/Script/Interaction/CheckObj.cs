@@ -6,6 +6,7 @@ public class CheckObj : MonoBehaviour
     public GameObject checkedObj;
 
     private PlayerController playerController;
+    private Rigidbody playerRig;
     private bool isAct;
 
     void Start()
@@ -13,6 +14,7 @@ public class CheckObj : MonoBehaviour
         checkedObj.SetActive(false);
         isAct = false;
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        playerRig = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -21,6 +23,7 @@ public class CheckObj : MonoBehaviour
         {
             isAct = true;
             playerController.isInteract = true;
+            playerRig.linearVelocity = new Vector3(0, playerRig.linearVelocity.y, 0);
             checkedObj.SetActive(true);
         }
 

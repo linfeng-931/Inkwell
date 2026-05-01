@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Awake : MonoBehaviour
 {
+    private PlayerController playerController;
     private float timer;
     private Animator animator;
 
@@ -10,6 +11,8 @@ public class Awake : MonoBehaviour
         timer = 0f;
         animator = GetComponent<Animator>();
         animator.speed = 0;
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        playerController.enabled = false;
     }
 
     void Update()
@@ -26,5 +29,6 @@ public class Awake : MonoBehaviour
         GameObject playerFace = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).gameObject;
         playerFace.SetActive(true);
         gameObject.SetActive(false);
+        playerController.enabled = true;
     }
 }

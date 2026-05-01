@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public float attackStepDelay = 0.1f;
     public BoxCollider attackCollider;
     public GameObject attackPratical;
+    public AttackEffect attackEffect;
     public bool isHurt;
 
     [Header("Collision Setting")]
@@ -449,6 +450,7 @@ public class PlayerController : MonoBehaviour
             int aniInt = animator.GetInteger(action);
             if(aniInt != 4 && aniInt != 5 && aniInt!=6) previousAct = aniInt;
             attackStep+=1;
+            attackEffect.attackAmount+=1;
             attackDelay = 0f;
             attackKeep = 0f;
             SwitchAni(3+attackStep);
@@ -514,7 +516,7 @@ public class PlayerController : MonoBehaviour
         if(type == 0) SwitchAni(-1);
         if(type == 1) SwitchAni(7);
         oriPos = transform.position;
-        print(x);
+
         if(type == 0){
             if(x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
             else rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
@@ -553,6 +555,7 @@ public class PlayerController : MonoBehaviour
     {
         interactTarget = target;
         isInteract = true;
+        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         isGoTarget = true;
         toTargetType = type;
         if(type == 0) SwitchAni(11);
