@@ -16,6 +16,7 @@ TagManager:
   - Interaction
   - Map
   - Body
+  - Socket
   layers:
   - Default
   - TransparentFX
@@ -31,8 +32,8 @@ TagManager:
   - Environment Hazard
   - BrokenPillar
   - otherGround
-  - 
-  - 
+  - GraySocket
+  - TextSocket
   - 
   - 
   - 
@@ -52,6 +53,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: GraySocket
+    uniqueID: 3806111997
+    locked: 0
+  - name: TextSocket
+    uniqueID: 2545627131
     locked: 0
   m_RenderingLayers:
   - Default
