@@ -16,7 +16,11 @@ public abstract class EnemyControl : MonoBehaviour
     public LayerMask groundLayer;
     public float checkRadius = 0.5f;
     public ParticleSystem particleHurt;
+    public Material HurtMaterial;
     public GameObject particleDead;
+    public float repelSpeed = 30f;
+    public float repelDistance = 1f;
+    public GameObject DeadEffect;
 
     protected bool isGrounded;
     protected GameObject player;
@@ -32,12 +36,14 @@ public abstract class EnemyControl : MonoBehaviour
     protected float scale;
     protected bool disDir;
     protected bool isHurt;
+    
 
     private PlayerController playerController;
     private bool flag;
-    private float repelSpeed = 30f;
     private float hurtTimer;
     private Vector3 oriPos;
+    private SpriteRenderer spriteRenderer;
+    private Material oriMaterial;
 
 
     protected virtual void Start()
@@ -57,7 +63,10 @@ public abstract class EnemyControl : MonoBehaviour
         animator = GetComponent<Animator>();
         scale = Math.Abs(transform.localScale.x);
         isGrounded = false;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        oriMaterial = spriteRenderer.material;
     }
+
 
     protected virtual void Update()
     {
@@ -91,17 +100,19 @@ public abstract class EnemyControl : MonoBehaviour
             hurtTimer+=Time.deltaTime;
             if(oriPos != null)
             {
-                if(Vector3.Distance(oriPos, transform.position) > 1f)
+                if(Vector3.Distance(oriPos, transform.position) > repelDistance)
                 {
                     hurtTimer = 0f;
                     isHurt = false;
+                    spriteRenderer.material = oriMaterial;
                     rig.linearVelocity = new Vector3(0, 0, 0);
                 }
             }
-            if(hurtTimer > 0.2f)
+            if(hurtTimer > 0.5f)
             {
                 hurtTimer = 0f;
                 isHurt = false;
+                spriteRenderer.material = oriMaterial;
                 rig.linearVelocity = new Vector3(0, 0, 0);
             }
         }
@@ -130,7 +141,6 @@ public abstract class EnemyControl : MonoBehaviour
             if (!isHurt)
             {
                 Hurt(player.GetComponent<PlayerStatus>().damage);
-                print("bul");
             }
         }
         else
@@ -144,10 +154,11 @@ public abstract class EnemyControl : MonoBehaviour
         isHurt = true;
         blood -= damage;
         particleHurt.Play();
+        spriteRenderer.material = HurtMaterial;
 
         if(blood <= 0){
             isDead = true;
-            particleDead.SetActive(true);
+            /*particleDead.SetActive(true);
             gameObject.GetComponent<SpriteRenderer>().enabled = false;
             gameObject.layer = LayerMask.NameToLayer("Body");
             if(otherObj != null)
@@ -160,7 +171,10 @@ public abstract class EnemyControl : MonoBehaviour
             }
             GetComponent<Collider>().isTrigger = false;
             rig.useGravity = true;
-            rig.AddForce(Vector3.down * 20f, ForceMode.Acceleration);
+            rig.AddForce(Vector3.down * 20f, ForceMode.Acceleration);*/
+
+            Instantiate(DeadEffect, gameObject.transform.position, Quaternion.identity);
+            Destroy(gameObject);
         }
 
         if (canRepel && blood > 0)

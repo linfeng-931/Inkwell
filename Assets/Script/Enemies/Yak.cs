@@ -44,6 +44,8 @@ public class Yak : EnemyControl
 
     protected override void Move()
     {
+        if(isHurt) return;
+
         if (attackStep > 0) 
         {
             Attack();
