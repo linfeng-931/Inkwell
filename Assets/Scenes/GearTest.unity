@@ -680,10 +680,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.00066666666, y: 0.0006666665, z: 0.0006666665}
+  m_LocalScale: {x: 0.0014285714, y: 0.0014285708, z: 0.0014285708}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 660409243}
+  m_Father: {fileID: 331929901}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &82918407
 SpriteRenderer:
@@ -905,11 +905,11 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 585024004}
+    m_TransformParent: {fileID: 1623728292}
     m_Modifications:
     - target: {fileID: 2364331010718011993, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: m_Name
-      value: puzzle_gear_sm_l
+      value: puzzle_gear_sm_r
       objectReference: {fileID: 0}
     - target: {fileID: 2364331010718011993, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: m_Layer
@@ -921,15 +921,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3135660015025244387, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.576923
+      value: 0.5999999
       objectReference: {fileID: 0}
     - target: {fileID: 3135660015025244387, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.57692295
+      value: 0.5999998
       objectReference: {fileID: 0}
     - target: {fileID: 3135660015025244387, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.57692283
+      value: 0.59999967
       objectReference: {fileID: 0}
     - target: {fileID: 3135660015025244387, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1402,6 +1402,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 82918406}
   - {fileID: 28193832}
   - {fileID: 987708858}
   - {fileID: 49070310}
@@ -1436,7 +1437,8 @@ MonoBehaviour:
   - {fileID: 2138943799}
   - {fileID: 1303305361}
   - {fileID: 1593630439}
-  isOccupied: 0
+  isOccupied: 1
+  answerItemId: 
 --- !u!1 &342577769
 GameObject:
   m_ObjectHideFlags: 0
@@ -2267,10 +2269,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.00066666666, y: 0.0006666665, z: 0.0006666665}
+  m_LocalScale: {x: 0.00066666666, y: 0.0006666664, z: 0.0006666664}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 587164611}
+  m_Father: {fileID: 660409243}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &437121430
 SpriteRenderer:
@@ -2819,7 +2821,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1642959093}
   - {fileID: 558112282}
   - {fileID: 1013180881}
   m_Father: {fileID: 287910684}
@@ -2842,7 +2843,8 @@ MonoBehaviour:
   ghostItemVisuals:
   - {fileID: 558112281}
   - {fileID: 1013180882}
-  isOccupied: 1
+  isOccupied: 0
+  answerItemId: 
 --- !u!1 &585175579
 GameObject:
   m_ObjectHideFlags: 0
@@ -3055,7 +3057,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 437121429}
+  - {fileID: 1629258546}
   - {fileID: 11906519}
   - {fileID: 467237861}
   - {fileID: 311541333}
@@ -3091,6 +3093,7 @@ MonoBehaviour:
   - {fileID: 404777723}
   - {fileID: 418526836}
   isOccupied: 1
+  answerItemId: O
 --- !u!1 &645193142
 GameObject:
   m_ObjectHideFlags: 0
@@ -3157,6 +3160,7 @@ MonoBehaviour:
   - {fileID: 1262045456}
   - {fileID: 909296886}
   isOccupied: 1
+  answerItemId: 
 --- !u!1 &647781996 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2364331010718011993, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
@@ -3197,7 +3201,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 82918406}
+  - {fileID: 437121429}
   - {fileID: 2067788192}
   - {fileID: 1013710147}
   - {fileID: 425414933}
@@ -3233,6 +3237,7 @@ MonoBehaviour:
   - {fileID: 1842694360}
   - {fileID: 1032000215}
   isOccupied: 1
+  answerItemId: L
 --- !u!1 &670073318
 GameObject:
   m_ObjectHideFlags: 0
@@ -3299,6 +3304,7 @@ MonoBehaviour:
   - {fileID: 756121914}
   - {fileID: 742527333}
   isOccupied: 1
+  answerItemId: D
 --- !u!1 &679954157
 GameObject:
   m_ObjectHideFlags: 0
@@ -4727,7 +4733,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1629258546}
   - {fileID: 585929827}
   - {fileID: 413517666}
   - {fileID: 1779745723}
@@ -4762,7 +4767,8 @@ MonoBehaviour:
   - {fileID: 206999391}
   - {fileID: 1257112500}
   - {fileID: 2018595411}
-  isOccupied: 1
+  isOccupied: 0
+  answerItemId: S
 --- !u!1 &1032000215
 GameObject:
   m_ObjectHideFlags: 0
@@ -5165,7 +5171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e447f694f1b3e4093094da7853aef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnappableItem
-  itemId: puzzle_gear_sm_r
+  itemId: puzzle_gear_sm_l
   needRot: 0
   snapThreshold: 0.5
   showGhostThreshold: 0.5
@@ -5336,6 +5342,7 @@ MonoBehaviour:
   - {fileID: 473015258}
   - {fileID: 404609524}
   isOccupied: 1
+  answerItemId: 
 --- !u!1 &1257112500
 GameObject:
   m_ObjectHideFlags: 0
@@ -5548,7 +5555,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1822300383}
   - {fileID: 318403702}
   - {fileID: 142579550}
   - {fileID: 981121239}
@@ -5583,7 +5589,8 @@ MonoBehaviour:
   - {fileID: 1044360363}
   - {fileID: 938847578}
   - {fileID: 2081015771}
-  isOccupied: 1
+  isOccupied: 0
+  answerItemId: C
 --- !u!1 &1303305361
 GameObject:
   m_ObjectHideFlags: 0
@@ -5918,9 +5925,9 @@ Transform:
   m_GameObject: {fileID: 1432862487}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.46, y: 0.133, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0.1, y: 0.133, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 964708158}
   - {fileID: 144699275}
@@ -5945,6 +5952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   gearRotMusic: {fileID: 1432862490}
   seekTime: 9
+  totalRequiredSockets: 8
 --- !u!82 &1432862490
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6341,6 +6349,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1822300383}
   - {fileID: 1816150979}
   - {fileID: 1168189796}
   - {fileID: 455896727}
@@ -6375,7 +6384,8 @@ MonoBehaviour:
   - {fileID: 1082233480}
   - {fileID: 1742328383}
   - {fileID: 61583111}
-  isOccupied: 0
+  isOccupied: 1
+  answerItemId: E
 --- !u!1001 &1531543189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6386,7 +6396,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2364331010718011993, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: m_Name
-      value: puzzle_gear_sm_r
+      value: puzzle_gear_sm_l
       objectReference: {fileID: 0}
     - target: {fileID: 2364331010718011993, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: m_Layer
@@ -6691,6 +6701,7 @@ MonoBehaviour:
   - {fileID: 444128023}
   - {fileID: 1455276785}
   isOccupied: 0
+  answerItemId: puzzle_gear_sm_r
 --- !u!1 &1618658129 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 484293405235510781, guid: ea73006a8ccf0e049a3506866bb5a482, type: 3}
@@ -6747,6 +6758,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1642959093}
   - {fileID: 2043416044}
   - {fileID: 1822082322}
   m_Father: {fileID: 1856731716}
@@ -6769,7 +6781,8 @@ MonoBehaviour:
   ghostItemVisuals:
   - {fileID: 1822082323}
   - {fileID: 2043416045}
-  isOccupied: 0
+  isOccupied: 1
+  answerItemId: 
 --- !u!1 &1629258545
 GameObject:
   m_ObjectHideFlags: 0
@@ -6797,12 +6810,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1629258545}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071069}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_LocalScale: {x: 0.00049999997, y: 0.00049999997, z: 0.00049999997}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1023497203}
+  m_Father: {fileID: 587164611}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1629258547
 SpriteRenderer:
@@ -6923,7 +6936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e447f694f1b3e4093094da7853aef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnappableItem
-  itemId: puzzle_gear_sm_l
+  itemId: puzzle_gear_sm_r
   needRot: 0
   snapThreshold: 0.5
   showGhostThreshold: 0.5
@@ -7095,6 +7108,7 @@ MonoBehaviour:
   - {fileID: 647781996}
   - {fileID: 2061539787}
   isOccupied: 0
+  answerItemId: puzzle_gear_sm_l
 --- !u!1 &1742328383
 GameObject:
   m_ObjectHideFlags: 0
@@ -7652,12 +7666,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822300382}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0.7071069, y: -0, z: -0, w: 0.70710677}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0006666666, y: 0.0006666663, z: 0.0006666663}
+  m_LocalScale: {x: 0.0013333333, y: 0.0013333333, z: 0.0013333331}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1282707063}
+  m_Father: {fileID: 1488526156}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1822300384
 MonoBehaviour:
@@ -8015,6 +8029,7 @@ MonoBehaviour:
   - {fileID: 1457402267}
   - {fileID: 23919879}
   isOccupied: 0
+  answerItemId: 
 --- !u!1 &1941863820
 GameObject:
   m_ObjectHideFlags: 0

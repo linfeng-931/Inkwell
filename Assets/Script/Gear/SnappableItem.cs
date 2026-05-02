@@ -17,6 +17,7 @@ public class SnappableItem : MonoBehaviour
     public AudioClip snapSound;
 
     private Transform lastValidParent; // 前一位置
+    public GearActive gearActiveRef = null;
 
     void Start() { 
         cam = Camera.main;
@@ -36,17 +37,13 @@ public class SnappableItem : MonoBehaviour
     // 當滑鼠按下
     void OnMouseDown()
     {
-        if (IsSystemLocked()) return;
+        if (IsSystemLocked() || gearActiveRef.IsComplete()) return;
 
-        if (transform.parent != null && transform.parent.CompareTag("Socket"))
+        if (transform.parent != null && transform.parent.TryGetComponent<GhostSocket>(out var oldSocket))
         {
-            if (transform.parent != null && transform.parent.CompareTag("Socket"))
-            {
-                var oldSocket = transform.parent.GetComponent<GhostSocket>();
-                if (oldSocket != null) oldSocket.isOccupied = false;
-                oldSocket.HideGhost();
-                transform.SetParent(null);
-            }
+            oldSocket.isOccupied = false;
+            oldSocket.NotifyStatusChanged("");
+            oldSocket.HideGhost();
             transform.SetParent(null);
         }
 
@@ -57,7 +54,7 @@ public class SnappableItem : MonoBehaviour
     // 當滑鼠拖曳
     void OnMouseDrag()
     {
-        if (IsSystemLocked()) return;
+        if (IsSystemLocked() || gearActiveRef.IsComplete()) return;
 
         Vector3 newPos = GetMouseWorldPos() + offset;
         newPos.z = -0.5f;
@@ -69,7 +66,7 @@ public class SnappableItem : MonoBehaviour
     // 當滑鼠放開
     void OnMouseUp()
     {
-        if (IsSystemLocked()) return;
+        if (IsSystemLocked() || gearActiveRef.IsComplete()) return;
 
         if (currentlyActiveGhostSocket != null)
         {
@@ -167,7 +164,11 @@ public class SnappableItem : MonoBehaviour
         }
 
         var ghostComp = socket.GetComponent<GhostSocket>();
-        if (ghostComp != null) ghostComp.isOccupied = true;
+        if (ghostComp != null)
+        {
+            ghostComp.isOccupied = true;
+            ghostComp.NotifyStatusChanged(this.itemId);
+        }
     }
 
     private Vector3 GetMouseWorldPos()

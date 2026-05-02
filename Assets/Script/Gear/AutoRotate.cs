@@ -28,14 +28,17 @@ public class AutoRotate : MonoBehaviour
         try
         {
             isRotating = true;
-            
-            // 正向
             yield return StartCoroutine(UpdateRotation(targetAngle, duration));
 
-            yield return new WaitForSeconds(1f);
-
-            // 反向
-            yield return StartCoroutine(UpdateRotation(-targetAngle, duration));
+            if (gearActiveRef.IsComplete())
+            {
+                gearActiveRef.PlayCompleteMusic();
+            }
+            else
+            {
+                yield return new WaitForSeconds(1f);
+                yield return StartCoroutine(UpdateRotation(-targetAngle, duration));
+            }
         }
         finally
         {
