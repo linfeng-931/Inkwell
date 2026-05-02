@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class GearActive : MonoBehaviour
 {
@@ -14,10 +15,11 @@ public class GearActive : MonoBehaviour
     // Update is called once per frame
     public void PlaySound()
     {
-        if (gearRotMusic!=null)
+        if (gearRotMusic != null)
         {
+            gearRotMusic.Stop();
             gearRotMusic.time = seekTime;
-            gearRotMusic.Play();
+            gearRotMusic.Play(); 
         }
     }
 

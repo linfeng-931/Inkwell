@@ -18,6 +18,7 @@ public class SnappableItem : MonoBehaviour
 
     private Transform lastValidParent; // «e¤@¦ì¸m
     public GearActive gearActiveRef = null;
+    
 
     void Start() { 
         cam = Camera.main;

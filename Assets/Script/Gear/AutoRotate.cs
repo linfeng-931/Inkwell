@@ -7,20 +7,19 @@ public class AutoRotate : MonoBehaviour
     [HideInInspector] public bool isRotating = false;
     public float duration = 2;
     public GearActive gearActiveRef = null;
+    public GameObject tierController;
+    TieRodController tierControllerScript;
+
+    private void Start()
+    {
+        tierControllerScript = GetComponent<TieRodController>();
+    }
 
 
-    void Update()
+    public void StartRotation()
     {
         if (isRotating) return;
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            print(transform.parent.name);
-            if (transform.parent != null && transform.parent.name == "GraySocket")
-                return;
-
-            StartCoroutine(RotateAndReverse(targetXAngle, duration));
-        }
+        StartCoroutine(RotateAndReverse(targetXAngle, duration));
     }
 
     public IEnumerator RotateAndReverse(float targetAngle, float duration)
@@ -28,6 +27,7 @@ public class AutoRotate : MonoBehaviour
         try
         {
             isRotating = true;
+            
             yield return StartCoroutine(UpdateRotation(targetAngle, duration));
 
             if (gearActiveRef.IsComplete())
@@ -36,7 +36,7 @@ public class AutoRotate : MonoBehaviour
             }
             else
             {
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.2f);
                 yield return StartCoroutine(UpdateRotation(-targetAngle, duration));
             }
         }
@@ -49,7 +49,6 @@ public class AutoRotate : MonoBehaviour
     private IEnumerator UpdateRotation(float angle, float time)
     {
         if (gearActiveRef != null) gearActiveRef.PlaySound();
-        
         float elapsed = 0;
         Quaternion startRot = transform.rotation;
         Quaternion endRot = startRot * Quaternion.Euler(0, angle, 0);
@@ -70,4 +69,5 @@ public class AutoRotate : MonoBehaviour
     {
         isRotating = false;
     }
+
 }
