@@ -18999,6 +18999,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 20.154
       objectReference: {fileID: 0}
+    - target: {fileID: 7166705649693665460, guid: e8b02723eda9e5c4abebbd0162db2f12, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8519432136228336224, guid: e8b02723eda9e5c4abebbd0162db2f12, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.32442594
@@ -19750,7 +19754,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2037950362
 Transform:
   m_ObjectHideFlags: 0
@@ -20084,6 +20088,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1166796769976342746, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
+      propertyPath: isGrounded
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1356121302652301512, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -20174,7 +20182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5758505504365379488, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.18
+      value: -1.197
       objectReference: {fileID: 0}
     - target: {fileID: 5758505504365379488, guid: d9ce027baa66e42128b37a32070c22fa, type: 3}
       propertyPath: m_LocalPosition.z
