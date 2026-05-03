@@ -10,11 +10,12 @@ public class TieRodController : MonoBehaviour
     public List<AutoRotate> gearScripts;
     public GearActive gearActiveRef = null;
     bool puzzleComplete = false;
+    public static bool isPuzzleActive = false;
 
     void OnMouseDown()
     {
+        if (!isPuzzleActive) return;
         PullLever();
-        
     }
 
     public void PullLever()

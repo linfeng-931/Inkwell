@@ -97,6 +97,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 interactTarget;
     private int toTargetType;
 
+    // Puzzle
+    public static bool isPuzzleActive = false;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -131,6 +134,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isPuzzleActive) return;
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, combinedLayerMask);
         Dead();
         GoTarget();
@@ -238,7 +242,8 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if(isSwirl){
+        if (isPuzzleActive) return;
+        if (isSwirl){
             return;
         }
 

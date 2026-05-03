@@ -18,7 +18,11 @@ public class SnappableItem : MonoBehaviour
 
     private Transform lastValidParent; // 前一位置
     public GearActive gearActiveRef = null;
-    
+
+    public float puzzleZDepth = 0.0f;
+
+    public static bool isPuzzleActive = false;
+
 
     void Start() { 
         cam = Camera.main;
@@ -38,7 +42,7 @@ public class SnappableItem : MonoBehaviour
     // 當滑鼠按下
     void OnMouseDown()
     {
-        if (IsSystemLocked() || gearActiveRef.IsComplete()) return;
+        if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
 
         if (transform.parent != null && transform.parent.TryGetComponent<GhostSocket>(out var oldSocket))
         {
@@ -55,10 +59,9 @@ public class SnappableItem : MonoBehaviour
     // 當滑鼠拖曳
     void OnMouseDrag()
     {
-        if (IsSystemLocked() || gearActiveRef.IsComplete()) return;
+        if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
 
         Vector3 newPos = GetMouseWorldPos() + offset;
-        newPos.z = -0.5f;
         transform.position = newPos;
 
         UpdateGhostVisibility();
@@ -67,7 +70,7 @@ public class SnappableItem : MonoBehaviour
     // 當滑鼠放開
     void OnMouseUp()
     {
-        if (IsSystemLocked() || gearActiveRef.IsComplete()) return;
+        if (IsSystemLocked() || gearActiveRef.IsComplete()||!isPuzzleActive) return;
 
         if (currentlyActiveGhostSocket != null)
         {
@@ -86,7 +89,12 @@ public class SnappableItem : MonoBehaviour
 
             if (gs != null && !gs.isOccupied && gs.expectedItemIds.Contains(this.itemId))
             {
-                float dist = Vector3.Distance(transform.position, s.transform.position);
+                Vector2 itemPos2D = new Vector2(transform.position.x, transform.position.y);
+                Vector2 socketPos2D = new Vector2(s.transform.position.x, s.transform.position.y);
+                float dist = Vector2.Distance(itemPos2D, socketPos2D);
+
+                // ------------------------------------
+
                 if (dist < snapThreshold && dist < minDistance)
                 {
                     minDistance = dist;
@@ -174,8 +182,12 @@ public class SnappableItem : MonoBehaviour
 
     private Vector3 GetMouseWorldPos()
     {
-        Vector3 mousePoint = Input.mousePosition;
-        mousePoint.z = Vector3.Distance(transform.position, cam.transform.position);
-        return cam.ScreenToWorldPoint(mousePoint);
+        Plane plane = new Plane(Vector3.forward, new Vector3(0, 0, puzzleZDepth));
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        if (plane.Raycast(ray, out float enter))
+        {
+            return ray.GetPoint(enter);
+        }
+        return transform.position;
     }
 }

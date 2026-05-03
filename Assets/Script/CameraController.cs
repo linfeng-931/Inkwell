@@ -1,6 +1,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
@@ -40,6 +41,10 @@ public class CameraController : MonoBehaviour
     //closer camera
     private float closerTimer;
 
+    // Puzzle
+    public static bool isPuzzleActive = false;
+    private bool freezeFollow = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -63,10 +68,13 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        if (isPuzzleActive || freezeFollow) return;
+
         FollowPlayer();
     }
     void Update()
     {
+        if (isPuzzleActive) return;
         MouseRay();
         if(drawPointNum >=2){
             canExtrude = true;
@@ -219,5 +227,24 @@ public class CameraController : MonoBehaviour
                 break;
         }
         
+    }
+    //Puzzle 
+
+    public void ResetCameraPosition(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
+    }
+
+    public void FreezeFollow(float time)
+    {
+        StartCoroutine(FreezeRoutine(time));
+    }
+
+    IEnumerator FreezeRoutine(float time)
+    {
+        freezeFollow = true;
+        yield return new WaitForSeconds(time);
+        freezeFollow = false;
     }
 }
