@@ -446,6 +446,21 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    //Saving(在save point interaction中使用)
+    public void Saving()
+    {
+        playerAni.ResumeAni();
+        OtherAni.SetInteger(action, 2);
+        PlayerFace.SetActive(false);
+        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+    }
+    public void DeSaving()
+    {
+        isInteract = false;
+        PlayerFace.SetActive(true);
+    }
+
     void Attack()
     {
         if(isDash || isHurt || isStory || isStory2 || isInteract) return;
@@ -573,19 +588,45 @@ public class PlayerController : MonoBehaviour
         if(toTargetType == 0)
         {
             Vector3 dirTarget = (interactTarget - transform.position).normalized;
+            if(dirTarget.x > 0)
+            {
+                direction = true;
+                transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+            }
+            else if(dirTarget.x < 0)
+            {
+                direction = false;
+                transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+            }
+            
             rb.linearVelocity = new Vector3(moveSpeed*0.4f*dirTarget.x, rb.linearVelocity.y, rb.linearVelocity.z);
             if(Math.Abs(interactTarget.x-transform.position.x) < 0.1f)
             {
                 isGoTarget = false;
+                SwitchAni(0);
+                rb.linearVelocity = Vector3.zero;
             }
         }
         else if(toTargetType == 1)
         {
             Vector3 dirTarget = (interactTarget - transform.position).normalized;
+            if(dirTarget.x > 0)
+            {
+                direction = true;
+                transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+            }
+            else if(dirTarget.x < 0)
+            {
+                direction = false;
+                transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
+            }
+
             rb.linearVelocity = new Vector3(moveSpeed*dirTarget.x, rb.linearVelocity.y, rb.linearVelocity.z);
             if(Math.Abs(interactTarget.x-transform.position.x) < 0.1f)
             {
                 isGoTarget = false;
+                SwitchAni(0);
+                rb.linearVelocity = Vector3.zero;
             }
         }
         

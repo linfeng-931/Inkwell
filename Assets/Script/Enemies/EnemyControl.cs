@@ -17,7 +17,6 @@ public abstract class EnemyControl : MonoBehaviour
     public float checkRadius = 0.5f;
     public ParticleSystem particleHurt;
     public Material HurtMaterial;
-    public GameObject particleDead;
     public float repelSpeed = 30f;
     public float repelDistance = 1f;
     public GameObject DeadEffect;
