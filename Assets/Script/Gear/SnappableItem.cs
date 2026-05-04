@@ -23,6 +23,9 @@ public class SnappableItem : MonoBehaviour
 
     public static bool isPuzzleActive = false;
 
+    public Material mouseOnMat;
+    public Material originMat;
+
 
     void Start() { 
         cam = Camera.main;
@@ -39,10 +42,23 @@ public class SnappableItem : MonoBehaviour
         return false;
     }
 
+    private void OnMouseExit()
+    {
+        GetComponent<Renderer>().material = originMat;
+    }
+
+    private void OnMouseOver()
+    {
+        if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
+        GetComponent<Renderer>().material = mouseOnMat;
+    }
+
     // 當滑鼠按下
     void OnMouseDown()
     {
+        
         if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
+        GetComponent<Renderer>().material = mouseOnMat;
 
         if (transform.parent != null && transform.parent.TryGetComponent<GhostSocket>(out var oldSocket))
         {
@@ -60,6 +76,7 @@ public class SnappableItem : MonoBehaviour
     void OnMouseDrag()
     {
         if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
+        GetComponent<Renderer>().material = mouseOnMat;
 
         Vector3 newPos = GetMouseWorldPos() + offset;
         newPos.z -= 0.1f;
@@ -71,6 +88,7 @@ public class SnappableItem : MonoBehaviour
     // 當滑鼠放開
     void OnMouseUp()
     {
+        GetComponent<Renderer>().material = originMat;
         if (IsSystemLocked() || gearActiveRef.IsComplete()||!isPuzzleActive) return;
 
         if (currentlyActiveGhostSocket != null)
