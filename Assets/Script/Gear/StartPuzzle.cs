@@ -12,6 +12,7 @@ public class StartPuzzle : MonoBehaviour
     public GameObject playerUI;
     public GameObject InteractionUI;
     public CameraController cameraController;
+    public TieRodController tieRodController;
 
     private Vector3 savedCamPos;
     private Quaternion savedCamRot;
@@ -29,9 +30,16 @@ public class StartPuzzle : MonoBehaviour
             StartCoroutine(TransitionToPuzzle());
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !tieRodController.getIsPulling())
         {
             StartCoroutine(LeavePuzzle());
+        }
+
+        if (tieRodController.getIsComplete())
+        {
+            StartCoroutine(LeavePuzzle());
+            interactionScript.SetPuzzleComplete();
+            InteractionUI.SetActive(false);
         }
     }
 
@@ -55,23 +63,25 @@ public class StartPuzzle : MonoBehaviour
 
     IEnumerator LeavePuzzle()
     {
-        
-        var camController = mainCamera.GetComponent<CameraController>();
-
         yield return StartCoroutine(CameraTransitionBack(puzzleCamera, mainCamera));
-        cameraController.ResetCameraPosition(savedCamPos, savedCamRot);
+
+        puzzleCamera.enabled = false;
+        mainCamera.enabled = true;
+
+        var camController = mainCamera.GetComponent<CameraController>();
+        if (camController != null)
+        {
+            camController.enabled = true;
+        }
 
         SnappableItem.isPuzzleActive = false;
         TieRodController.isPuzzleActive = false;
         PlayerController.isPuzzleActive = false;
         CameraController.isPuzzleActive = false;
-        camController.FreezeFollow(0.3f);
 
         InteractionUI.SetActive(true);
         playerUI.SetActive(true);
-
         player.SetActive(true);
-
     }
 
     IEnumerator CameraTransition(Camera currentCam, Camera nextCam, Transform target)

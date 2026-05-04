@@ -69,4 +69,14 @@ public class TieRodController : MonoBehaviour
         }
         return true;
     }
+
+    public bool getIsPulling()
+    {
+        return isPulling;
+    }
+
+    public bool getIsComplete()
+    {
+        return puzzleComplete;
+    }
 }

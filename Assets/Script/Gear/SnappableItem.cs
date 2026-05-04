@@ -62,6 +62,7 @@ public class SnappableItem : MonoBehaviour
         if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
 
         Vector3 newPos = GetMouseWorldPos() + offset;
+        newPos.z -= 0.1f;
         transform.position = newPos;
 
         UpdateGhostVisibility();

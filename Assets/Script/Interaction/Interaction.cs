@@ -13,6 +13,8 @@ public class Interaction : MonoBehaviour
     private float scaleChangeSpeed;
     private float timer;
 
+    public bool puzzleComplete = false;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -27,7 +29,15 @@ public class Interaction : MonoBehaviour
 
     void Update()
     {
-        if(Vector3.Distance(playerTrans.position, transform.position) < detectionRange)
+        if (puzzleComplete)
+        {
+            if (InteractionKey.transform.localScale != Vector3.zero)
+            {
+                InteractionKey.transform.localScale = Vector3.zero;
+            }
+            return;
+        }
+        if (Vector3.Distance(playerTrans.position, transform.position) < detectionRange)
         {
             InteractionKeyIn();
             if (Input.GetKeyDown(KeyCode.E))
@@ -78,5 +88,10 @@ public class Interaction : MonoBehaviour
     public bool GetCanInteract()
     {
         return canInteract;
+    }
+
+    public void SetPuzzleComplete()
+    {
+        puzzleComplete = true;
     }
 }

@@ -3075,6 +3075,7 @@ MonoBehaviour:
   detectionRange: 3.5
   InteractionKey: {fileID: 1533191774}
   canInteract: 0
+  puzzleComplete: 0
 --- !u!114 &352551969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13692,11 +13693,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6511908951819869753, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -63.92
+      value: -64.8
       objectReference: {fileID: 0}
     - target: {fileID: 6511908951819869753, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.6
+      value: 8.49
       objectReference: {fileID: 0}
     - target: {fileID: 6511908951819869753, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13744,7 +13745,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7736084981688048470, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -65.1
+      value: -64.4
       objectReference: {fileID: 0}
     - target: {fileID: 7736084981688048470, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.y
@@ -13752,13 +13753,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7736084981688048470, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.2
+      value: -5.94
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6515561433562037292, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
-      insertIndex: -1
+      insertIndex: 0
       addedObject: {fileID: 1385306236}
     - targetCorrespondingSourceObject: {fileID: 6515561433562037292, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       insertIndex: -1
@@ -15799,7 +15800,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1385306236
 Transform:
   m_ObjectHideFlags: 0
@@ -15866,7 +15867,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385306235}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1385306239
 Camera:
   m_ObjectHideFlags: 0
@@ -16870,6 +16871,7 @@ MonoBehaviour:
   detectionRange: 2
   InteractionKey: {fileID: 2051663394}
   canInteract: 0
+  puzzleComplete: 0
 --- !u!1 &1524625118
 GameObject:
   m_ObjectHideFlags: 0
