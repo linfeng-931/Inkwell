@@ -420,6 +420,8 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: b504299dc39ae6349a2d56533ed2e549, type: 3}
   gearActiveRef: {fileID: 352551965}
   puzzleZDepth: 0.85
+  mouseOnMat: {fileID: 2100000, guid: a6add90d60023d94f9d611891bde5bae, type: 2}
+  originMat: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
 --- !u!212 &21134759
 SpriteRenderer:
   serializedVersion: 2
@@ -446,7 +448,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a77e9486a759e410297a1e882f685ede, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -615,6 +617,8 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: b504299dc39ae6349a2d56533ed2e549, type: 3}
   gearActiveRef: {fileID: 352551965}
   puzzleZDepth: 0.85
+  mouseOnMat: {fileID: 2100000, guid: a6add90d60023d94f9d611891bde5bae, type: 2}
+  originMat: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
 --- !u!212 &31208300
 SpriteRenderer:
   serializedVersion: 2
@@ -3339,8 +3343,8 @@ MonoBehaviour:
   InteractionUI: {fileID: 1533191774}
   cameraController: {fileID: 1123444859}
   tieRodController: {fileID: 387303358}
-  playerController: {fileID: 0}
-  playerRig: {fileID: 0}
+  playerController: {fileID: 437628493}
+  playerRig: {fileID: 437628495}
 --- !u!4 &357626385 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6060634827007674178, guid: f1bb4862dd7ed11459d41491db703cb6, type: 3}
@@ -4168,6 +4172,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4855427028502007179, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
   m_PrefabInstance: {fileID: 1127942079}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &437628493 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 397983580896098627, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+  m_PrefabInstance: {fileID: 1127942079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437628489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f821f0cc640b4bb68dcef46ce2793e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+--- !u!54 &437628495 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8347631844913243627, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+  m_PrefabInstance: {fileID: 1127942079}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &441225490
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4939,6 +4959,8 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: b504299dc39ae6349a2d56533ed2e549, type: 3}
   gearActiveRef: {fileID: 352551965}
   puzzleZDepth: 0.85
+  mouseOnMat: {fileID: 2100000, guid: a66b4ddc60ca47e4bb001f01aa8c1333, type: 2}
+  originMat: {fileID: 2100000, guid: 30df236bbc4547446a8b8909bdba01ec, type: 2}
 --- !u!4 &568137951 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3135660015025244387, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
@@ -12119,6 +12141,8 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: b504299dc39ae6349a2d56533ed2e549, type: 3}
   gearActiveRef: {fileID: 352551965}
   puzzleZDepth: 0.85
+  mouseOnMat: {fileID: 2100000, guid: a6add90d60023d94f9d611891bde5bae, type: 2}
+  originMat: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
 --- !u!212 &903861332
 SpriteRenderer:
   serializedVersion: 2
@@ -13212,7 +13236,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4309723803973727116, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4309723803973727116, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3dbb690fb11e823478133c286594ef33, type: 2}
+    - target: {fileID: 4309723803973727116, guid: 3ded97b8bcff7c54fa76c6b282cb2505, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: 3dbb690fb11e823478133c286594ef33, type: 2}
     m_RemovedComponents: []
@@ -13509,6 +13541,8 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: b504299dc39ae6349a2d56533ed2e549, type: 3}
   gearActiveRef: {fileID: 352551965}
   puzzleZDepth: 0.85
+  mouseOnMat: {fileID: 2100000, guid: a6add90d60023d94f9d611891bde5bae, type: 2}
+  originMat: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
 --- !u!212 &1056569512
 SpriteRenderer:
   serializedVersion: 2
@@ -13949,9 +13983,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2449987096186382232, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_RendererIndex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2449987096186382232, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2584608968605029677, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_Depth
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3080378964481550448, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_Name
       value: BasicObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 4183643431673532830, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6515561433562037292, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13997,6 +14047,14 @@ PrefabInstance:
       propertyPath: 'sceneManagement.Array.data[0]'
       value: 
       objectReference: {fileID: 1396254335}
+    - target: {fileID: 7736084981688048470, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -65.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 7736084981688048470, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.24
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14595,6 +14653,8 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: b504299dc39ae6349a2d56533ed2e549, type: 3}
   gearActiveRef: {fileID: 352551965}
   puzzleZDepth: 0.85
+  mouseOnMat: {fileID: 2100000, guid: a6add90d60023d94f9d611891bde5bae, type: 2}
+  originMat: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
 --- !u!212 &1192228496
 SpriteRenderer:
   serializedVersion: 2
@@ -17444,6 +17504,8 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: b504299dc39ae6349a2d56533ed2e549, type: 3}
   gearActiveRef: {fileID: 352551965}
   puzzleZDepth: 0.85
+  mouseOnMat: {fileID: 2100000, guid: a6add90d60023d94f9d611891bde5bae, type: 2}
+  originMat: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
 --- !u!212 &1553227181
 SpriteRenderer:
   serializedVersion: 2
@@ -20821,6 +20883,8 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: b504299dc39ae6349a2d56533ed2e549, type: 3}
   gearActiveRef: {fileID: 352551965}
   puzzleZDepth: 0.85
+  mouseOnMat: {fileID: 2100000, guid: a66b4ddc60ca47e4bb001f01aa8c1333, type: 2}
+  originMat: {fileID: 2100000, guid: 3dbb690fb11e823478133c286594ef33, type: 2}
 --- !u!65 &1958376099
 BoxCollider:
   m_ObjectHideFlags: 0
