@@ -10,6 +10,7 @@ public class Elevator : MonoBehaviour
     public bool endAct;
     public bool dir; //true-up or false-down
     public bool disScript;
+    public bool closeDoor;
 
     private Animator animator;
     private GameObject player;
@@ -32,6 +33,14 @@ public class Elevator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (closeDoor)
+        {
+            animator.speed = 0f;
+        }
+        else if(!closeDoor && animator.speed == 0)
+        {
+            animator.speed = 3f;
+        }
         if (!disScript)
         {
             if(isAct && !changeStatus){

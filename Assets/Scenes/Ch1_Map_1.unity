@@ -446,7 +446,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: a77e9486a759e410297a1e882f685ede, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1557,6 +1557,7 @@ MonoBehaviour:
   endAct: 1
   dir: 1
   disScript: 0
+  closeDoor: 0
 --- !u!1 &161563858
 GameObject:
   m_ObjectHideFlags: 0
@@ -3075,7 +3076,6 @@ MonoBehaviour:
   detectionRange: 3.5
   InteractionKey: {fileID: 1533191774}
   canInteract: 0
-  puzzleComplete: 0
 --- !u!114 &352551969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15801,7 +15801,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1385306236
 Transform:
   m_ObjectHideFlags: 0
@@ -16872,7 +16872,6 @@ MonoBehaviour:
   detectionRange: 2
   InteractionKey: {fileID: 2051663394}
   canInteract: 0
-  puzzleComplete: 0
 --- !u!1 &1524625118
 GameObject:
   m_ObjectHideFlags: 0
@@ -19976,6 +19975,7 @@ MonoBehaviour:
   endAct: 1
   dir: 1
   disScript: 1
+  closeDoor: 1
 --- !u!1 &1901734212 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4127930170650245119, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
