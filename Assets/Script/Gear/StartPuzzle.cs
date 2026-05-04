@@ -13,6 +13,8 @@ public class StartPuzzle : MonoBehaviour
     public GameObject InteractionUI;
     public CameraController cameraController;
     public TieRodController tieRodController;
+    public PlayerController playerController;
+    public Rigidbody playerRig;
 
     private Vector3 savedCamPos;
     private Quaternion savedCamRot;
@@ -45,6 +47,9 @@ public class StartPuzzle : MonoBehaviour
 
     IEnumerator TransitionToPuzzle()
     {
+        playerController.isInteract = true;
+        playerRig.linearVelocity = new Vector3(0, playerRig.linearVelocity.y, 0);
+        player.SetActive(false);
         savedCamPos = mainCamera.transform.position;
         savedCamRot = mainCamera.transform.rotation;
 
@@ -58,7 +63,7 @@ public class StartPuzzle : MonoBehaviour
 
         yield return StartCoroutine(CameraTransition(mainCamera, puzzleCamera, puzzleCameraTarget));
 
-        player.SetActive(false);
+        
     }
 
     IEnumerator LeavePuzzle()
@@ -82,6 +87,7 @@ public class StartPuzzle : MonoBehaviour
         InteractionUI.SetActive(true);
         playerUI.SetActive(true);
         player.SetActive(true);
+        playerController.isInteract = false;
     }
 
     IEnumerator CameraTransition(Camera currentCam, Camera nextCam, Transform target)
