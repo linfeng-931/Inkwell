@@ -86,8 +86,6 @@ public class CameraController : MonoBehaviour
 
     void FollowPlayer()
     {
-
-        if (isPuzzleActive) return;
         playerPos = player.transform.position;
         int dirX = playerRig.linearVelocity.x > 0 ? 1 : -1;
         int dirY = playerRig.linearVelocity.y > 0 ? 1: -1;
@@ -240,7 +238,6 @@ public class CameraController : MonoBehaviour
 
     public void FreezeFollow(float time)
     {
-
         StartCoroutine(FreezeRoutine(time));
     }
 

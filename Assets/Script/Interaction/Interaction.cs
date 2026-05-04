@@ -12,8 +12,7 @@ public class Interaction : MonoBehaviour
     private float interactionKeyScale;
     private float scaleChangeSpeed;
     private float timer;
-
-    public bool puzzleComplete = false;
+    private bool puzzleComplete = false;
 
     void Start()
     {
@@ -30,13 +29,14 @@ public class Interaction : MonoBehaviour
     void Update()
     {
         if (puzzleComplete)
-        {
-            if (InteractionKey.transform.localScale != Vector3.zero)
+            if (puzzleComplete)
             {
-                InteractionKey.transform.localScale = Vector3.zero;
+                if (InteractionKey.transform.localScale != Vector3.zero)
+                {
+                    InteractionKey.transform.localScale = Vector3.zero;
+                }
             }
-            return;
-        }
+
         if (Vector3.Distance(playerTrans.position, transform.position) < detectionRange)
         {
             InteractionKeyIn();
