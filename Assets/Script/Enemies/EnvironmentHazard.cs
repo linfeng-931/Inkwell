@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnvironmentHazard : MonoBehaviour
@@ -8,6 +9,8 @@ public class EnvironmentHazard : MonoBehaviour
 
     private bool isAct;
     private float timer;
+    private GameObject player;
+    private Transform cameraTrans;
     private Transform playerTrans;
     private Rigidbody playerRb;
     private PlayerController playerController;
@@ -17,10 +20,11 @@ public class EnvironmentHazard : MonoBehaviour
         reStart = false;
         isAct = false;
         timer = 0f;
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         playerTrans = player.transform;
         playerRb = player.GetComponent<Rigidbody>();
         playerController = player.GetComponent<PlayerController>();
+        cameraTrans = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
 
     void Update()
@@ -34,8 +38,10 @@ public class EnvironmentHazard : MonoBehaviour
                 {
                     playerRb.linearVelocity = Vector3.zero; 
                     playerRb.angularVelocity = Vector3.zero;
+                    playerRb.position = checkPoint.position;
                 }
                 playerTrans.position = checkPoint.position;
+                cameraTrans.position = new Vector3(checkPoint.position.x, checkPoint.position.y, cameraTrans.position.z);
             }
             if(timer > 2f)
             {
