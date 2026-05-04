@@ -74,4 +74,9 @@ public class Interaction : MonoBehaviour
         }
         InteractionKey.transform.localScale = new Vector3(interactionKeyScale, interactionKeyScale, 1);
     }
+
+    public bool GetCanInteract()
+    {
+        return canInteract;
+    }
 }
