@@ -3094,6 +3094,7 @@ MonoBehaviour:
   puzzleCamera: {fileID: 1385306239}
   playerUI: {fileID: 1901734212}
   InteractionUI: {fileID: 1533191774}
+  cameraController: {fileID: 0}
 --- !u!4 &357626385 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6060634827007674178, guid: f1bb4862dd7ed11459d41491db703cb6, type: 3}
@@ -4729,7 +4730,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8029243281177990790, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
+      propertyPath: m_ConnectedBody
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8029243281177990790, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
+    - {fileID: 4962333787424601629, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
     m_RemovedGameObjects:
     - {fileID: 5259972720147307840, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
     - {fileID: 6421494847845462338, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
@@ -16172,9 +16179,15 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8029243281177990790, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
+      propertyPath: m_ConnectedBody
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1552008129532392227, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
     - {fileID: 704733835164685963, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
+    - {fileID: 8029243281177990790, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
+    - {fileID: 4962333787424601629, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
     m_RemovedGameObjects:
     - {fileID: 9023338623247550316, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
     - {fileID: 2434961075189420435, guid: 768fa1216e1a5b14caad3403ca2ff981, type: 3}
