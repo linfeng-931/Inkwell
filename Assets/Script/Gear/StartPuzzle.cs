@@ -45,6 +45,7 @@ public class StartPuzzle : MonoBehaviour
 
     IEnumerator TransitionToPuzzle()
     {
+        player.SetActive(false);
         savedCamPos = mainCamera.transform.position;
         savedCamRot = mainCamera.transform.rotation;
 
@@ -57,8 +58,6 @@ public class StartPuzzle : MonoBehaviour
         playerUI.SetActive(false);
 
         yield return StartCoroutine(CameraTransition(mainCamera, puzzleCamera, puzzleCameraTarget));
-
-        player.SetActive(false);
     }
 
     IEnumerator LeavePuzzle()
