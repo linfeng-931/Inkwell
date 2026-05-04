@@ -1512,6 +1512,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Yak
       objectReference: {fileID: 0}
+    - target: {fileID: 6572878362541796977, guid: 7a63f6344593a45aba54036b4800fea0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8213630929367111976, guid: 7a63f6344593a45aba54036b4800fea0, type: 3}
       propertyPath: particleDead
       value: 
@@ -2244,6 +2248,7 @@ MonoBehaviour:
   showGhostThreshold: 1
   snapSound: {fileID: 0}
   gearActiveRef: {fileID: 0}
+  puzzleZDepth: 0
 --- !u!1 &1850622194
 GameObject:
   m_ObjectHideFlags: 0

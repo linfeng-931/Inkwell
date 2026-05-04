@@ -1597,6 +1597,74 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3baa1cc6440282445a6cb4a649cb4021, type: 3}
   m_PrefabInstance: {fileID: 437847568}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &453187051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 453187054}
+  - component: {fileID: 453187053}
+  - component: {fileID: 453187052}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &453187052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453187051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f6bfea72d5f43c1a3f11e8ddff5c2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeStoryType
+  story0: 0
+  story1: 1
+--- !u!65 &453187053
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453187051}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 4.2328677, z: 8.095153}
+  m_Center: {x: 0, y: 1.6164339, z: -0.26637745}
+--- !u!4 &453187054
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453187051}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.12, y: -1.68, z: -0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &491814204
 GameObject:
   m_ObjectHideFlags: 0
@@ -12790,7 +12858,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: com.cqf.urpvolumetricfog.runtime::VolumetricAdditionalLight
   anisotropy: -0.85
-  scattering: 0.32
+  scattering: 2.3
   radius: 1
 --- !u!114 &1040828585
 MonoBehaviour:
@@ -12894,13 +12962,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1040828583}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.011840679, y: -0.72939825, z: 0.054684386, w: 0.6817973}
-  m_LocalPosition: {x: 65.7, y: 5.3, z: 1.4}
+  m_LocalRotation: {x: 0.0851849, y: -0.7245035, z: 0.14479494, w: 0.6684854}
+  m_LocalPosition: {x: 65.7, y: 9.7, z: 1.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1676510605}
-  m_LocalEulerAnglesHint: {x: 3.648, y: -93.696, z: 5.28}
+  m_LocalEulerAnglesHint: {x: 18.887, y: -93.898, z: 4.252}
 --- !u!1 &1049268172
 GameObject:
   m_ObjectHideFlags: 0
@@ -13384,7 +13452,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 0.94806665, g: 1, b: 0.8066038, a: 1}
-  m_Intensity: 43.5
+  m_Intensity: 5
   m_Range: 8.8
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -13447,7 +13515,7 @@ Transform:
   m_GameObject: {fileID: 1212980241}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.17, y: 9.24261, z: -0.1}
+  m_LocalPosition: {x: -9.46, y: 9.24261, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20406,7 +20474,7 @@ Light:
   serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.1
+  m_Intensity: 0.05
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -21191,3 +21259,4 @@ SceneRoots:
   - {fileID: 2131172031}
   - {fileID: 1998644219}
   - {fileID: 399891211}
+  - {fileID: 453187054}

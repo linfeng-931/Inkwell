@@ -56,14 +56,14 @@ public class StartPuzzle : MonoBehaviour
         SnappableItem.isPuzzleActive = true;
         TieRodController.isPuzzleActive = true;
         PlayerController.isPuzzleActive = true;
-        CameraController.isPuzzleActive = true; 
+        CameraController.isPuzzleActive = true;
 
         InteractionUI.SetActive(false);
         playerUI.SetActive(false);
 
         yield return StartCoroutine(CameraTransition(mainCamera, puzzleCamera, puzzleCameraTarget));
 
-        
+
     }
 
     IEnumerator LeavePuzzle()
