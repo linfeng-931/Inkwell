@@ -9972,14 +9972,17 @@ MonoBehaviour:
   moveRange: 5
   idleRange: 5
   detectionRange: 4
-  otherCollider: []
+  otherObj: []
   groundCheckPoint: {fileID: 400314954151469640}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   checkRadius: 0.5
   particleHurt: {fileID: 4832183047267646276}
-  particleDead: {fileID: 6856275499397951206}
+  HurtMaterial: {fileID: 2100000, guid: abac0c953cbe744eb943a3d38bee34ac, type: 2}
+  repelSpeed: 30
+  repelDistance: 1
+  DeadEffect: {fileID: 4123365093093318906, guid: 7f751b22b979b4c529155026c56a0b52, type: 3}
   attackCollider: {fileID: 4424724899687113675}
 --- !u!54 &3946360408629014194
 Rigidbody:

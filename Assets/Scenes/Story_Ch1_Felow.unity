@@ -945,6 +945,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasicObj
       objectReference: {fileID: 0}
+    - target: {fileID: 4183643431673532830, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6511908951819869753, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.x
       value: -14.606
@@ -12480,6 +12484,7 @@ MonoBehaviour:
   endAct: 0
   dir: 0
   disScript: 0
+  closeDoor: 0
 --- !u!1001 &877517011
 PrefabInstance:
   m_ObjectHideFlags: 0
