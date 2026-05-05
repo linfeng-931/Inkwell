@@ -14,11 +14,10 @@ public class Hand : MonoBehaviour
     private Animator playerAnimator;
     private float targetX;
     private int step;
-    private Vector3 handEndPos = new Vector3(26.89f, -2.2f, 1.37f);
+    private Vector3 handEndPos = new Vector3(27.421f, 6.54f, 12);
     private bool handReady;
     private Animator handAni;
     private float timer;
-    //private Vector3 handStartPos = new Vector3(26.89f, -2.2f, 7.83f);
 
     void Start()
     {
@@ -92,12 +91,15 @@ public class Hand : MonoBehaviour
 
     void ParticleRotate()
     {
-        var shape = particleSystemHole.shape;
-        shape.rotation += new Vector3(90f, 0, 0)*Time.deltaTime;
+        particleSystemHole.transform.Rotate(0, 90f * Time.deltaTime, 0);
 
-        if(shape.rotation.x >= 90f){
-            shape.rotation = new Vector3(90f, shape.rotation.y, 0);
-            shape.scale += new Vector3(1, 10f*Time.deltaTime, 1);
+        if (particleSystemHole.transform.localEulerAngles.y >= 90f && particleSystemHole.transform.localEulerAngles.y < 100f)
+        {
+            particleSystemHole.transform.localEulerAngles = new Vector3(-90f, 90f, 0);
+
+            var vel = particleSystemHole.velocityOverLifetime;
+            vel.enabled = true;
+
             hand.SetActive(true);
             step++;
         }
