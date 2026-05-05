@@ -11,6 +11,8 @@ public class TieRodController : MonoBehaviour
     public GearActive gearActiveRef = null;
     bool puzzleComplete = false;
     public static bool isPuzzleActive = false;
+    public AudioSource tieRodUp;
+    public AudioSource tieRodDown;
 
     void OnMouseDown()
     {
@@ -31,9 +33,10 @@ public class TieRodController : MonoBehaviour
         // ¥¿¼½
         tieRodAnimator.SetFloat("PlaySpeed", 1f);
         tieRodAnimator.Play(animationName, 0, 0f);
+        tieRodUp.pitch = 2f;
+        tieRodUp.Play();
 
         yield return new WaitForSeconds(1.208f);
-
         // ±Ò°Ê¾¦½ü
         if (gearScripts != null)
         {
@@ -43,11 +46,12 @@ public class TieRodController : MonoBehaviour
             }
         }
 
-        
-
         // ­Ë¼½
+        tieRodDown.pitch = 2f;
+        tieRodDown.Play();
         tieRodAnimator.Play(animationName, 0, 1f);
         tieRodAnimator.SetFloat("PlaySpeed", -1f);
+        
 
         yield return new WaitForSeconds(1.208f);
 

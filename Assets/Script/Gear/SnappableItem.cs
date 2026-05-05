@@ -26,6 +26,9 @@ public class SnappableItem : MonoBehaviour
     public Material mouseOnMat;
     public Material originMat;
 
+    private static GameObject currentDrag;
+    public float zOffest = 0.0f;
+
 
     void Start() { 
         cam = Camera.main;
@@ -44,13 +47,17 @@ public class SnappableItem : MonoBehaviour
 
     private void OnMouseExit()
     {
-        GetComponent<Renderer>().material = originMat;
+        if (currentDrag != this.gameObject)
+        {
+            SetHighlight(false);
+        }
     }
 
     private void OnMouseOver()
     {
+        if (currentDrag != null && currentDrag != this.gameObject) return;
         if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
-        GetComponent<Renderer>().material = mouseOnMat;
+        SetHighlight(true);
     }
 
     // 當滑鼠按下
@@ -58,10 +65,12 @@ public class SnappableItem : MonoBehaviour
     {
         
         if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
-        GetComponent<Renderer>().material = mouseOnMat;
+        if (this.gameObject == currentDrag)
+            GetComponent<Renderer>().material = mouseOnMat;
 
         if (transform.parent != null && transform.parent.TryGetComponent<GhostSocket>(out var oldSocket))
         {
+            
             oldSocket.isOccupied = false;
             oldSocket.NotifyStatusChanged("");
             oldSocket.HideGhost();
@@ -76,10 +85,12 @@ public class SnappableItem : MonoBehaviour
     void OnMouseDrag()
     {
         if (IsSystemLocked() || gearActiveRef.IsComplete() || !isPuzzleActive) return;
-        GetComponent<Renderer>().material = mouseOnMat;
+        currentDrag = this.gameObject;
+        if (this.gameObject == currentDrag)
+            GetComponent<Renderer>().material = mouseOnMat;
 
         Vector3 newPos = GetMouseWorldPos() + offset;
-        newPos.z -= 0.1f;
+        newPos.z += zOffest;
         transform.position = newPos;
 
         UpdateGhostVisibility();
@@ -88,6 +99,8 @@ public class SnappableItem : MonoBehaviour
     // 當滑鼠放開
     void OnMouseUp()
     {
+        currentDrag = null;
+        SetHighlight(false);
         GetComponent<Renderer>().material = originMat;
         if (IsSystemLocked() || gearActiveRef.IsComplete()||!isPuzzleActive) return;
 
@@ -208,5 +221,11 @@ public class SnappableItem : MonoBehaviour
             return ray.GetPoint(enter);
         }
         return transform.position;
+    }
+
+    // 材質切換
+    private void SetHighlight(bool isHighlighted)
+    {
+        GetComponent<Renderer>().material = isHighlighted ? mouseOnMat : originMat;
     }
 }

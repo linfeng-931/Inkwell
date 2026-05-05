@@ -53,17 +53,17 @@ public class StartPuzzle : MonoBehaviour
         savedCamPos = mainCamera.transform.position;
         savedCamRot = mainCamera.transform.rotation;
 
-        SnappableItem.isPuzzleActive = true;
-        TieRodController.isPuzzleActive = true;
+        //print("先前相機位置: " + savedCamPos);
+
+
         PlayerController.isPuzzleActive = true;
         CameraController.isPuzzleActive = true;
 
         InteractionUI.SetActive(false);
         playerUI.SetActive(false);
-
+        SnappableItem.isPuzzleActive = true;
+        TieRodController.isPuzzleActive = true;
         yield return StartCoroutine(CameraTransition(mainCamera, puzzleCamera, puzzleCameraTarget));
-
-
     }
 
     IEnumerator LeavePuzzle()
@@ -88,6 +88,8 @@ public class StartPuzzle : MonoBehaviour
         playerUI.SetActive(true);
         player.SetActive(true);
         playerController.isInteract = false;
+
+        //print("當前相機位置: " + mainCamera.transform.position);
     }
 
     IEnumerator CameraTransition(Camera currentCam, Camera nextCam, Transform target)
@@ -121,6 +123,8 @@ public class StartPuzzle : MonoBehaviour
         Vector3 startPos = currentCam.transform.position;
         Quaternion startRot = currentCam.transform.rotation;
 
+        //print("被保存的相機座標: " + savedCamPos);
+
         while (time < duration)
         {
             time += Time.deltaTime;
@@ -135,6 +139,8 @@ public class StartPuzzle : MonoBehaviour
             yield return null;
         }
 
+        nextCam.transform.position = savedCamPos;
+        nextCam.transform.rotation = savedCamRot;
         currentCam.enabled = false;
         nextCam.enabled = true;
     }
