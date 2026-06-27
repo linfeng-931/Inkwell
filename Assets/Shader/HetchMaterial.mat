@@ -53,11 +53,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Hatch0:
-        m_Texture: {fileID: 2800000, guid: 6fe59a7649541440abd2ed7496f58016, type: 3}
+        m_Texture: {fileID: 2800000, guid: 189719547250f4a978fb0d80b32ff2f2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Hatch1:
-        m_Texture: {fileID: 2800000, guid: 3181ff81d5b7a4287ad13a61e2a64bf2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6c399ab1c0030404fac5509a590ba46e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -107,6 +107,7 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _AmbientBrightness: 0.5
+    - _BgShadowInfluence: 0.7
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -122,11 +123,13 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Hatch0_End: 0.589
-    - _Hatch0_Start: 0.277
-    - _Hatch1_End: 1
-    - _Hatch1_Start: 0.598
-    - _HatchScale: 0.4
+    - _Hatch0_End: 0.495
+    - _Hatch0_Start: 0.167
+    - _Hatch1_End: 0.156
+    - _Hatch1_Start: 0.081
+    - _HatchAngle: 45
+    - _HatchScale: 0.7
+    - _LightSensitivity: 1
     - _Metallic: 0
     - _NoiseDistort: 0.212
     - _OcclusionStrength: 1
@@ -150,8 +153,8 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HatchColor0: {r: 0.13317555, g: 0.13029549, b: 0.1509434, a: 1}
-    - _HatchColor1: {r: 0.16560099, g: 0.16273583, b: 0.21698111, a: 1}
+    - _HatchColor0: {r: 0.6768423, g: 0.6815146, b: 0.735849, a: 1}
+    - _HatchColor1: {r: 0.4188323, g: 0.43042564, b: 0.49056602, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _StructureColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
