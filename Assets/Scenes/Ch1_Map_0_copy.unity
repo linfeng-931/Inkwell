@@ -15,18 +15,18 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0, g: 0, b: 0, a: 1}
+  m_FogColor: {r: 0.17568529, g: 0.20465237, b: 0.26415092, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.024
+  m_FogDensity: 0.204
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
-  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
-  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientSkyColor: {r: 0.25431648, g: 0.3138907, b: 0.4245283, a: 1}
+  m_AmbientEquatorColor: {r: 0.07008722, g: 0.12861338, b: 0.1981132, a: 1}
+  m_AmbientGroundColor: {r: 0.2735849, g: 0, b: 0.015906172, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0, g: 0, b: 0, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: b51d9de95314544c0a336aee6a262890, type: 2}
+  m_AmbientMode: 1
+  m_SubtractiveShadowColor: {r: 0.050980393, g: 0.050980393, b: 0.08235294, a: 1}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -94,7 +94,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: d5eb2309f8ea36e499f334148b73a327, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -25509,6 +25509,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4183643431673532830, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6511908951819869753, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.16
@@ -25572,6 +25576,22 @@ PrefabInstance:
     - target: {fileID: 7736084981688048470, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.z
       value: -6.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002024587270566553, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002024587270566553, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.2627451
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002024587270566553, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.20392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002024587270566553, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.1764706
       objectReference: {fileID: 0}
     - target: {fileID: 8323002819771083859, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
       propertyPath: m_LocalPosition.x
