@@ -4,7 +4,6 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.UIElements;
 
 public class DrawMesh : MonoBehaviour
 {
@@ -156,7 +155,6 @@ public class DrawMesh : MonoBehaviour
                 float directionalMultiplier = Mathf.Lerp(horizontalWeight, verticalWeight, t);
                 float targetThickness = baseThickness * directionalMultiplier;
 
-                print("speed = "+speed+", targetThickness = "+targetThickness);
                 targetThickness = Mathf.Clamp(targetThickness, 0.05f, 0.35f);
                 currentThickness = Mathf.Lerp(currentThickness, targetThickness, 10f*Time.deltaTime);
                 

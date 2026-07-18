@@ -5,20 +5,27 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Action Setting")]
+    public PlayerAni playerAni;
+
+    //move
     public bool direction;
     public float moveSpeed;
     public float currentMoveSpeed; //be used to control mapRotate
     public float moveInput;
-    public bool isDash;
+
+    //jump
     public float jumpForce;
-    public PlayerAni playerAni;
     public ParticleSystem jumpEffect0;
     public ParticleSystem jumpEffect1;
     public ParticleSystem dropEffect;
+
+    //dash
+    public bool isDash;
     public float dashForce;
+    public float dashTime;
     public GameObject dashObj;
-    public GameObject dashObj1;
-    public GameObject dashObj2;
+
+    //attack
     public float attackStepDelay = 0.1f;
     public BoxCollider attackCollider;
     public GameObject attackPratical;
@@ -125,8 +132,8 @@ public class PlayerController : MonoBehaviour
         skyAttack = true;
         direction = true;
         isGoTarget = false;
-        transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
-        if(GameObject.FindGameObjectWithTag("Map")!=null) mapParent = GameObject.FindGameObjectWithTag("Map").transform;
+        transform.localScale = new Vector3(-1f * xScale, transform.localScale.y, transform.localScale.z);
+        if (GameObject.FindGameObjectWithTag("Map") != null) mapParent = GameObject.FindGameObjectWithTag("Map").transform;
         else mapParent = null;
         combinedLayerMask = groundLayer | otherGroundLayer;
     }
@@ -138,9 +145,10 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, combinedLayerMask);
         Dead();
         GoTarget();
-        if(isDead || isStory || isStory2 || isInteract) return;
+        if (isDead || isStory || isStory2 || isInteract) return;
 
-        if(isSwirl){
+        if (isSwirl)
+        {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 swirlParticle.SetActive(false);
@@ -158,16 +166,19 @@ public class PlayerController : MonoBehaviour
         }
 
         //cancel jump
-        if (isGrounded && rb.linearVelocity.y < 0.1f && jumpCount!=0 && !isHurt)
+        if (isGrounded && rb.linearVelocity.y < 0.1f && jumpCount != 0 && !isHurt)
         {
             jumpCount = 0;
-            if((animator.GetInteger(action) == 2 ||animator.GetInteger(action) == 3) && jumpDelay>0.2f){
+            if ((animator.GetInteger(action) == 2 || animator.GetInteger(action) == 3) && jumpDelay > 0.2f)
+            {
                 playerAni.ResumeAni();
-                if(rb.linearVelocity.x < 0.1f){
+                if (rb.linearVelocity.x < 0.1f)
+                {
                     SwitchAni(0);
                     dropEffect.Play();
                 }
-                else{
+                else
+                {
                     SwitchAni(1);
                     dropEffect.Play();
                 }
@@ -181,13 +192,13 @@ public class PlayerController : MonoBehaviour
             isDrawing = true;
             playerStatus.isUsingEnergy = true;
             currentMoveSpeed = 0.09f;
-            if(mapParent!= null)
+            if (mapParent != null)
             {
                 GameObject newObj = Instantiate(drawPrefab);
                 newObj.transform.SetParent(mapParent, true);
                 newObj.transform.localScale = new Vector3(
-                    1f / mapParent.lossyScale.x, 
-                    1f / mapParent.lossyScale.y, 
+                    1f / mapParent.lossyScale.x,
+                    1f / mapParent.lossyScale.y,
                     1f / mapParent.lossyScale.z
                 );
             }
@@ -207,32 +218,34 @@ public class PlayerController : MonoBehaviour
             {
                 playerStatus.energy -= (int)(costOfDraw);
                 drawTimer = 0f;
-            } 
+            }
         }
 
         Attack();
-        if(jumpDelayTimer<0.3f) jumpDelayTimer+=Time.deltaTime;
+        if (jumpDelayTimer < 0.3f) jumpDelayTimer += Time.deltaTime;
 
         if (isHurt)
         {
-            if(hurtType == 0)
+            if (hurtType == 0)
             {
-                if(Vector3.Distance(oriPos, transform.position)>0.5f) rb.linearVelocity = new Vector3(0, 0, 0);
-                hurtTimer+= Time.deltaTime;
-                if(hurtTimer > 0.5f){
+                if (Vector3.Distance(oriPos, transform.position) > 0.5f) rb.linearVelocity = new Vector3(0, 0, 0);
+                hurtTimer += Time.deltaTime;
+                if (hurtTimer > 0.5f)
+                {
                     isHurt = false;
                     hurtTimer = 0f;
                 }
-            } 
-            else if(hurtType == 1)
+            }
+            else if (hurtType == 1)
             {
-                if(hurtTimer < 0.5f)
+                if (hurtTimer < 0.5f)
                 {
-                    hurtTimer+= Time.deltaTime;
+                    hurtTimer += Time.deltaTime;
                 }
                 else
                 {
-                    if(isGrounded){
+                    if (isGrounded)
+                    {
                         hurtTimer = 0;
                         isHurt = false;
                     }
@@ -243,7 +256,8 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         if (isPuzzleActive) return;
-        if (isSwirl){
+        if (isSwirl)
+        {
             return;
         }
 
@@ -251,20 +265,20 @@ public class PlayerController : MonoBehaviour
         if (!isGrounded && !isDash)
         {
             rb.AddForce(Vector3.down * gravityValue * gravityValue * Time.deltaTime, ForceMode.Acceleration);
-            jumpDelay+=Time.deltaTime;
-            if(jumpCount == 0 && !isHurt && !isDead)
+            jumpDelay += Time.deltaTime;
+            if (jumpCount == 0 && !isHurt && !isDead)
             {
-                if(!isGoTarget) SwitchAni(8);
+                if (!isGoTarget) SwitchAni(8);
             }
         }
-        else if(rb.linearVelocity.y < 0)
+        else if (rb.linearVelocity.y < 0)
         {
             Vector3 vel = rb.linearVelocity;
             vel.y = -0.5f;
             rb.linearVelocity = vel;
         }
 
-        if(isDead || isHurt || isInteract) return;
+        if (isDead || isHurt || isInteract) return;
 
         Move();
         Walk();
@@ -273,9 +287,9 @@ public class PlayerController : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if(groundCheckPoint != null)
+        if (groundCheckPoint != null)
         {
-            Gizmos.color = isGrounded? Color.green : Color.red;
+            Gizmos.color = isGrounded ? Color.green : Color.red;
             Gizmos.DrawSphere(groundCheckPoint.position, checkRadius);
         }
     }
@@ -300,136 +314,149 @@ public class PlayerController : MonoBehaviour
     public void MoveAction(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<float>();
-        
-        if(isDead || isHurt) return;
-        
+
+        if (isDead || isHurt) return;
+
     }
     void Move()
     {
-        if(isDash || isAttack || isHurt || isStory || isInteract) return;
+        if (isDash || isAttack || isHurt || isStory || isInteract) return;
 
-        if(moveInput < 0 && direction){
+        if (moveInput < 0 && direction)
+        {
             direction = false;
             transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
         }
-        else if(moveInput > 0 && !direction){
+        else if (moveInput > 0 && !direction)
+        {
             direction = true;
-            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-1f * xScale, transform.localScale.y, transform.localScale.z);
         }
 
-        if(Math.Abs(moveInput) < 0.01f || isDrawing){
-            if(jumpCount==0 && isGrounded) SwitchAni(0);
+        if (Math.Abs(moveInput) < 0.01f || isDrawing)
+        {
+            if (jumpCount == 0 && isGrounded) SwitchAni(0);
 
             if (currentMoveSpeed != 0f)
             {
                 currentMoveSpeed -= accelerateSpeed * Time.deltaTime;
-                if(currentMoveSpeed < 0f) currentMoveSpeed = 0f;
+                if (currentMoveSpeed < 0f) currentMoveSpeed = 0f;
             }
-            rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
+            rb.linearVelocity = new Vector3(currentMoveSpeed * moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
             return;
         }
 
-        if(currentMoveSpeed < moveSpeed)
+        if (currentMoveSpeed < moveSpeed)
         {
             currentMoveSpeed += accelerateSpeed * Time.deltaTime;
-            if(currentMoveSpeed > moveSpeed) currentMoveSpeed = moveSpeed;
+            if (currentMoveSpeed > moveSpeed) currentMoveSpeed = moveSpeed;
         }
-        if(jumpCount == 0 && isGrounded) SwitchAni(1);
-        rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
+        if (jumpCount == 0 && isGrounded) SwitchAni(1);
+        rb.linearVelocity = new Vector3(currentMoveSpeed * moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
         playerStatus.RaiseEnegry(currentMoveSpeed);
     }
     void Walk()
     {
-        if(!isStory) return;
-        if(moveInput < 0 && direction){
+        if (!isStory) return;
+        if (moveInput < 0 && direction)
+        {
             direction = false;
             transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
         }
-        else if(moveInput > 0 && !direction){
+        else if (moveInput > 0 && !direction)
+        {
             direction = true;
-            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-1f * xScale, transform.localScale.y, transform.localScale.z);
         }
 
-        if(Math.Abs(moveInput) < 0.01f || isDrawing){
-            if(jumpCount==0 && isGrounded) SwitchAni(0);
+        if (Math.Abs(moveInput) < 0.01f || isDrawing)
+        {
+            if (jumpCount == 0 && isGrounded) SwitchAni(0);
 
             if (currentMoveSpeed != 0f)
             {
                 currentMoveSpeed -= accelerateSpeed * Time.deltaTime;
-                if(currentMoveSpeed < 0f) currentMoveSpeed = 0f;
+                if (currentMoveSpeed < 0f) currentMoveSpeed = 0f;
             }
-            rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
+            rb.linearVelocity = new Vector3(currentMoveSpeed * moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
             return;
         }
 
-        if(currentMoveSpeed < moveSpeed * 0.4f)
+        if (currentMoveSpeed < moveSpeed * 0.4f)
         {
             currentMoveSpeed += accelerateSpeed * Time.deltaTime;
-            if(currentMoveSpeed > moveSpeed * 0.4f) currentMoveSpeed = moveSpeed * 0.4f;
+            if (currentMoveSpeed > moveSpeed * 0.4f) currentMoveSpeed = moveSpeed * 0.4f;
         }
-        if(jumpCount == 0 && isGrounded) SwitchAni(11);
-        rb.linearVelocity = new Vector3(currentMoveSpeed*moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
+        if (jumpCount == 0 && isGrounded) SwitchAni(11);
+        rb.linearVelocity = new Vector3(currentMoveSpeed * moveInput, rb.linearVelocity.y, rb.linearVelocity.z);
         playerStatus.RaiseEnegry(currentMoveSpeed);
     }
     public void DashAction(InputAction.CallbackContext context)
     {
-        if(isHurt || isDead || isStory || isStory2 || isInteract) return;
+        if (isHurt || isDead || isStory || isStory2 || isInteract) return;
 
-        if(dashDelay!=0f) {
+        if (dashDelay != 0f)
+        {
             dashUnused = 0f;
             return;
         }
-        if(dashUnused <0.3f) return;
+        if (dashUnused < 0.3f) return;
 
-        
+
         isDash = true;
         playerAni.ResumeAni();
         OtherAni.SetInteger(action, 1);
         PlayerFace.SetActive(false);
         dashObj.SetActive(true);
-        dashObj1.SetActive(true);
-        dashObj2.SetActive(true);
-        rb.linearVelocity = direction? new Vector3(dashForce, 0):new Vector3(-1*dashForce, 0);
+        rb.linearVelocity = direction ? new Vector3(dashForce, 0) : new Vector3(-1 * dashForce, 0);
     }
     void Dash()
     {
-        if(!isDash){
-            dashUnused += Time.deltaTime;
+        if (!isDash)
+        {
+            if (dashUnused < 0.3f)
+            {
+                dashUnused += Time.deltaTime;
+            }
+            else
+            {
+                dashObj.SetActive(false);
+            }
             return;
         }
 
-        dashDelay+=Time.deltaTime;
+        dashDelay += Time.deltaTime;
 
-        if(dashDelay > 0.4f)
+        if (dashDelay > dashTime - 0.1f)
         {
             OtherAni.SetInteger(action, 0);
         }
-        if(dashDelay > 0.5f){
+        if (dashDelay > dashTime)
+        {
             isDash = false;
             dashDelay = 0f;
             PlayerFace.SetActive(true);
-            dashObj.SetActive(false);
-            dashObj1.SetActive(false);
-            dashObj2.SetActive(false);
         }
     }
     public void JumpAction(InputAction.CallbackContext context)
     {
-        if(isDrawing || isDash || isHurt || isDead || isStory || isStory2 || isInteract) return;
+        if (isDrawing || isDash || isHurt || isDead || isStory || isStory2 || isInteract) return;
 
-        if(jumpDelayTimer<0.25f) return;
+        if (jumpDelayTimer < 0.25f) return;
 
-        if (context.started && jumpCount <2)
+        if (context.started && jumpCount < 2)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpCount++;
-            if(jumpCount == 1){
+            if (jumpCount == 1)
+            {
                 jumpDelayTimer = 0f;
                 jumpEffect0.Play();
                 jumpEffect1.Play();
                 SwitchAni(2);
             }
-            else if(jumpCount == 2){
+            else if (jumpCount == 2)
+            {
                 jumpDelayTimer = 0f;
                 jumpEffect0.Play();
                 jumpEffect1.Play();
@@ -447,6 +474,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /*
+    public void Jump()
+    {
+        if (waitJump)
+        {
+            waitTimer += Time.deltaTime;
+            if (waitTimer > jumpWaitTime)
+            {
+                waitTimer = 0f;
+                waitJump = false;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                jumpCount++;
+            }
+        }
+
+        if (jumpCount == 1)
+        {
+            jumpDelayTimer = 0f;
+            jumpEffect0.Play();
+            jumpEffect1.Play();
+            SwitchAni(2);
+        }
+        else if (jumpCount == 2)
+        {
+            jumpDelayTimer = 0f;
+            jumpEffect0.Play();
+            jumpEffect1.Play();
+            playerAni.ResumeAni();
+            SwitchAni(3);
+        }
+    }
+    */
+
     //Saving(在save point interaction中使用)
     public void Saving()
     {
@@ -463,42 +523,43 @@ public class PlayerController : MonoBehaviour
 
     void Attack()
     {
-        if(isDash || isHurt || isStory || isStory2 || isInteract) return;
+        if (isDash || isHurt || isStory || isStory2 || isInteract) return;
 
-        if (Input.GetMouseButtonDown(0) && !isDash && canAttack && attackStep!=3 && skyAttack)
+        if (Input.GetMouseButtonDown(0) && !isDash && canAttack && attackStep != 3 && skyAttack)
         {
             int aniInt = animator.GetInteger(action);
-            if(aniInt != 4 && aniInt != 5 && aniInt!=6) previousAct = aniInt;
-            attackStep+=1;
-            attackEffect.attackAmount+=1;
+            if (aniInt != 4 && aniInt != 5 && aniInt != 6) previousAct = aniInt;
+            attackStep += 1;
+            attackEffect.attackAmount += 1;
             attackDelay = 0f;
             attackKeep = 0f;
-            SwitchAni(3+attackStep);
+            SwitchAni(3 + attackStep);
             canAttack = false;
             isAttack = true;
             oriPos = transform.position;
-            rb.linearVelocity = direction ? new Vector3(10f, 0, 0): new Vector3(-10f, 0, 0);
+            rb.linearVelocity = direction ? new Vector3(10f, 0, 0) : new Vector3(-10f, 0, 0);
             attackCollider.enabled = true;
             attackPratical.SetActive(true);
         }
-        if(!isAttack){
+        if (!isAttack)
+        {
             attackCollider.enabled = false;
             attackPratical.SetActive(false);
             return;
         }
-        if(Vector3.Distance(oriPos, transform.position)>0.5f) rb.linearVelocity = new Vector3(0, 0, 0);
+        if (Vector3.Distance(oriPos, transform.position) > 0.5f) rb.linearVelocity = new Vector3(0, 0, 0);
 
-        if(!isGrounded) playerAni.ResumeAni(); //跳躍時的攻擊問題
+        if (!isGrounded) playerAni.ResumeAni(); //跳躍時的攻擊問題
 
         //delay between steps
-        if(attackStep == 3 && attackDelay > attackStepDelay + 0.1f)
+        if (attackStep == 3 && attackDelay > attackStepDelay + 0.1f)
         {
             canAttack = true;
             attackDelay = 0f;
             attackStep = 0;
-            if(!isGrounded) skyAttack = false;
+            if (!isGrounded) skyAttack = false;
         }
-        else if(attackDelay > attackStepDelay && attackStep != 3)
+        else if (attackDelay > attackStepDelay && attackStep != 3)
         {
             canAttack = true;
             attackDelay = 0f;
@@ -509,44 +570,48 @@ public class PlayerController : MonoBehaviour
         }
 
         //cancel attack
-        if(attackKeep > 0.45f)
+        if (attackKeep > 0.45f)
         {
             isAttack = false;
             attackKeep = 0;
             attackStep = 0;
-            if(!isGrounded) skyAttack = false;
+            if (!isGrounded) skyAttack = false;
             SwitchAni(previousAct);
         }
-        else{
-            attackKeep+=Time.deltaTime;
+        else
+        {
+            attackKeep += Time.deltaTime;
         }
-        
+
     }
     void Draw()
     {
-        
+
     }
     public void Hurt(int damage, int type, float x)
     {
-        if(isHurt || isDash || isDead || isStory || isStory2 || isInteract) return;
+        if (isHurt || isDash || isDead || isStory || isStory2 || isInteract) return;
 
         isHurt = true;
         hurtTimer = 0f;
         hurtType = type;
-        if(type == 0) SwitchAni(-1);
-        if(type == 1) SwitchAni(7);
+        if (type == 0) SwitchAni(-1);
+        if (type == 1) SwitchAni(7);
         oriPos = transform.position;
 
-        if(type == 0){
-            if(x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
-            else rb.linearVelocity = direction ? new Vector3(-10f, 0, 0): new Vector3(10f, 0, 0);
+        if (type == 0)
+        {
+            if (x != 0) rb.linearVelocity = x > 0 ? new Vector3(-10f, 0, 0) : new Vector3(10f, 0, 0);
+            else rb.linearVelocity = direction ? new Vector3(-10f, 0, 0) : new Vector3(10f, 0, 0);
         }
-        
-        if(x > 0){
-            transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+
+        if (x > 0)
+        {
+            transform.localScale = new Vector3(-1f * xScale, transform.localScale.y, transform.localScale.z);
             direction = true;
         }
-        else if(x < 0){
+        else if (x < 0)
+        {
             transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
             direction = false;
         }
@@ -556,16 +621,16 @@ public class PlayerController : MonoBehaviour
 
     public void Dead()
     {
-        if(playerStatus.blood == 0)
+        if (playerStatus.blood == 0)
         {
             isDead = true;
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
             SwitchAni(-2);
         }
-        if(!isDead) return;
+        if (!isDead) return;
 
         deadTimer += Time.deltaTime;
-        if(deadTimer > 2f)
+        if (deadTimer > 2f)
         {
             Reset();
         }
@@ -578,58 +643,58 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         isGoTarget = true;
         toTargetType = type;
-        if(type == 0) SwitchAni(11);
-        else if(type == 1) SwitchAni(1);
+        if (type == 0) SwitchAni(11);
+        else if (type == 1) SwitchAni(1);
     }
     void GoTarget()
     {
-        if(!isGoTarget) return;
+        if (!isGoTarget) return;
 
-        if(toTargetType == 0)
+        if (toTargetType == 0)
         {
             Vector3 dirTarget = (interactTarget - transform.position).normalized;
-            if(dirTarget.x > 0)
+            if (dirTarget.x > 0)
             {
                 direction = true;
-                transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(-1f * xScale, transform.localScale.y, transform.localScale.z);
             }
-            else if(dirTarget.x < 0)
+            else if (dirTarget.x < 0)
             {
                 direction = false;
                 transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
             }
-            
-            rb.linearVelocity = new Vector3(moveSpeed*0.4f*dirTarget.x, rb.linearVelocity.y, rb.linearVelocity.z);
-            if(Math.Abs(interactTarget.x-transform.position.x) < 0.1f)
+
+            rb.linearVelocity = new Vector3(moveSpeed * 0.4f * dirTarget.x, rb.linearVelocity.y, rb.linearVelocity.z);
+            if (Math.Abs(interactTarget.x - transform.position.x) < 0.1f)
             {
                 isGoTarget = false;
                 SwitchAni(0);
                 rb.linearVelocity = Vector3.zero;
             }
         }
-        else if(toTargetType == 1)
+        else if (toTargetType == 1)
         {
             Vector3 dirTarget = (interactTarget - transform.position).normalized;
-            if(dirTarget.x > 0)
+            if (dirTarget.x > 0)
             {
                 direction = true;
-                transform.localScale = new Vector3(-1f*xScale, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(-1f * xScale, transform.localScale.y, transform.localScale.z);
             }
-            else if(dirTarget.x < 0)
+            else if (dirTarget.x < 0)
             {
                 direction = false;
                 transform.localScale = new Vector3(xScale, transform.localScale.y, transform.localScale.z);
             }
 
-            rb.linearVelocity = new Vector3(moveSpeed*dirTarget.x, rb.linearVelocity.y, rb.linearVelocity.z);
-            if(Math.Abs(interactTarget.x-transform.position.x) < 0.1f)
+            rb.linearVelocity = new Vector3(moveSpeed * dirTarget.x, rb.linearVelocity.y, rb.linearVelocity.z);
+            if (Math.Abs(interactTarget.x - transform.position.x) < 0.1f)
             {
                 isGoTarget = false;
                 SwitchAni(0);
                 rb.linearVelocity = Vector3.zero;
             }
         }
-        
+
     }
 
     public void SwitchAni(int act)

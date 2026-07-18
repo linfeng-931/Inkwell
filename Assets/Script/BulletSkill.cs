@@ -11,8 +11,9 @@ public class BulletSkill : MonoBehaviour
     public float enlargeSpeed = 1f;
     public Sprite[] sprites;
     public GameObject bulletPrefab;
+    public LineRenderer shootingLine;
 
-    private bool isAct; 
+    private bool isAct;
     private bool startTimer;
     private int targetStyle;
     private bool enlargeFlag;
@@ -26,8 +27,6 @@ public class BulletSkill : MonoBehaviour
     private float delayTimer;
     private bool delayTime;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isAct = false;
@@ -38,16 +37,16 @@ public class BulletSkill : MonoBehaviour
         enlargeFlag = false;
         delayTimer = 0f;
         playerStatus = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStatus>();
+        shootingLine.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         TargetPointStyle();
         if (delayTime)
         {
             delayTimer += Time.deltaTime;
-            if(delayTimer > 0.5f) delayTime = false;
+            if (delayTimer > 0.5f) delayTime = false;
             return;
         }
 
@@ -60,22 +59,32 @@ public class BulletSkill : MonoBehaviour
             }
             if (startTimer)
             {
-                timer+=Time.deltaTime;
-                if(Vector2.Distance(Mouse.current.position.value, mousePos) > 10f)
+                timer += Time.deltaTime;
+                if (Vector2.Distance(Mouse.current.position.value, mousePos) > 10f)
                 {
                     timer = 0f;
                     startTimer = false;
                 }
-                if(timer > 0.8f)
+                if (timer > 0.8f)
                 {
                     isAct = true;
                     targetStyle = 1;
+                    shootingLine.gameObject.SetActive(true);
+
+                    Vector3 playerPos = transform.parent.position;
+                    Vector3 mousePosWorld = MouseUtils.GetMouseWorldPosition();
+                    Vector3 direction = (mousePosWorld - playerPos).normalized;
+                    Vector3 extendedPos = playerPos + (direction * 3f);
+                    shootingLine.SetPosition(0, playerPos);
+                    shootingLine.SetPosition(2, extendedPos);
+                    shootingLine.SetPosition(1, (playerPos + extendedPos) / 2.0f);
                     spriteRenderer.enabled = true;
+
                     startTimer = false;
                     playerStatus.isUsingEnergy = false;
                     timer = 0;
                     drawMeshes = new List<GameObject>(GameObject.FindGameObjectsWithTag("DrawMesh"));
-                    foreach(GameObject drawMesh in drawMeshes)
+                    foreach (GameObject drawMesh in drawMeshes)
                     {
                         DrawMesh drawMesh1 = drawMesh.GetComponent<DrawMesh>();
                         if (!drawMesh1.isAct)
@@ -88,6 +97,12 @@ public class BulletSkill : MonoBehaviour
         }
         else
         {
+            Vector3 playerPos = transform.parent.position;
+            Vector3 mousePosWorld = MouseUtils.GetMouseWorldPosition();
+            Vector3 direction = (mousePosWorld - playerPos).normalized;
+            Vector3 extendedPos = playerPos + (direction * 7f);
+            shootingLine.SetPosition(2, extendedPos);
+            shootingLine.SetPosition(1, (playerPos + extendedPos) / 2.0f);
             if (Input.GetMouseButtonUp(actButton))
             {
                 isShoot = true;
@@ -97,20 +112,22 @@ public class BulletSkill : MonoBehaviour
                 target = MouseUtils.GetMouseWorldPosition();
                 delayTimer = 0f;
                 delayTime = true;
+                shootingLine.gameObject.SetActive(false);
             }
         }
-        if(targetStyle!=3) transform.position = MouseUtils.GetMouseWorldPosition(); 
+        if (targetStyle != 3) transform.position = MouseUtils.GetMouseWorldPosition();
     }
 
     private void TargetPointStyle()
     {
-        if(targetStyle == 0) return;
+        if (targetStyle == 0) return;
 
         switch (targetStyle)
         {
             case 1:
-                transform.localScale += new Vector3(1, 1, 0)*enlargeSpeed*Time.deltaTime*20f;
-                if(transform.localScale.x >= maxScale){
+                transform.localScale += new Vector3(1, 1, 0) * enlargeSpeed * Time.deltaTime * 20f;
+                if (transform.localScale.x >= maxScale)
+                {
                     transform.localScale = new Vector3(maxScale, maxScale, 1f);
                     targetStyle++;
                     transform.GetChild(0).gameObject.SetActive(true);
@@ -119,16 +136,18 @@ public class BulletSkill : MonoBehaviour
             case 2:
                 if (!enlargeFlag)
                 {
-                    transform.localScale -= new Vector3(1, 1, 0)*enlargeSpeed*Time.deltaTime;
-                    if(transform.localScale.x <= minScale){
+                    transform.localScale -= new Vector3(1, 1, 0) * enlargeSpeed * Time.deltaTime;
+                    if (transform.localScale.x <= minScale)
+                    {
                         transform.localScale = new Vector3(minScale, minScale, 1f);
                         enlargeFlag = true;
                     }
                 }
                 else
                 {
-                    transform.localScale += new Vector3(1, 1, 0)*enlargeSpeed*Time.deltaTime;
-                    if(transform.localScale.x >= maxScale){
+                    transform.localScale += new Vector3(1, 1, 0) * enlargeSpeed * Time.deltaTime;
+                    if (transform.localScale.x >= maxScale)
+                    {
                         transform.localScale = new Vector3(maxScale, maxScale, 1f);
                         enlargeFlag = false;
                     }
@@ -137,8 +156,9 @@ public class BulletSkill : MonoBehaviour
             case 3:
                 if (!enlargeFlag)
                 {
-                    transform.localScale -= new Vector3(1, 1, 0)*enlargeSpeed*Time.deltaTime*20f;
-                    if(transform.localScale.x <= 0.1f){
+                    transform.localScale -= new Vector3(1, 1, 0) * enlargeSpeed * Time.deltaTime * 20f;
+                    if (transform.localScale.x <= 0.1f)
+                    {
                         transform.localScale = new Vector3(0.1f, 0.1f, 1f);
                         enlargeFlag = true;
                         spriteRenderer.sprite = sprites[1];
@@ -147,28 +167,30 @@ public class BulletSkill : MonoBehaviour
                 }
                 else
                 {
-                    if(isShoot){
+                    if (isShoot)
+                    {
                         GameObject bullet = Instantiate(bulletPrefab);
                         bullet.GetComponent<Bullet>().target = new Vector3(target.x, target.y, -1f);
                         isShoot = false;
                     }
-                    transform.localScale += new Vector3(1, 1, 0)*enlargeSpeed*Time.deltaTime*20f;
+                    transform.localScale += new Vector3(1, 1, 0) * enlargeSpeed * Time.deltaTime * 20f;
 
                     Color c = spriteRenderer.color;
-                    c.a -= Time.deltaTime*4f;
+                    c.a -= Time.deltaTime * 4f;
                     c.a = Mathf.Max(0, c.a);
                     spriteRenderer.color = c;
 
-                    if(transform.localScale.x >= maxScale*2f){
+                    if (transform.localScale.x >= maxScale * 2f)
+                    {
                         spriteRenderer.enabled = false;
                         transform.GetChild(1).gameObject.SetActive(false);
-                        transform.localScale = new Vector3(maxScale*2f, maxScale*2f, 1f);
+                        transform.localScale = new Vector3(maxScale * 2f, maxScale * 2f, 1f);
                         enlargeFlag = false;
                         targetStyle = 0;
                         isAct = false;
                         spriteRenderer.sprite = sprites[0];
                         c.a = 1;
-                        spriteRenderer.color = c;  
+                        spriteRenderer.color = c;
                     }
                 }
                 break;
