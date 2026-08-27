@@ -19,6 +19,7 @@ public class Bee : EnemyControl
         canAttack = false;
         attackTimer = 0f;
         createNeedle = true;
+        disDir = true;
     }
 
     protected override void Update()
@@ -104,6 +105,7 @@ public class Bee : EnemyControl
             {
                 Vector3 toTarget = ((player.transform.position+new Vector3(0, 1f, 0)) - transform.position).normalized;
                 rig.linearVelocity = speed * 0.2f * toTarget;
+                dir = toTarget.x > 0 ? -1 : 1;
                 transform.localScale = new Vector3(dir*scale, scale, scale);
             }
             else
@@ -129,9 +131,9 @@ public class Bee : EnemyControl
 
                             Direction = new Vector3(random2D.x, finalY, 0);
                         }
-
-                        float toTarget = ((player.transform.position+new Vector3(0, 1f, 0)) - transform.position).normalized.x;
-                        transform.localScale = toTarget > 0 ? new Vector3(-1*scale, scale, scale):new Vector3(scale, scale, scale);
+                        float toTargetX = ((player.transform.position + new Vector3(0, 1f, 0)) - transform.position).normalized.x;
+                        dir = toTargetX > 0 ? -1 : 1;
+                        transform.localScale = new Vector3(dir * scale, scale, scale);
                         rig.linearVelocity = speed * Direction;
                         moveStartPos = transform.position;
                     }

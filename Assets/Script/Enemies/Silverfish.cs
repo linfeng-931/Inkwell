@@ -16,7 +16,7 @@ public class Silverfish : EnemyControl
         delayMoveTime = 1f;
         attackStep = 0;
         attackTimer = 0f;
-        attackDelayTime = 1f;
+        attackDelayTime = 0.1f;
         disDir = true;
     }
 

@@ -35,7 +35,7 @@ public abstract class EnemyControl : MonoBehaviour
     protected float scale;
     protected bool disDir;
     protected bool isHurt;
-    
+
 
     private PlayerController playerController;
     private bool flag;
@@ -69,9 +69,10 @@ public abstract class EnemyControl : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(isDead) return;
+        if (isDead) return;
 
-        if(groundCheckPoint != null){
+        if (groundCheckPoint != null)
+        {
             isGrounded = Physics.CheckSphere(groundCheckPoint.position, checkRadius, groundLayer);
             if (!isGrounded && rig.linearVelocity != Vector3.zero)
             {
@@ -85,29 +86,21 @@ public abstract class EnemyControl : MonoBehaviour
         //update direction
         if (!disDir)
         {
-            if(rig.linearVelocity.y > 0){
+            if (rig.linearVelocity.y > 0)
+            {
                 dir = 1;
             }
-            else if(rig.linearVelocity.y < 0){
+            else if (rig.linearVelocity.y < 0)
+            {
                 dir = -1;
             }
         }
-    
+
         //hurtDelay
         if (isHurt)
         {
-            hurtTimer+=Time.deltaTime;
-            if(oriPos != null)
-            {
-                if(Vector3.Distance(oriPos, transform.position) > repelDistance)
-                {
-                    hurtTimer = 0f;
-                    isHurt = false;
-                    spriteRenderer.material = oriMaterial;
-                    rig.linearVelocity = new Vector3(0, 0, 0);
-                }
-            }
-            if(hurtTimer > 0.5f)
+            hurtTimer += Time.deltaTime;
+            if (hurtTimer > 0.5f)
             {
                 hurtTimer = 0f;
                 isHurt = false;
@@ -121,12 +114,13 @@ public abstract class EnemyControl : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if(repelPlayer){
-                if(playerController.isHurt) return;
+            if (repelPlayer)
+            {
+                if (playerController.isHurt) return;
                 Rigidbody playerRb = player.GetComponent<Rigidbody>();
                 playerRb.linearVelocity = Vector3.zero;
                 float x = transform.position.x - player.transform.position.x;
-                Vector3 forceDir = x<0 ? new Vector3(1, 1, 0) : new Vector3(-1, 1, 0);
+                Vector3 forceDir = x < 0 ? new Vector3(1, 1, 0) : new Vector3(-1, 1, 0);
                 playerRb.AddForce(forceDir * 4f, ForceMode.Impulse);
                 playerController.Hurt(damage, 1, transform.position.x - player.transform.position.x);
             }
@@ -150,12 +144,14 @@ public abstract class EnemyControl : MonoBehaviour
 
     protected void Hurt(float damage)
     {
+        Debug.Log($"[Hurt] frame={Time.frameCount}, blood before={blood}, damage={damage}, isHurt was false, now hitting");
         isHurt = true;
         blood -= damage;
         particleHurt.Play();
         spriteRenderer.material = HurtMaterial;
 
-        if(blood <= 0){
+        if (blood <= 0)
+        {
             isDead = true;
             /*particleDead.SetActive(true);
             gameObject.GetComponent<SpriteRenderer>().enabled = false;
@@ -179,7 +175,7 @@ public abstract class EnemyControl : MonoBehaviour
         if (canRepel && blood > 0)
         {
             oriPos = transform.position;
-            rig.linearVelocity = new Vector3(repelSpeed*dir, 0, 0);
+            rig.linearVelocity = new Vector3(repelSpeed * dir, 0, 0);
         }
     }
 
@@ -190,7 +186,7 @@ public abstract class EnemyControl : MonoBehaviour
 
     protected void StopEnemy()
     {
-        isMoving = false; 
+        isMoving = false;
         rig.linearVelocity = Vector3.zero;
     }
 
