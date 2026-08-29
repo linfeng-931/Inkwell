@@ -107,6 +107,9 @@ public class PlayerController : MonoBehaviour
     // Puzzle
     public static bool isPuzzleActive = false;
 
+    // Camera Shake
+    public CameraShake camShake;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -591,6 +594,17 @@ public class PlayerController : MonoBehaviour
     public void Hurt(int damage, int type, float x)
     {
         if (isHurt || isDash || isDead || isStory || isStory2 || isInteract) return;
+
+        
+        if (camShake != null)
+        {
+            camShake.Shake(0.5f, 0.2f);
+        }
+        else {
+            Debug.Log("鏡頭晃動");
+        }
+
+        
 
         isHurt = true;
         hurtTimer = 0f;

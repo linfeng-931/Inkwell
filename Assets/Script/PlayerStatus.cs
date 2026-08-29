@@ -38,21 +38,25 @@ public class PlayerStatus : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(blood < 0) blood = 0;
+        if (blood < 0) blood = 0;
+        if (blood > maxBlood) blood = maxBlood;
 
         inkbar_emptyTrans.position = new Vector3(energyRangeX_max-(energyRangeX_max-energyRangeX_min)*(1f-(energy/100f)), inkbar_emptyTrans.position.y, inkbar_emptyTrans.position.z);
-        if (maxBlood != blood)
+
+        int totalHeartCount = blood_full.transform.childCount;
+        for (int i = 0; i < totalHeartCount; i++)
         {
-            for(int i = maxBlood-1; i>=blood; i--)
-            {
-                blood_full.transform.GetChild(i).gameObject.SetActive(false);
-            }
-            for(int i = 0; i<blood; i++)
+            if (i < blood)
             {
                 blood_full.transform.GetChild(i).gameObject.SetActive(true);
             }
-        }  
-        if(energy< 100) energyRaiseTimer+=Time.deltaTime;
+            else
+            {
+                blood_full.transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+
+        if (energy< 100) energyRaiseTimer+=Time.deltaTime;
     }
     public void RaiseEnegry(float lx)
     {
