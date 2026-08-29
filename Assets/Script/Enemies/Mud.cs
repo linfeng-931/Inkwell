@@ -64,11 +64,11 @@ public class Mud : MonoBehaviour
         {
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             col.enabled = false;
-            Destroy(gameObject); //或做效果
+            Destroy(gameObject);
         }
         else
         {
-            playerController.Hurt(1, 0, rig.linearVelocity.x);
+            playerController.Hurt(1, 0, transform.position.x - playerTrans.position.x);
             Destroy(gameObject);
         }
     }

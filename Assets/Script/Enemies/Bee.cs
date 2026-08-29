@@ -5,7 +5,10 @@ public class Bee : EnemyControl
     public float attackDelay;
     public GameObject needle;
 
-    
+    [Header("Collision Avoidance")]
+    public float bodyRadius = 0.3f;
+    public LayerMask obstacleLayer;
+
     private Vector3 moveStartPos;
     private GameObject currentNeedle;   
     private bool canAttack;
@@ -52,14 +55,28 @@ public class Bee : EnemyControl
     protected override void Move()
     {
         //防撞
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, rig.linearVelocity.normalized, out hit, 0.5f))
+
+        if (rig.linearVelocity.sqrMagnitude > 0.0001f)
         {
-            if (!hit.collider.CompareTag("Player"))
+            float frameTravel = rig.linearVelocity.magnitude * Time.deltaTime + bodyRadius;
+            if (Physics.SphereCast(transform.position, bodyRadius, rig.linearVelocity.normalized,
+                                    out RaycastHit hit, frameTravel, obstacleLayer))
             {
-                StopEnemy();
+                if (!hit.collider.CompareTag("Player"))
+                {
+                    StopEnemy();
+                }
             }
         }
+
+        //RaycastHit hit;
+        //if (Physics.Raycast(transform.position, rig.linearVelocity.normalized, out hit, 0.5f))
+        //{
+        //    if (!hit.collider.CompareTag("Player"))
+        //    {
+        //        StopEnemy();
+        //    }
+        //}
 
         if (!isTracing)
         {
@@ -69,7 +86,7 @@ public class Bee : EnemyControl
                 if (delayMoveTimer >= delayMoveTime)
                 {
                     delayMoveTimer = 0f;
-                    isMoving = true;
+                    // isMoving = true;
                     Vector3 Direction;
 
                     if (Vector3.Distance(transform.position, startPos) >= idleRange)
@@ -78,16 +95,31 @@ public class Bee : EnemyControl
                     }
                     else
                     {
-                        Vector2 random2D = Random.insideUnitCircle.normalized;
-                        float finalY = random2D.y;
+                        Direction = GetSafeRandomDirection();
+
+                        //Vector2 random2D = Random.insideUnitCircle.normalized;
+                        //float finalY = random2D.y;
                         //需防止撞地板
 
-                        Direction = new Vector3(random2D.x, finalY, 0);
+                        //Direction = new Vector3(random2D.x, finalY, 0);
                     }
 
-                    transform.localScale = new Vector3(dir*scale, scale, scale);
-                    rig.linearVelocity = speed * Direction;
-                    moveStartPos = transform.position;
+                    if (Direction == Vector3.zero)
+                    {
+                        isMoving = false;
+                    }
+                    else
+                    {
+                        dir = Direction.x > 0 ? -1 : 1;
+                        transform.localScale = new Vector3(dir * scale, scale, scale);
+                        rig.linearVelocity = speed * Direction;
+                        moveStartPos = transform.position;
+                        isMoving = true;
+                    }
+
+                    //transform.localScale = new Vector3(dir*scale, scale, scale);
+                    //rig.linearVelocity = speed * Direction;
+                    //moveStartPos = transform.position;
                 }
             }
             else
@@ -125,17 +157,32 @@ public class Bee : EnemyControl
                         }
                         else
                         {
-                            Vector2 random2D = Random.insideUnitCircle.normalized;
-                            float finalY = random2D.y;
-                            //需防止撞地板
+                            Direction = GetSafeRandomDirection();
+                            //Vector2 random2D = Random.insideUnitCircle.normalized;
+                            //float finalY = random2D.y;
+                            ////需防止撞地板
 
-                            Direction = new Vector3(random2D.x, finalY, 0);
+                            //Direction = new Vector3(random2D.x, finalY, 0);
                         }
-                        float toTargetX = ((player.transform.position + new Vector3(0, 1f, 0)) - transform.position).normalized.x;
-                        dir = toTargetX > 0 ? -1 : 1;
-                        transform.localScale = new Vector3(dir * scale, scale, scale);
-                        rig.linearVelocity = speed * Direction;
-                        moveStartPos = transform.position;
+
+                        if (Direction == Vector3.zero)
+                        {
+                            isMoving = false;
+                        }
+                        else
+                        {
+                            dir = Direction.x > 0 ? -1 : 1;
+                            transform.localScale = new Vector3(dir * scale, scale, scale);
+                            rig.linearVelocity = speed * Direction;
+                            moveStartPos = transform.position;
+                            isMoving = true;
+                        }
+
+                        //float toTargetX = ((player.transform.position + new Vector3(0, 1f, 0)) - transform.position).normalized.x;
+                        //dir = toTargetX > 0 ? -1 : 1;
+                        //transform.localScale = new Vector3(dir * scale, scale, scale);
+                        //rig.linearVelocity = speed * Direction;
+                        //moveStartPos = transform.position;
                     }
                 }
                 else
@@ -148,6 +195,22 @@ public class Bee : EnemyControl
                 }
             }
         }
+    }
+
+    private Vector3 GetSafeRandomDirection(int maxAttempts = 6)
+    {
+        float lookahead = moveRange + bodyRadius;
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            Vector2 random2D = Random.insideUnitCircle.normalized;
+            Vector3 candidate = new Vector3(random2D.x, random2D.y, 0);
+
+            if (!Physics.SphereCast(transform.position, bodyRadius, candidate, out _, lookahead, obstacleLayer))
+            {
+                return candidate;
+            }
+        }
+        return Vector3.zero;
     }
     void Attack()
     {

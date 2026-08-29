@@ -33,9 +33,7 @@ public class Needle : MonoBehaviour
     {
         if (other.CompareTag("DrawMesh"))
         {
-            //destory drawMesh
-            other.transform.root.gameObject.GetComponent<DrawMesh>().isComplete = true; 
-
+            other.transform.root.gameObject.GetComponent<DrawMesh>().isComplete = true;
             Destroy(gameObject);
             return;
         }
@@ -46,7 +44,7 @@ public class Needle : MonoBehaviour
         }
         else
         {
-            playerController.Hurt(1, 0, needleRig.linearVelocity.x);
+            playerController.Hurt(1, 0, transform.position.x - playerTrans.position.x);
         }
     }
 

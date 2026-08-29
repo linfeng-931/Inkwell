@@ -560,6 +560,9 @@ public class PlayerController : MonoBehaviour
             canAttack = true;
             attackDelay = 0f;
             attackStep = 0;
+            isAttack = false;
+            attackKeep = 0f;
+            SwitchAni(previousAct);
             if (!isGrounded) skyAttack = false;
         }
         else if (attackDelay > attackStepDelay && attackStep != 3)

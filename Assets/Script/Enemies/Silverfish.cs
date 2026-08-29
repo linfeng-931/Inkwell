@@ -8,7 +8,7 @@ public class Silverfish : EnemyControl
     private float attackTimer;
     private float attackDelayTime;
     private Vector3 moveStartPos;
-    private Vector3 Direction;
+    private Vector3 direction;
 
     protected override void Start()
     {
@@ -57,9 +57,9 @@ public class Silverfish : EnemyControl
                 {
                     delayMoveTimer = 0f;
                     dir *= -1;
-                    Direction = dir == -1 ? new Vector3(1, 0, 0) : new Vector3(-1, 0, 0);
+                    direction = dir == -1 ? new Vector3(1, 0, 0) : new Vector3(-1, 0, 0);
                     transform.localScale = new Vector3(dir*scale, scale, scale);
-                    rig.linearVelocity = speed * Direction;
+                    rig.linearVelocity = speed * direction;
                     moveStartPos = transform.position;
                     isMoving = true;
                     animator.SetInteger("action", 1);
@@ -67,7 +67,7 @@ public class Silverfish : EnemyControl
             }
             else
             {
-                rig.linearVelocity = speed * Direction;
+                rig.linearVelocity = speed * direction;
                 if (Vector3.Distance(transform.position, moveStartPos) >= idleRange || !isGrounded)
                 {
                     isMoving = false;
@@ -84,10 +84,11 @@ public class Silverfish : EnemyControl
             }
             else if(isGrounded)
             {
-                Vector3 Direction = (player.transform.position - transform.position).normalized;
-                Vector3 finalTarget = new Vector3(Direction.x, 0, Direction.z);
+                direction = (player.transform.position - transform.position).normalized;
+                Vector3 finalTarget = new Vector3(direction.x, 0, direction.z);
                 rig.linearVelocity = finalTarget * speed;
                 isMoving = true;
+                moveStartPos = transform.position;
                 animator.SetInteger("action", 1);
                 transform.localScale = (-1*finalTarget.x) > 0? new Vector3(scale, scale, scale) : new Vector3(-1f*scale, scale, scale);
                 dir = (-1*finalTarget.x) > 0? 1 : -1;
@@ -106,9 +107,9 @@ public class Silverfish : EnemyControl
         {
             case 0:
                 rig.linearVelocity = new Vector3(0, 0, 0);
-                Vector3 Direction = (player.transform.position - transform.position).normalized;
-                transform.localScale = Direction.x > 0 ? new Vector3(-1*scale, scale, scale): new Vector3(scale, scale, scale);
-                dir = (-1*Direction.x) > 0? 1 : -1;
+                direction = (player.transform.position - transform.position).normalized;
+                transform.localScale = direction.x > 0 ? new Vector3(-1*scale, scale, scale): new Vector3(scale, scale, scale);
+                dir = (-1* direction.x) > 0? 1 : -1;
                 animator.SetInteger("action", 0);
                 attackTimer += Time.deltaTime;
                 if (attackTimer >= attackDelayTime)
