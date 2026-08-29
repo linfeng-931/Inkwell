@@ -3,40 +3,35 @@ using Unity.Cinemachine;
 
 public class CameraShake : MonoBehaviour
 {
-    public CinemachineCamera vcam;
-
-    private CinemachineBasicMultiChannelPerlin noise;
-    private float shakeTimer;
+    public CinemachineImpulseSource impulseSource;
 
     void Start()
     {
-        if (vcam != null)
-        {
-            noise = vcam.GetComponent<CinemachineBasicMultiChannelPerlin>();
-        }
-        else {
-            Debug.Log("找不到vcam");
-        }
     }
 
     public void Shake(float intensity, float time)
     {
-        if (noise != null)
+        if (impulseSource != null)
         {
-            noise.AmplitudeGain = intensity;
-            shakeTimer = time;
+            Debug.Log("晃動強度" + intensity);
+            impulseSource.ImpulseDefinition.ImpulseDuration = time;
+            impulseSource.GenerateImpulseWithForce(intensity);
+        }
+        else{
+            Debug.Log("找不到晃動元件");
+
         }
     }
 
-    void Update()
-    {
-        if (shakeTimer > 0)
-        {
-            shakeTimer -= Time.deltaTime;
-            if (shakeTimer <= 0 && noise != null)
-            {
-                noise.AmplitudeGain = 0f;
-            }
-        }
-    }
+    //void Update()
+    //{
+    //    if (shakeTimer > 0)
+    //    {
+    //        shakeTimer -= Time.deltaTime;
+    //        if (shakeTimer <= 0 && noise != null)
+    //        {
+    //            noise.AmplitudeGain = 0f;
+    //        }
+    //    }
+    //}
 }

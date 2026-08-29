@@ -601,7 +601,7 @@ public class PlayerController : MonoBehaviour
         
         if (camShake != null)
         {
-            camShake.Shake(0.5f, 0.2f);
+            camShake.Shake(0.1f, 0.2f);
         }
         else {
             Debug.Log("鏡頭晃動");

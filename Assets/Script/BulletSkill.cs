@@ -84,12 +84,20 @@ public class BulletSkill : MonoBehaviour
                     playerStatus.isUsingEnergy = false;
                     timer = 0;
                     drawMeshes = new List<GameObject>(GameObject.FindGameObjectsWithTag("DrawMesh"));
-                    foreach (GameObject drawMesh in drawMeshes)
+                    HashSet<DrawMesh> uniqueDrawMeshes = new HashSet<DrawMesh>();
+                    foreach (GameObject drawMeshObj in drawMeshes)
                     {
-                        DrawMesh drawMesh1 = drawMesh.GetComponent<DrawMesh>();
-                        if (!drawMesh1.isAct)
+                        DrawMesh drawMesh1 = drawMeshObj.transform.root.GetComponent<DrawMesh>();
+                        if (drawMesh1 != null)
                         {
-                            drawMesh1.DrawMeshDestory();
+                            uniqueDrawMeshes.Add(drawMesh1);
+                        }
+                    }
+                    foreach (DrawMesh dm in uniqueDrawMeshes)
+                    {
+                        if (!dm.isAct)
+                        {
+                            dm.DrawMeshDestory();
                         }
                     }
                 }

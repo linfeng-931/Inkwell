@@ -9,8 +9,13 @@ public class Bee : EnemyControl
     public float bodyRadius = 0.3f;
     public LayerMask obstacleLayer;
 
+    [Header("飛行數值")]
+    public float acceleration = 15f;
+    private Vector3 desiredDirection = Vector3.zero;
+    private float desiredSpeedValue = 0f;
+
     private Vector3 moveStartPos;
-    private GameObject currentNeedle;   
+    private GameObject currentNeedle;
     private bool canAttack;
     private float attackTimer;
     private bool createNeedle;
@@ -29,8 +34,9 @@ public class Bee : EnemyControl
     {
         base.Update();
 
-        if(isDead){
-            isMoving = false; 
+        if (isDead)
+        {
+            isMoving = false;
             rig.linearVelocity = new Vector3(0, rig.linearVelocity.y, 0);
             return;
         }
@@ -65,6 +71,8 @@ public class Bee : EnemyControl
                 if (!hit.collider.CompareTag("Player"))
                 {
                     StopEnemy();
+                    desiredDirection = Vector3.zero;
+                    desiredSpeedValue = 0f;
                 }
             }
         }
@@ -107,6 +115,8 @@ public class Bee : EnemyControl
                     if (Direction == Vector3.zero)
                     {
                         isMoving = false;
+                        desiredDirection = Vector3.zero;
+                        desiredSpeedValue = 0f;
                     }
                     else
                     {
@@ -127,7 +137,8 @@ public class Bee : EnemyControl
                 if (Vector3.Distance(transform.position, moveStartPos) >= moveRange)
                 {
                     isMoving = false;
-                    rig.linearVelocity = new Vector3(0, 0, 0);
+                    desiredDirection = Vector3.zero;
+                    desiredSpeedValue = 0f;
                 }
             }
         }
@@ -135,20 +146,27 @@ public class Bee : EnemyControl
         {
             if (Vector3.Distance(player.transform.position, transform.position) > detectionRange * 0.7f)
             {
-                Vector3 toTarget = ((player.transform.position+new Vector3(0, 1f, 0)) - transform.position).normalized;
-                rig.linearVelocity = speed * 0.2f * toTarget;
+                Vector3 toTarget = ((player.transform.position + new Vector3(0, 1f, 0)) - transform.position).normalized;
+                // rig.linearVelocity = speed * 0.2f * toTarget;
                 dir = toTarget.x > 0 ? -1 : 1;
-                transform.localScale = new Vector3(dir*scale, scale, scale);
+                transform.localScale = new Vector3(dir * scale, scale, scale);
+                desiredDirection = toTarget;
+                desiredSpeedValue = speed * 0.2f;
             }
             else
             {
+                // Face to player when attack
+                Vector3 aimDir = (player.transform.position - transform.position).normalized;
+                dir = aimDir.x > 0 ? -1 : 1;
+                transform.localScale = new Vector3(dir * scale, scale, scale);
+
                 if (!isMoving)
                 {
                     delayMoveTimer += Time.deltaTime;
                     if (delayMoveTimer >= delayMoveTime)
                     {
                         delayMoveTimer = 0f;
-                        isMoving = true;
+                        // isMoving = true;
                         Vector3 Direction;
 
                         if (Vector3.Distance(transform.position, startPos) >= idleRange)
@@ -168,14 +186,21 @@ public class Bee : EnemyControl
                         if (Direction == Vector3.zero)
                         {
                             isMoving = false;
+                            desiredDirection = Vector3.zero;
+                            desiredSpeedValue = 0f;
                         }
                         else
                         {
-                            dir = Direction.x > 0 ? -1 : 1;
-                            transform.localScale = new Vector3(dir * scale, scale, scale);
-                            rig.linearVelocity = speed * Direction;
+                            desiredDirection = Direction;
+                            desiredSpeedValue = speed;
                             moveStartPos = transform.position;
                             isMoving = true;
+
+                            //dir = Direction.x > 0 ? -1 : 1;
+                            //transform.localScale = new Vector3(dir * scale, scale, scale);
+                            //rig.linearVelocity = speed * Direction;
+                            //moveStartPos = transform.position;
+                            //isMoving = true;
                         }
 
                         //float toTargetX = ((player.transform.position + new Vector3(0, 1f, 0)) - transform.position).normalized.x;
@@ -190,11 +215,18 @@ public class Bee : EnemyControl
                     if (Vector3.Distance(transform.position, moveStartPos) >= moveRange)
                     {
                         isMoving = false;
-                        rig.linearVelocity = new Vector3(0, 0, 0);
+                        desiredDirection = Vector3.zero;
+                        desiredSpeedValue = 0f;
+                        //rig.linearVelocity = new Vector3(0, 0, 0);
                     }
                 }
             }
         }
+
+        Vector3 desiredVelocity = desiredDirection.sqrMagnitude > 0.0001f
+    ? desiredDirection.normalized * desiredSpeedValue
+    : Vector3.zero;
+        rig.linearVelocity = Vector3.MoveTowards(rig.linearVelocity, desiredVelocity, acceleration * Time.deltaTime);
     }
 
     private Vector3 GetSafeRandomDirection(int maxAttempts = 6)
@@ -214,29 +246,29 @@ public class Bee : EnemyControl
     }
     void Attack()
     {
-        if(!isTracing || !canAttack)
+        if (!isTracing || !canAttack)
         {
-            if(attackTimer <= attackDelay && !canAttack)
+            if (attackTimer <= attackDelay && !canAttack)
             {
                 attackTimer += Time.deltaTime;
-                if(attackTimer >= attackDelay * 0.98f)
+                if (attackTimer >= attackDelay * 0.98f)
                 {
                     animator.SetInteger("action", 1);
                 }
-                if(attackTimer >= attackDelay * 0.99f && createNeedle)
+                if (attackTimer >= attackDelay * 0.99f && createNeedle)
                 {
                     currentNeedle = Instantiate(needle, transform, false);
                     currentNeedle.transform.localPosition = new Vector3(0, -0.63f, 0);
                     createNeedle = false;
                 }
             }
-            else if(!canAttack)
+            else if (!canAttack)
             {
-                canAttack = true;  
+                canAttack = true;
                 attackTimer = 0f;
-                 animator.SetInteger("action", 0);
+                animator.SetInteger("action", 0);
             }
-            
+
             return;
         }
 

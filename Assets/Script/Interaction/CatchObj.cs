@@ -38,7 +38,7 @@ public class CatchObj : MonoBehaviour
             inEffect = 1;
             GetComponent<SpriteRenderer>().material = actMaterial;
             Time.timeScale = 0.5f;
-            cameraController.cameraStatus = 1;
+            // cameraController.cameraStatus = 1;
         }
         if (inEffect == 5)
         {
