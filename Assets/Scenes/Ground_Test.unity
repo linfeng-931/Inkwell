@@ -599,7 +599,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 464905062}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ff57da3b22e7304faad7b5a1904e12c, type: 3}
   m_Name: 
@@ -2874,7 +2874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
   ImpulseDefinition:
     ImpulseChannel: 1
-    ImpulseShape: 4
+    ImpulseShape: 0
     CustomImpulseShape:
       serializedVersion: 2
       m_Curve:
@@ -2888,8 +2888,17 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
+        time: 0.2076394
+        value: 0.25081402
+        inSlope: -2.1397986
+        outSlope: -2.1397986
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.17895073
+      - serializedVersion: 3
         time: 1
-        value: 1
+        value: 0.37392807
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -2899,9 +2908,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    ImpulseDuration: 0.1
+    ImpulseDuration: 0.2
     ImpulseType: 0
-    DissipationRate: 0.25
+    DissipationRate: 0.067
     RawSignal: {fileID: 0}
     AmplitudeGain: 1
     FrequencyGain: 1

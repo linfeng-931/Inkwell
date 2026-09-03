@@ -562,7 +562,7 @@ public class PlayerController : MonoBehaviour
             attackStep = 0;
             isAttack = false;
             attackKeep = 0f;
-            SwitchAni(previousAct);
+            RestoreAnimationAfterAttack();
             if (!isGrounded) skyAttack = false;
         }
         else if (attackDelay > attackStepDelay && attackStep != 3)
@@ -582,7 +582,7 @@ public class PlayerController : MonoBehaviour
             attackKeep = 0;
             attackStep = 0;
             if (!isGrounded) skyAttack = false;
-            SwitchAni(previousAct);
+            RestoreAnimationAfterAttack();
         }
         else
         {
@@ -712,6 +712,18 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+    }
+
+    private void RestoreAnimationAfterAttack()
+    {
+        if (isGrounded)
+        {
+            SwitchAni(Mathf.Abs(moveInput) < 0.01f ? 0 : 1);
+        }
+        else
+        {
+            SwitchAni(jumpCount >= 2 ? 3 : 2);
+        }
     }
 
     public void SwitchAni(int act)
