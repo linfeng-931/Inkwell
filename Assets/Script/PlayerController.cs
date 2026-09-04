@@ -396,13 +396,9 @@ public class PlayerController : MonoBehaviour
     }
     public void DashAction(InputAction.CallbackContext context)
     {
+        if (!context.performed) return;
         if (isHurt || isDead || isStory || isStory2 || isInteract) return;
-
-        if (dashDelay != 0f)
-        {
-            dashUnused = 0f;
-            return;
-        }
+        if (isDash) return;
         if (dashUnused < 0.3f) return;
 
 

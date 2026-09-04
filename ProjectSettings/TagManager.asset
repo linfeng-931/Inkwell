@@ -26,7 +26,7 @@ TagManager:
   - Water
   - UI
   - Body
-  - Player
+  - 
   - Enemy
   - Player_Base
   - Player_Outline
@@ -37,7 +37,7 @@ TagManager:
   - TextSocket
   - SeeThroughObject
   - transparent
-  - 
+  - Player
   - 
   - 
   - 
@@ -55,6 +55,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: transparent
+    uniqueID: 1426050325
+    locked: 0
+  - name: Player
+    uniqueID: 1088927137
+    locked: 0
   - name: GraySocket
     uniqueID: 3806111997
     locked: 0
@@ -70,3 +76,5 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
+  - Layer 8
+  - Layer 9
