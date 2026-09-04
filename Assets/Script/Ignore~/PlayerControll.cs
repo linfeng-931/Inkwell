@@ -107,9 +107,12 @@ public class PlayerControll : MonoBehaviour
     // Puzzle
     public static bool isPuzzleActive = false;
 
-    // Camera Shake
-    public CameraShake camShake;
+    // Camera Controller
+    public CameraController cameraController;
 
+    // Shake Preset
+    // Customize shake duration and intensity for each shake
+    public ShakePreset EnemyShakePreset;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -396,13 +399,9 @@ public class PlayerControll : MonoBehaviour
     }
     public void DashAction(InputAction.CallbackContext context)
     {
+        if (!context.performed) return;
         if (isHurt || isDead || isStory || isStory2 || isInteract) return;
-
-        if (dashDelay != 0f)
-        {
-            dashUnused = 0f;
-            return;
-        }
+        if (isDash) return;
         if (dashUnused < 0.3f) return;
 
 
@@ -562,7 +561,7 @@ public class PlayerControll : MonoBehaviour
             attackStep = 0;
             isAttack = false;
             attackKeep = 0f;
-            SwitchAni(previousAct);
+            RestoreAnimationAfterAttack();
             if (!isGrounded) skyAttack = false;
         }
         else if (attackDelay > attackStepDelay && attackStep != 3)
@@ -582,7 +581,7 @@ public class PlayerControll : MonoBehaviour
             attackKeep = 0;
             attackStep = 0;
             if (!isGrounded) skyAttack = false;
-            SwitchAni(previousAct);
+            RestoreAnimationAfterAttack();
         }
         else
         {
@@ -597,18 +596,7 @@ public class PlayerControll : MonoBehaviour
     public void Hurt(int damage, int type, float x)
     {
         if (isHurt || isDash || isDead || isStory || isStory2 || isInteract) return;
-
-        
-        if (camShake != null)
-        {
-            camShake.Shake(0.1f, 0.2f);
-        }
-        else {
-            Debug.Log("鏡頭晃動");
-        }
-
-        
-
+        cameraController.CameraShake(EnemyShakePreset);
         isHurt = true;
         hurtTimer = 0f;
         hurtType = type;
@@ -712,6 +700,18 @@ public class PlayerControll : MonoBehaviour
             }
         }
 
+    }
+
+    private void RestoreAnimationAfterAttack()
+    {
+        if (isGrounded)
+        {
+            SwitchAni(Mathf.Abs(moveInput) < 0.01f ? 0 : 1);
+        }
+        else
+        {
+            SwitchAni(jumpCount >= 2 ? 3 : 2);
+        }
     }
 
     public void SwitchAni(int act)

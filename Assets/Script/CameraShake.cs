@@ -9,29 +9,29 @@ public class CameraShake : MonoBehaviour
     {
     }
 
-    public void Shake(float intensity, float time)
+    public void Shake(float intensity, float duration)
     {
-        if (impulseSource != null)
-        {
-            Debug.Log("晃動強度" + intensity);
-            impulseSource.ImpulseDefinition.ImpulseDuration = time;
-            impulseSource.GenerateImpulseWithForce(intensity);
-        }
-        else{
-            Debug.Log("找不到晃動元件");
+        if (impulseSource == null) return;
 
-        }
+        impulseSource.ImpulseDefinition.ImpulseDuration = duration;
+        impulseSource.GenerateImpulseWithForce(intensity);
     }
 
-    //void Update()
-    //{
-    //    if (shakeTimer > 0)
-    //    {
-    //        shakeTimer -= Time.deltaTime;
-    //        if (shakeTimer <= 0 && noise != null)
-    //        {
-    //            noise.AmplitudeGain = 0f;
-    //        }
-    //    }
-    //}
+    public void Shake(ShakePreset preset)
+    {
+        if (preset == null)
+        {
+            Debug.LogWarning("ShakePreset is null");
+            return;
+        }
+        Shake(preset.intensity, preset.duration);
+    }
+}
+
+[CreateAssetMenu(fileName = "New Shake Preset", menuName = "Camera/Shake Preset")]
+public class ShakePreset : ScriptableObject
+{
+    // Shake intensity & duration
+    public float intensity = 0.1f;
+    public float duration = 0.2f;
 }

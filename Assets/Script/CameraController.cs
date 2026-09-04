@@ -1,10 +1,19 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using Unity.Cinemachine;
 using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("Camera Shake")]
+    public CameraShake cameraShake;
+
+    [Header("Camera Priority")]
+    public int defaultPriority = 10;
+    public int activeCamPriority = 20;
+    private CinemachineVirtualCameraBase currentOverrideCam; // Current Active Camera
+
     public int drawKey = 1;
 
     //ground check for camera
@@ -125,6 +134,39 @@ public class CameraController : MonoBehaviour
             drawPointNum = 0;
             drawPointList = new GameObject[2];
         }
+    }
+
+    // Switch Camera
+    public void SwitchCam(CinemachineVirtualCameraBase targetCam) {
+        if (targetCam == null) return;
+
+        if (currentOverrideCam != null && currentOverrideCam != targetCam) {
+            currentOverrideCam.Priority = defaultPriority;
+        }
+
+        targetCam.Priority = activeCamPriority;
+        currentOverrideCam = targetCam;
+    }
+
+    // Reset Target Camera
+    public void ResetCam(CinemachineVirtualCameraBase targetCam) {
+        if (targetCam == null) return;
+
+        if (currentOverrideCam != targetCam) return;
+
+        targetCam.Priority = defaultPriority;
+        currentOverrideCam = null;
+    }
+
+    // Call this function when player hurts or something changes in the scene
+    public void CameraShake(ShakePreset prese) {
+        if (cameraShake == null) {
+            Debug.Log("找不到 CameraShake");
+            return;
+        }
+        
+
+        cameraShake.Shake(prese);
     }
 
     //void FollowPlayer()
