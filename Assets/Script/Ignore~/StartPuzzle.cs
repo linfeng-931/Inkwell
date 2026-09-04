@@ -45,19 +45,19 @@
 //        }
 //    }
 
-//    IEnumerator TransitionToPuzzle()
-//    {
-//        playerController.isInteract = true;
-//        playerRig.linearVelocity = new Vector3(0, playerRig.linearVelocity.y, 0);
-//        player.SetActive(false);
-//        savedCamPos = mainCamera.transform.position;
-//        savedCamRot = mainCamera.transform.rotation;
+    IEnumerator TransitionToPuzzle()
+    {
+        //playerController.isInteract = true;
+        playerRig.linearVelocity = new Vector3(0, playerRig.linearVelocity.y, 0);
+        player.SetActive(false);
+        savedCamPos = mainCamera.transform.position;
+        savedCamRot = mainCamera.transform.rotation;
 
-//        //print("¥ý«e¬Û¾÷¦ì¸m: " + savedCamPos);
+        //print("ï¿½ï¿½ï¿½eï¿½Û¾ï¿½ï¿½ï¿½m: " + savedCamPos);
 
 
-//        PlayerController.isPuzzleActive = true;
-//        CameraController.isPuzzleActive = true;
+        //PlayerController.isPuzzleActive = true;
+        CameraController.isPuzzleActive = true;
 
 //        InteractionUI.SetActive(false);
 //        playerUI.SetActive(false);
@@ -79,18 +79,18 @@
 //            camController.enabled = true;
 //        }
 
-//        SnappableItem.isPuzzleActive = false;
-//        TieRodController.isPuzzleActive = false;
-//        PlayerController.isPuzzleActive = false;
-//        CameraController.isPuzzleActive = false;
+        SnappableItem.isPuzzleActive = false;
+        TieRodController.isPuzzleActive = false;
+        //PlayerController.isPuzzleActive = false;
+        CameraController.isPuzzleActive = false;
 
-//        InteractionUI.SetActive(true);
-//        playerUI.SetActive(true);
-//        player.SetActive(true);
-//        playerController.isInteract = false;
+        InteractionUI.SetActive(true);
+        playerUI.SetActive(true);
+        player.SetActive(true);
+        //playerController.isInteract = false;
 
-//        //print("·í«e¬Û¾÷¦ì¸m: " + mainCamera.transform.position);
-//    }
+        //print("ï¿½ï¿½ï¿½eï¿½Û¾ï¿½ï¿½ï¿½m: " + mainCamera.transform.position);
+    }
 
 //    IEnumerator CameraTransition(Camera currentCam, Camera nextCam, Transform target)
 //    {
@@ -123,7 +123,7 @@
 //        Vector3 startPos = currentCam.transform.position;
 //        Quaternion startRot = currentCam.transform.rotation;
 
-//        //print("³Q«O¦sªº¬Û¾÷®y¼Ð: " + savedCamPos);
+        //print("ï¿½Qï¿½Oï¿½sï¿½ï¿½ï¿½Û¾ï¿½ï¿½yï¿½ï¿½: " + savedCamPos);
 
 //        while (time < duration)
 //        {

@@ -14,16 +14,16 @@ public class ChangeStoryType : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            if(story0){
-                playerController.isStory = true;
-                playerController.isStory2 = false;
-            }
-            else if(story1){
-                playerController.isStory = false;
-                playerController.isStory2 = true;
-            }
-        }
+        // if (other.CompareTag("Player"))
+        // {
+        //     if(story0){
+        //         playerController.isStory = true;
+        //         playerController.isStory2 = false;
+        //     }
+        //     else if(story1){
+        //         playerController.isStory = false;
+        //         playerController.isStory2 = true;
+        //     }
+        // }
     }
 }

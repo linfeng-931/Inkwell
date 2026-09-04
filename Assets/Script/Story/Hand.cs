@@ -84,8 +84,8 @@ public class Hand : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isAct = true;
-            playerController.isInteract = true;
-            playerController.SetUpForInteraction(new Vector3(targetX, 0, 0), 1);
+            // playerController.isInteract = true;
+            // playerController.SetUpForInteraction(new Vector3(targetX, 0, 0), 1);
         }
     }
 

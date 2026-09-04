@@ -22,7 +22,7 @@ public class CheckObj : MonoBehaviour
         if (interaction.canInteract && !isAct)
         {
             isAct = true;
-            playerController.isInteract = true;
+            //playerController.isInteract = true;
             playerRig.linearVelocity = new Vector3(0, playerRig.linearVelocity.y, 0);
             checkedObj.SetActive(true);
         }
@@ -32,7 +32,7 @@ public class CheckObj : MonoBehaviour
             if(!interaction.canInteract)
             {
                 isAct = false;
-                playerController.isInteract = false;
+                //playerController.isInteract = false;
                 checkedObj.SetActive(false);
             }
         }

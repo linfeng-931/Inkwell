@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControll : MonoBehaviour
 {
     [Header("Action Setting")]
     public PlayerAni playerAni;

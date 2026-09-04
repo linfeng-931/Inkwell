@@ -23,32 +23,32 @@ public class SavePoint : MonoBehaviour
 
     void Update()
     {
-        if (interaction.canInteract)
-        {
-            if (!saving)
-            {
-                if(!ready){
-                    playerController.SetUpForInteraction(point.position, 0);
-                    ready = true;
-                }
-                if(!playerController.isGoTarget){
-                    saving = true;
-                    playerController.Saving();
-                    inkAni.SetTrigger("inkUp");
-                }
-                return;
-            }
+        // if (interaction.canInteract)
+        // {
+        //     if (!saving)
+        //     {
+        //         if(!ready){
+        //             playerController.SetUpForInteraction(point.position, 0);
+        //             ready = true;
+        //         }
+        //         if(!playerController.isGoTarget){
+        //             saving = true;
+        //             playerController.Saving();
+        //             inkAni.SetTrigger("inkUp");
+        //         }
+        //         return;
+        //     }
 
-            timer += Time.deltaTime;
-            if(timer > 1f)
-            {
-                playerController.OtherAni.SetInteger("action", 0);
-            }
-            if(timer > 1.11f)
-            {
-                playerController.DeSaving();
-                interaction.canInteract = false;
-            }
-        }
+        //     timer += Time.deltaTime;
+        //     if(timer > 1f)
+        //     {
+        //         playerController.OtherAni.SetInteger("action", 0);
+        //     }
+        //     if(timer > 1.11f)
+        //     {
+        //         playerController.DeSaving();
+        //         interaction.canInteract = false;
+        //     }
+        // }
     }
 }
