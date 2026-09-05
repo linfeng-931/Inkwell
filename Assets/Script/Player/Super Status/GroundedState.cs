@@ -6,8 +6,6 @@ public class GroundedState : PlayerState
 
     public override void Update()
     {
-        base.Update();
-
         if (!manager.isGrounded)
         {
             manager.TransitionToState<FallState>();
@@ -17,7 +15,7 @@ public class GroundedState : PlayerState
         //init canAirDash when player stand on the ground
         manager.canAirDash = true;
 
-        //handle jump state
+        //handle jump state and coyote time
         manager.coyoteTimer = manager.coyoteTime;
         
         if (manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Jump))
@@ -25,6 +23,7 @@ public class GroundedState : PlayerState
             manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Jump);
             manager.coyoteTimer = 0f;
             manager.TransitionToState<JumpState>();
+            return;
         }
     }
 }

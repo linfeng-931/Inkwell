@@ -23,7 +23,7 @@ public class InputBufferManager : MonoBehaviour
     public float moveInputX { get; private set; }
     public bool isRunning { get; private set; }
     public bool isWalking { get; private set; }
-    public bool isJumpReleased { get; private set; }
+    public bool isJumpHeld { get; private set; }
 
     [Header("Input Actions")]
     public InputActionReference moveAction;
@@ -40,7 +40,7 @@ public class InputBufferManager : MonoBehaviour
         //continuous type
         moveInputX = moveAction.action.ReadValue<float>();
         isWalking = walkAction.action.IsPressed();
-        isJumpReleased = jumpAction.action.WasReleasedThisFrame();
+        isJumpHeld = jumpAction.action.IsPressed();
 
         //triggered type
         if (jumpAction.action.WasPressedThisFrame())

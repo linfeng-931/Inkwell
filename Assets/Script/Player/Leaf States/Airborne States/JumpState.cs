@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class JumpState : AirborneState
 {
+    private bool hasAppliedJumpCut;
+
     public JumpState(PlayerController manager) : base(manager) { }
 
     public override void Enter()
@@ -16,17 +18,11 @@ public class JumpState : AirborneState
         base.Update();
         if (manager.currentState != this) return;
 
-        if (manager.inputBufferManager.isJumpReleased)
+        if (!hasAppliedJumpCut && !manager.inputBufferManager.isJumpHeld)
         {
-            if(manager.rig.linearVelocity.y > 0)
-            {
-                manager.rig.linearVelocity = new Vector3(
-                    manager.rig.linearVelocity.x,
-                    manager.rig.linearVelocity.y * manager.jumpCutMultiplier,
-                    0f
-                );
-            }
+            ApplyJumpCut();
         }
+
         if (manager.rig.linearVelocity.y <= 0)
         {
             manager.TransitionToState<FallState>();
@@ -35,6 +31,24 @@ public class JumpState : AirborneState
 
     public override void Exit()
     {
+        hasAppliedJumpCut = false;
         base.Exit();
+    }
+
+    /// <summary>
+    /// handle variable jump height
+    /// </summary>
+    private void ApplyJumpCut()
+    {
+        if(manager.rig.linearVelocity.y > 0)
+        {
+            manager.rig.linearVelocity = new Vector3(
+                manager.rig.linearVelocity.x,
+                manager.rig.linearVelocity.y * manager.jumpCutMultiplier,
+                0f
+            );
+        }
+
+        hasAppliedJumpCut = true;
     }
 }

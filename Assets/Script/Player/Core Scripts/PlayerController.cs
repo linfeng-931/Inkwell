@@ -42,15 +42,18 @@ public class PlayerController : MonoBehaviour
     public float coyoteTimer { get; set; }
 
     [Header("Dash Setting")]
+    public GameObject dashParticle;
     public float dashSpeed = 15f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 0.6f;
     public float dashEndCut = 0.1f;
     public float lastDashTime = -100f;
     public bool canAirDash = true;
-    public float dashLookAhead = 0.5f; 
+    public float dashLookAhead = 0.5f;
     public float cornerCorrectionRange = 0.4f;
     public float correctionStep = 0.1f;
+
+    private ParticleSystem[] dashParticleSystems;
 
     #endregion
 
@@ -58,12 +61,17 @@ public class PlayerController : MonoBehaviour
     public bool canTurn = true;
     public bool isFacingRight = true; //should check your player image direction
 
+    [Header("Art Setting")]
+    public GameObject playerFace;
+
     private void Awake()
     {
         //init components
-        animator = GetComponent<Animator>();
+        animator = playerFace.GetComponent<Animator>();
         rig = GetComponent<Rigidbody>();
         inputBufferManager = GetComponent<InputBufferManager>();
+
+        dashParticleSystems = dashParticle.GetComponentsInChildren<ParticleSystem>();
     }
 
     void Start()
@@ -147,7 +155,7 @@ public class PlayerController : MonoBehaviour
             bool isCooldownReady = Time.time >= (lastDashTime + dashCooldown);
             bool hasSpaceToDash = isGrounded || canAirDash;
 
-            if(isCooldownReady && hasSpaceToDash)
+            if (isCooldownReady && hasSpaceToDash)
             {
                 lastDashTime = Time.time;
                 if (!isGrounded)
@@ -158,6 +166,22 @@ public class PlayerController : MonoBehaviour
                 inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
                 TransitionToState<DashState>();
             }
+        }
+    }
+
+    public void PlayDashParticle()
+    {
+        foreach(ParticleSystem ps in dashParticleSystems)
+        {
+            ps.Play();
+        }
+    }
+
+    public void StopDashParticle()
+    {
+        foreach(ParticleSystem ps in dashParticleSystems)
+        {
+            ps.Stop();
         }
     }
 }

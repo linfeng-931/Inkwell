@@ -6,12 +6,19 @@ public class AirborneState : PlayerState
 
     public override void Update()
     {
-        base.Update();
-
         //check if player need to change state
-        if (manager.isGrounded)
+        bool isFalling = manager.rig.linearVelocity.y <= 0.5f;
+
+        if (manager.isGrounded && isFalling)
         {
-            manager.TransitionToState<IdleState>();
+            if (Mathf.Abs(manager.currentMoveX) > 0.01f)
+            {
+                manager.TransitionToState<RunState>();
+            }
+            else
+            {
+                manager.TransitionToState<IdleState>();
+            }
             return;
         }
 
@@ -23,14 +30,14 @@ public class AirborneState : PlayerState
         float accelRate = (Mathf.Abs(manager.currentMoveX) > 0.01f) ? manager.acceleration : manager.deceleration;
         float targetSpeedX = manager.currentMoveX * manager.airMoveSpeed;
         float newSpeedX = Mathf.MoveTowards(
-            currentSpeedX, 
-            targetSpeedX, 
+            currentSpeedX,
+            targetSpeedX,
             accelRate * Time.deltaTime
         );
 
         manager.rig.linearVelocity = new Vector3(
-            newSpeedX, 
-            manager.rig.linearVelocity.y, 
+            newSpeedX,
+            manager.rig.linearVelocity.y,
             0f
         );
 
@@ -50,7 +57,7 @@ public class AirborneState : PlayerState
         //first jump
         manager.coyoteTimer -= Time.deltaTime;
 
-        if(manager.coyoteTimer > 0f && manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Jump))
+        if (manager.coyoteTimer > 0f && manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Jump))
         {
             manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Jump);
             manager.coyoteTimer = 0f;
