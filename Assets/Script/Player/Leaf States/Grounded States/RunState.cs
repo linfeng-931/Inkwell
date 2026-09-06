@@ -25,7 +25,7 @@ public class RunState : GroundedState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-    
+
         float targetSpeedX = manager.currentMoveX * manager.runSpeed;
         float currentSpeedX = manager.rig.linearVelocity.x;
 

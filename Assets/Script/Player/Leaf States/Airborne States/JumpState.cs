@@ -9,7 +9,8 @@ public class JumpState : AirborneState
     public override void Enter()
     {
         base.Enter();
-
+        Debug.Log("jump");
+        hasAppliedJumpCut = false;
         manager.rig.linearVelocity = new Vector3(manager.rig.linearVelocity.x, manager.jumpForce, 0f);
     }
 
@@ -27,6 +28,11 @@ public class JumpState : AirborneState
         {
             manager.TransitionToState<FallState>();
         }
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
     }
 
     public override void Exit()

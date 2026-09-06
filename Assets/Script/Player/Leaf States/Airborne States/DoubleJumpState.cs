@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DoubleJumpState : AirborneState
+public class DoubleJumpState : JumpState
 {
     public DoubleJumpState(PlayerController manager) : base(manager) { }
 

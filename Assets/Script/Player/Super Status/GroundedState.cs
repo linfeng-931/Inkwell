@@ -4,6 +4,12 @@ public class GroundedState : PlayerState
 {
     public GroundedState(PlayerController manager) : base(manager) { }
 
+    public override void Enter()
+    {
+        base.Enter();
+        manager.currentAirJumps = 1;
+    }
+    
     public override void Update()
     {
         if (!manager.isGrounded)

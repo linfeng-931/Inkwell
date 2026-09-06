@@ -29,13 +29,12 @@ public class DashState : PlayerState
         manager.rig.linearVelocity = Vector3.zero;
 
         // handle collider
-        CapsuleCollider col = manager.GetComponent<CapsuleCollider>();
-        originalHeight = col.height;
-        originalRadius = col.radius;
-        originalCenter = col.center;
+        originalHeight = manager.col.height;
+        originalRadius = manager.col.radius;
+        originalCenter = manager.col.center;
 
-        col.height = originalRadius * 2f; // modify collider size
-        col.center = originalCenter;
+        manager.col.height = originalRadius * 2f; // modify collider size
+        manager.col.center = originalCenter;
 
         // switch playerMesh and dashParticle
         manager.playerFace.SetActive(false);
@@ -82,10 +81,9 @@ public class DashState : PlayerState
         manager.rig.useGravity = true;
         manager.rig.linearVelocity = manager.rig.linearVelocity * manager.dashEndCut;
 
-        CapsuleCollider col = manager.GetComponent<CapsuleCollider>();
-        col.height = originalHeight;
-        col.radius = originalRadius;
-        col.center = originalCenter;
+        manager.col.height = originalHeight;
+        manager.col.radius = originalRadius;
+        manager.col.center = originalCenter;
 
         manager.playerFace.SetActive(true);
         manager.StopDashParticle();
@@ -96,21 +94,20 @@ public class DashState : PlayerState
     /// </summary>
     private bool CanRestoreSize()
     {
-        Transform t = manager.transform;
-        CapsuleCollider col = manager.GetComponent<CapsuleCollider>();
+        Transform playerTrans = manager.transform;
 
         // calc scaled dimensions
-        float scaleY = t.lossyScale.y;
-        float scaleXZ = Mathf.Max(t.lossyScale.x, t.lossyScale.z);
+        float scaleY = playerTrans.lossyScale.y;
+        float scaleXZ = Mathf.Max(playerTrans.lossyScale.x, playerTrans.lossyScale.z);
         
         float requiredHeight = originalHeight * scaleY;
         float realRadius = (originalRadius * scaleXZ) * 0.9f;
         float centerDist = requiredHeight - (2f * realRadius);
         float clearance = 0.02f;
 
-        Vector3 upDir = t.up;
-        Vector3 worldCenter = t.TransformPoint(originalCenter);
-        Vector3 smallCenter = t.TransformPoint(col.center);
+        Vector3 upDir = playerTrans.up;
+        Vector3 worldCenter = playerTrans.TransformPoint(originalCenter);
+        Vector3 smallCenter = playerTrans.TransformPoint(manager.col.center);
 
         // fast static check
         Vector3 pointOffset = upDir * (centerDist / 2f - clearance);
@@ -155,7 +152,7 @@ public class DashState : PlayerState
     /// </summary>
     private void HandleCornerCorrection()
     {
-        Bounds bounds = manager.GetComponent<Collider>().bounds;
+        Bounds bounds = manager.col.bounds;
 
         // parameter from manager
         float range = manager.cornerCorrectionRange;

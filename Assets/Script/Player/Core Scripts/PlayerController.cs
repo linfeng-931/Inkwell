@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public Animator animator { get; private set; }
     public Rigidbody rig { get; private set; }
     public InputBufferManager inputBufferManager { get; private set; }
+    public CapsuleCollider col {get; private set;}
 
     [Header("Player Control Toggle")]
     public bool isPlayerInputEnabled = true;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     public float gravityScale = 2f;
     public float jumpForce = 12f;
     public float jumpCutMultiplier = 0.5f;
+    public int currentAirJumps = 1;
     public float airMoveSpeed = 5f;
 
     [Header("Apex Modifier Setting")]
@@ -70,6 +72,7 @@ public class PlayerController : MonoBehaviour
         animator = playerFace.GetComponent<Animator>();
         rig = GetComponent<Rigidbody>();
         inputBufferManager = GetComponent<InputBufferManager>();
+        col = GetComponent<CapsuleCollider>();
 
         dashParticleSystems = dashParticle.GetComponentsInChildren<ParticleSystem>();
     }
@@ -124,6 +127,15 @@ public class PlayerController : MonoBehaviour
         currentState.Enter();
     }
 
+    public bool CheckGrounded()
+    {
+        Bounds bounds = col.bounds;
+        
+        float castRadius = bounds.extents.x * 0.9f; // avoid to detect wall
+        Vector3 startPos = bounds.center - new Vector3(0, bounds.extents.y - 0.1f, 0);
+        return Physics.SphereCast(startPos, castRadius, Vector3.down, out RaycastHit hit, 0.2f, groundLayer);
+    }
+
     /// <summary>
     /// turn player face
     /// </summary>
@@ -169,6 +181,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // control particle or other effect
     public void PlayDashParticle()
     {
         foreach(ParticleSystem ps in dashParticleSystems)
@@ -183,5 +196,12 @@ public class PlayerController : MonoBehaviour
         {
             ps.Stop();
         }
+    }
+
+    // draw debug game objects
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red; 
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 }
