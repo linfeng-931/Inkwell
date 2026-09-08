@@ -83,7 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: RenderObjects
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.RenderObjects
-  m_Active: 1
+  m_Active: 0
   settings:
     passTag: RenderObjects
     Event: 600
@@ -91,7 +91,7 @@ MonoBehaviour:
       RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
-        m_Bits: 384
+        m_Bits: 262144
       PassNames: []
     overrideMaterial: {fileID: 2100000, guid: 4378d3e78fc42425f9cb4cddf466fb66, type: 2}
     overrideMaterialPassIndex: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: Outline
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
   m_Active: 1
-  injectionPoint: 600
+  injectionPoint: 450
   fetchColorBuffer: 1
   requirements: 0
   passMaterial: {fileID: 2100000, guid: fd731548b4e64c5419e3fff722861d16, type: 2}
@@ -209,7 +209,8 @@ MonoBehaviour:
   - {fileID: -3495155799193110250}
   - {fileID: 4517381068051272262}
   - {fileID: -4815209374175587660}
-  m_RendererFeatureMap: ad6b866f10d7b46c55ffe221c5a62f9cab7fd440c5860e360da0dae2aaac2b18dbab8fb491151cbc9bf4f8c62d5024f016b9729a51b67ecf465245b425f6b03eb412221596f02cbd
+  - {fileID: 6142582143122538408}
+  m_RendererFeatureMap: ad6b866f10d7b46c55ffe221c5a62f9cab7fd440c5860e360da0dae2aaac2b18dbab8fb491151cbc9bf4f8c62d5024f016b9729a51b67ecf465245b425f6b03eb412221596f02cbda8ff7914ead53e55
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -364,6 +365,19 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &6142582143122538408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3927fd6f4d7d83045b64b4cc46dcc3d7, type: 3}
+  m_Name: CubismRenderPassFeature
+  m_EditorClassIdentifier: Live2D.Cubism::Live2D.Cubism.Rendering.URP.CubismRenderPassFeature
+  m_Active: 1
 --- !u!114 &7833122117494664109
 MonoBehaviour:
   m_ObjectHideFlags: 0
