@@ -400,9 +400,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3f2f5a06366b4e3ea7f0d7346bf7ae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentHazard
-  checkPoint: {fileID: 1000039214}
-  fadeAni: {fileID: 1728718180}
-  reStart: 0
 --- !u!65 &56270770
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2898,11 +2895,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4a11d2bfdf6a1c4ab58afb85930e8e6, type: 3}
---- !u!4 &295878696 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7370861215565216155, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
-  m_PrefabInstance: {fileID: 1568807078}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &323400864
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5807,9 +5799,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3f2f5a06366b4e3ea7f0d7346bf7ae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentHazard
-  checkPoint: {fileID: 1057594197}
-  fadeAni: {fileID: 1728718180}
-  reStart: 0
 --- !u!65 &646845100
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8596,11 +8585,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 748882442061863126, guid: d4a11d2bfdf6a1c4ab58afb85930e8e6, type: 3}
   m_PrefabInstance: {fileID: 2013080312}
   m_PrefabAsset: {fileID: 0}
---- !u!20 &946925494 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 8002024587270566553, guid: 7068ea90ae3e04048990043cc1f08785, type: 3}
-  m_PrefabInstance: {fileID: 1568807078}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &952441970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9087,7 +9071,7 @@ MonoBehaviour:
   SeeThroughMaterials:
   - {fileID: 2100000, guid: 2bea23d162f6b004b960c31ca2ddddc0, type: 2}
   - {fileID: 2100000, guid: 9fca75a471278e848afa36f4ba9f89af, type: 2}
-  Camera: {fileID: 946925494}
+  Camera: {fileID: 0}
   Mask:
     serializedVersion: 2
     m_Bits: 65536
@@ -17124,19 +17108,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0e9ee1624e547a3810c7d481ac17bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
-  cameraStatus: 0
-  moveSpeed: 2
-  stopOffsetY: 12
+  cameraShake: {fileID: 0}
+  defaultPriority: 10
+  activeCamPriority: 20
   drawKey: 1
-  groundCheckPoint: {fileID: 295878696}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  checkRadius: 0.3
   eligibleExtrude: 0
   canExtrude: 0
-  maxDis: 0
-  closerSpeed: 0
 --- !u!1 &1347355169
 GameObject:
   m_ObjectHideFlags: 0
