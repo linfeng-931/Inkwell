@@ -70,6 +70,26 @@ public class AirborneState : PlayerState
                 return;
             }
         }
+
+        // handle attack state
+        if (manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Attack))
+        {
+            if (manager.canAirAttack)
+            {
+                manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
+                
+                // airborne attack
+                manager.currentComboList = manager.airCombo;
+                manager.currentComboIndex = 0;
+                
+                manager.TransitionToState<AttackState>();
+                return;
+            }
+            else
+            {
+                manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
+            }
+        }
     }
 
     public override void FixedUpdate()

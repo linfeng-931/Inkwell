@@ -7,6 +7,7 @@ public class RunState : GroundedState
     public override void Enter()
     {
         base.Enter();
+        manager.animator.Play(PlayerAnimateHash.Run, 0, 0f);
     }
 
     public override void Update()

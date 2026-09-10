@@ -9,9 +9,9 @@ public class JumpState : AirborneState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("jump");
         hasAppliedJumpCut = false;
         manager.rig.linearVelocity = new Vector3(manager.rig.linearVelocity.x, manager.jumpForce, 0f);
+        manager.animator.Play(PlayerAnimateHash.JumpStart, 0, 0f);
     }
 
     public override void Update()

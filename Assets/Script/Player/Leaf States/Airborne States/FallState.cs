@@ -5,6 +5,7 @@ public class FallState : AirborneState
     public override void Enter()
     {
         base.Enter();
+        manager.animator.Play(PlayerAnimateHash.Fall, 0, 0f);
     }
 
     public override void Update()

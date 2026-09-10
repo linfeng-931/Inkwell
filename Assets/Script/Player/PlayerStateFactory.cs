@@ -19,7 +19,6 @@ public class PlayerStateFactory
         states[typeof(RunState)] = new RunState(context);
         states[typeof(AttackState)] = new AttackState(context);
 
-        states[typeof(AirAttackState)] = new AirAttackState(context);
         states[typeof(JumpState)] = new JumpState(context);
         states[typeof(DoubleJumpState)] = new DoubleJumpState(context);
         states[typeof(FallState)] = new FallState(context);
@@ -30,6 +29,7 @@ public class PlayerStateFactory
         states[typeof(HurtState)] = new HurtState(context);
         states[typeof(InteractState)] = new InteractState(context);
         states[typeof(HookState)] = new HookState(context);
+        states[typeof(HookShootState)] = new HookShootState(context);
     }
 
     /// <summary>

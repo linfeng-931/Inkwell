@@ -7,6 +7,7 @@ public class DoubleJumpState : JumpState
     public override void Enter()
     {
         base.Enter();
+        manager.animator.Play(PlayerAnimateHash.DoubleJumpStart, 0, 0f);
     }
 
     public override void Update()

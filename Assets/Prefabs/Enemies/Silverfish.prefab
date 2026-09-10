@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4412877128505271985
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 400314954151469640}
-  m_Layer: 8
-  m_Name: groundCheckPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &400314954151469640
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4412877128505271985}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.67, y: -1.16, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2629518011321342451}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4424724899687113675
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,6 +53,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.4944698, y: 1.0154525, z: 2.7770004}
   m_Center: {x: -0.2472344, y: -0.36312583, z: -0.007726252}
+--- !u!1 &4614678817579269192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2275216602922227441}
+  m_Layer: 8
+  m_Name: edgeCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2275216602922227441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614678817579269192}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.36, y: -0.56, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2629518011321342451}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6398808383537711663
 GameObject:
   m_ObjectHideFlags: 0
@@ -9843,9 +9843,9 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 2275216602922227441}
   - {fileID: 1914391881184656987}
   - {fileID: 9169938583637883805}
-  - {fileID: 400314954151469640}
   - {fileID: 5171159431262036296}
   - {fileID: 8531560355427298817}
   m_Father: {fileID: 0}
@@ -9899,7 +9899,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1216501312, guid: 31738e0b568244014a4b2fbea7ddb159, type: 3}
+  m_Sprite: {fileID: 21300000, guid: eb7d8027730cc441fb81d0902f3de78f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -9964,26 +9964,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 141fc69ef406b4faf96b8b6a72d2be1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Silverfish
-  damage: 1
-  blood: 3
-  speed: 2
-  canRepel: 1
-  repelPlayer: 0
-  moveRange: 2
-  idleRange: 2
-  detectionRange: 3.5
-  otherObj: []
-  groundCheckPoint: {fileID: 400314954151469640}
+  patrolSpeed: 2
+  chaseSpeed: 2.5
+  maxHealth: 3
+  sightRange: 3.59
+  attackRange: 1.3
+  player: {fileID: 0}
+  edgeCheckPoint: {fileID: 2275216602922227441}
+  rayDistance: 0.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  checkRadius: 0.2
-  particleHurt: {fileID: 4832183047267646276}
-  HurtMaterial: {fileID: 2100000, guid: abac0c953cbe744eb943a3d38bee34ac, type: 2}
-  repelSpeed: 5
-  repelDistance: 0.05
-  DeadEffect: {fileID: 4123365093093318906, guid: 7f751b22b979b4c529155026c56a0b52, type: 3}
-  attackCollider: {fileID: 4424724899687113675}
+  separationRadius: 0.4
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  attackCastTime: 0.3
+  attackInterval: 1
+  animator: {fileID: 2980973970034205491}
+  idleAni: Silverfish_Idle
+  walkAni: Silverfish_Walk
+  attackAni: Silverfish_Attack
+  attackEndAni: Silverfish_Attack_End
+  damagedAni: Silverfish_Damaged
 --- !u!54 &3946360408629014194
 Rigidbody:
   m_ObjectHideFlags: 0

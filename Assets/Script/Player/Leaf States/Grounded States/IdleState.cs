@@ -7,6 +7,7 @@ public class IdleState : GroundedState
     public override void Enter()
     {
         base.Enter();
+        manager.animator.Play(PlayerAnimateHash.Idle, 0, 0f);
     }
 
     public override void Update()

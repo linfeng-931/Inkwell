@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 6462334715052733848}
   - component: {fileID: 8325929490926091873}
   - component: {fileID: 5512879379746265835}
-  - component: {fileID: 8167568703649040906}
   - component: {fileID: 7143038593138564062}
+  - component: {fileID: 7000935873827856160}
   m_Layer: 8
   m_Name: needle
   m_TagString: Enemy
@@ -143,20 +143,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.57366854, y: 0.60004205, z: 4.412267}
   m_Center: {x: -0.01658206, y: -0.011655042, z: 0.32325456}
---- !u!114 &8167568703649040906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1034778191327631434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac45324a2fb31494ba9e2dc16c80bb8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Needle
-  isAct: 0
-  needleSpeed: 20
 --- !u!96 &7143038593138564062
 TrailRenderer:
   serializedVersion: 4
@@ -276,3 +262,17 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &7000935873827856160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034778191327631434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac45324a2fb31494ba9e2dc16c80bb8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Needle
+  isAct: 0
+  needleSpeed: 15

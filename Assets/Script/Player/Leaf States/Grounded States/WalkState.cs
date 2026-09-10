@@ -7,6 +7,7 @@ public class WalkState : GroundedState
     public override void Enter()
     {
         base.Enter();
+        manager.animator.Play(PlayerAnimateHash.Walk, 0, 0f);
     }
 
     public override void Update()

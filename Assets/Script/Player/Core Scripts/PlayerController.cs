@@ -57,6 +57,55 @@ public class PlayerController : MonoBehaviour
 
     private ParticleSystem[] dashParticleSystems;
 
+    [Header("Attack Setting")]
+    public AttackData[] groundCombo;
+    public AttackData[] airCombo;
+    public bool canAirAttack = true;
+    public int damage = 1;
+    
+    public int currentComboIndex {get; set;} = 0;
+    public AttackData[] currentComboList {get; set;}
+
+    [Header("Hurt and Die Setting")]
+    public float hurtKnockbackForce = 5f;
+    public float hurtKnockbackDuration = 0.1f;
+    public float hurtDuration = 0.8f;
+
+    [Header("Hook Setting")]
+    public float hookRange = 10f;
+    public float hookSpeed = 25f; // move speed
+    public float hookStopDistance = 1f; 
+
+    public LayerMask hookLayer;
+
+    public float hookBodyOffsetX = 0.5f;
+    public float hookBodyOffsetY = 1.5f;
+
+    public float hookShootSpeed = 40f; // line speed
+    public float hookRetractSpeed = 60f;
+
+    public float hookTipRadius = 0.3f; // detect point range
+
+    public float hookMissPauseTime = 0.15f;
+    public float hookHangTime = 0.2f; // hang on the air
+
+    public Vector3 currentHookTipPos { get; set; }
+    public Vector3 currentHookTarget { get; set; }
+
+    [Header("Hook Rope")]
+    public int ropeResolution = 10; // line effect
+    public LineRenderer hookLineRenderer;
+
+    public float bounceAmplitude = 1.2f;
+    public float bounceFrequency = 45f;
+
+    [Header("Rope Retract Shape")]
+    public float ropeSAmount = 2f; // width
+    public float ropeSFrequency = 1f; // amount
+    public float ropeSOffset = 0.35f; // sense of fluidity
+    public AnimationCurve ropeSGrowth = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f); // dynamic contraction curve
+
+    private Camera mainCam;
     #endregion
 
     [Header("Turn Setting")]
@@ -75,6 +124,8 @@ public class PlayerController : MonoBehaviour
         col = GetComponent<CapsuleCollider>();
 
         dashParticleSystems = dashParticle.GetComponentsInChildren<ParticleSystem>();
+
+        mainCam = Camera.main;
     }
 
     void Start()
@@ -144,17 +195,38 @@ public class PlayerController : MonoBehaviour
         if (currentMoveX > 0.1f && !isFacingRight)
         {
             isFacingRight = true;
-            Vector3 playerScale = transform.localScale;
-            playerScale.x *= -1;
-            transform.localScale = playerScale;
+            Flip();
         }
         else if (currentMoveX < -0.1f && isFacingRight)
         {
             isFacingRight = false;
-            Vector3 playerScale = transform.localScale;
-            playerScale.x *= -1;
-            transform.localScale = playerScale;
+            Flip();
         }
+    }
+
+    /// <summary>
+    /// force to face target position
+    /// </summary>
+    /// <param name="targetPos"></param>
+    public void FaceTowards(Vector3 targetPos)
+    {
+        if(targetPos.x > transform.position.x && !isFacingRight)
+        {
+            isFacingRight = true;
+            Flip();
+        }
+        else if(targetPos.x < transform.position.x && isFacingRight)
+        {
+            isFacingRight = false;
+            Flip();
+        }
+    }
+
+    private void Flip()
+    {
+        Vector3 playerScale = transform.localScale;
+        playerScale.x *= -1;
+        transform.localScale = playerScale;
     }
 
     /// <summary>
@@ -162,6 +234,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void CheckGlobalAbilities()
     {
+        // dash
         if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Dash))
         {
             bool isCooldownReady = Time.time >= (lastDashTime + dashCooldown);
@@ -178,6 +251,13 @@ public class PlayerController : MonoBehaviour
                 inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
                 TransitionToState<DashState>();
             }
+        }
+
+        // hook
+        if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Hook))
+        {
+            inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
+            TransitionToState<HookShootState>();
         }
     }
 
@@ -198,10 +278,58 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // draw debug game objects
+    /// <summary>
+    /// get mouse direction according to player center
+    /// </summary>
+    public Vector3 GetMouseDirection()
+    {
+        Vector2 mouseScreenPos = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
+        
+        // get x, y plane
+        Plane playerPlane = new Plane(Vector3.forward, transform.position);
+        Ray ray = mainCam.ScreenPointToRay(mouseScreenPos);
+
+        if (playerPlane.Raycast(ray, out float distance))
+        {
+            Vector3 worldMousePos = ray.GetPoint(distance);
+            return (worldMousePos - transform.position).normalized;
+        }
+        
+        return isFacingRight ? Vector3.right : Vector3.left;
+    }
+
+    /// <summary>
+    /// calculate the final pos according to hook target type
+    /// </summary>
+    public Vector3 CalculateHookDestination(Vector3 targetPos, HookTargetType type)
+    {
+        Vector3 destination = targetPos;
+        float directionToPlayerX = transform.position.x < targetPos.x ? -1f : 1f;
+
+        switch (type)
+        {
+            case HookTargetType.AirEnemy:
+            case HookTargetType.GroundEnemy:
+                destination.x += directionToPlayerX * hookBodyOffsetX;
+                destination.y = targetPos.y; 
+                break;
+            case HookTargetType.HookPoint:
+                destination.x = targetPos.x;
+                destination.y = targetPos.y + hookBodyOffsetY;
+                break;
+        }
+        destination.z = targetPos.z; 
+        return destination;
+    }
+
+    # region Gizmos
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red; 
         Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, hookRange);
     }
+    #endregion
 }
