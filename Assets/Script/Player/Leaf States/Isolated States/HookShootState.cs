@@ -20,6 +20,8 @@ public class HookShootState : PlayerState
     {
         base.Enter();
 
+        manager.canTurn = false;
+
         shootDir = manager.GetMouseDirection();
         manager.currentHookTipPos = manager.transform.position;
 
@@ -289,7 +291,7 @@ public class HookShootState : PlayerState
     public override void Exit()
     {
         base.Exit();
-
+        manager.canTurn = true;
         manager.hookLineRenderer.enabled = false;
         manager.hookLineRenderer.positionCount = 2;
     }

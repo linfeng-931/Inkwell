@@ -12031,11 +12031,38 @@ MonoBehaviour:
     ImpulseShape: 3
     CustomImpulseShape:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.45914105
+        value: 0.47501758
+        inSlope: -2.9116015
+        outSlope: -2.9116015
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.21909656
+      - serializedVersion: 3
+        time: 1
+        value: 0.8059006
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    ImpulseDuration: 0.1
+    ImpulseDuration: 0.2
     ImpulseType: 0
     DissipationRate: 0.25
     RawSignal: {fileID: 0}
@@ -76013,16 +76040,16 @@ MonoBehaviour:
   dashDuration: 0.15
   dashCooldown: 0.6
   dashEndCut: 0.1
-  lastDashTime: -100
+  lastDashTime: 258.74902
   canAirDash: 1
   dashLookAhead: 0.5
   cornerCorrectionRange: 1
   correctionStep: 0.1
   groundCombo:
   - animationName: Attack_1
-    duration: 0.35
+    duration: 0.25
     comboStartTime: 0.04
-    comboEndTime: 0.8
+    comboEndTime: 0.35
     forwardThrust: 15
     thrustDuration: 0.02
     activeHitBoxStartTime: 0.01
@@ -76032,7 +76059,7 @@ MonoBehaviour:
   - animationName: Attack_2
     duration: 0.35
     comboStartTime: 0.04
-    comboEndTime: 0.8
+    comboEndTime: 0.5
     forwardThrust: 15
     thrustDuration: 0.02
     activeHitBoxStartTime: 0.01

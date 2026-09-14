@@ -210,13 +210,17 @@ public class PlayerController : MonoBehaviour
     /// <param name="targetPos"></param>
     public void FaceTowards(Vector3 targetPos)
     {
+        Debug.Log("滑鼠目標位置: " + targetPos.x);
+        Debug.Log("玩家目前位置: " + transform.position.x);
         if(targetPos.x > transform.position.x && !isFacingRight)
         {
+            Debug.Log("玩家面向右側");
             isFacingRight = true;
             Flip();
         }
         else if(targetPos.x < transform.position.x && isFacingRight)
         {
+            Debug.Log("玩家面向左側");
             isFacingRight = false;
             Flip();
         }
