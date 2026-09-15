@@ -21,6 +21,9 @@ public class RunState : GroundedState
             manager.TransitionToState<IdleState>();
             return;
         }
+
+        // recover energy
+        manager.playerEnergy.canRecoverEnergy = manager.isGrounded;
     }
 
     public override void FixedUpdate()
@@ -46,5 +49,6 @@ public class RunState : GroundedState
     public override void Exit()
     {
         base.Exit();
+        manager.playerEnergy.canRecoverEnergy = false;
     }
 }

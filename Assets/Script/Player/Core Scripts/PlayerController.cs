@@ -5,11 +5,12 @@ public class PlayerController : MonoBehaviour
     public PlayerState currentState { get; private set; }
     private PlayerStateFactory stateFactory;
 
-    //components
+    [Header("Component References")]
     public Animator animator { get; private set; }
     public Rigidbody rig { get; private set; }
     public InputBufferManager inputBufferManager { get; private set; }
     public CapsuleCollider col {get; private set;}
+    public PlayerEnergy playerEnergy {get; set;}
 
     [Header("Player Control Toggle")]
     public bool isPlayerInputEnabled = true;
@@ -20,6 +21,11 @@ public class PlayerController : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     public bool isGrounded { get; private set; }
+
+    [Header("Energy Setting")]
+    public float dashCost = 20f;
+    public float hookCost = 35f;
+    public float shootCost = 35f;
 
     #region Action Setting
     [Header("Move Setting")]
@@ -122,6 +128,7 @@ public class PlayerController : MonoBehaviour
         rig = GetComponent<Rigidbody>();
         inputBufferManager = GetComponent<InputBufferManager>();
         col = GetComponent<CapsuleCollider>();
+        playerEnergy = GetComponent<PlayerEnergy>();
 
         dashParticleSystems = dashParticle.GetComponentsInChildren<ParticleSystem>();
 
@@ -237,19 +244,23 @@ public class PlayerController : MonoBehaviour
         // dash
         if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Dash))
         {
-            bool isCooldownReady = Time.time >= (lastDashTime + dashCooldown);
-            bool hasSpaceToDash = isGrounded || canAirDash;
-
-            if (isCooldownReady && hasSpaceToDash)
+            bool hasEnergy = playerEnergy.ConsumeEnergy(dashCost);
+            if (hasEnergy)
             {
-                lastDashTime = Time.time;
-                if (!isGrounded)
-                {
-                    canAirDash = false;
-                }
+                bool isCooldownReady = Time.time >= (lastDashTime + dashCooldown);
+                bool hasSpaceToDash = isGrounded || canAirDash;
 
-                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
-                TransitionToState<DashState>();
+                if (isCooldownReady && hasSpaceToDash)
+                {
+                    lastDashTime = Time.time;
+                    if (!isGrounded)
+                    {
+                        canAirDash = false;
+                    }
+
+                    inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
+                    TransitionToState<DashState>();
+                }
             }
         }
 

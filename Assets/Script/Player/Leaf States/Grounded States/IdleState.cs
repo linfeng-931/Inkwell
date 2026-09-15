@@ -38,10 +38,14 @@ public class IdleState : GroundedState
                 0f
             );
         }
+
+        // recover energy
+        manager.playerEnergy.canRecoverEnergy = manager.isGrounded;
     }
 
     public override void Exit()
     {
         base.Exit();
+        manager.playerEnergy.canRecoverEnergy = false;
     }
 }

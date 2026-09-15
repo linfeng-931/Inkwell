@@ -99,7 +99,7 @@ public class DashState : PlayerState
         // calc scaled dimensions
         float scaleY = playerTrans.lossyScale.y;
         float scaleXZ = Mathf.Max(playerTrans.lossyScale.x, playerTrans.lossyScale.z);
-        
+
         float requiredHeight = originalHeight * scaleY;
         float realRadius = (originalRadius * scaleXZ) * 0.9f;
         float centerDist = requiredHeight - (2f * realRadius);

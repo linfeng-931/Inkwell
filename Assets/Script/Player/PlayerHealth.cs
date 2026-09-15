@@ -14,13 +14,15 @@ public class PlayerHealth : MonoBehaviour
     private float invincibilityTimer = 0f;
 
     private PlayerController playerController;
-    public event Action<int, int> OnHealthChanged;
     public event Action OnDeath;
 
-    void Awake()
+    void Start()
     {
         playerController = GetComponent<PlayerController>();
         currentHealth = maxHealth;
+
+        //init player health
+        GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
     }
 
     void Update()
@@ -47,7 +49,7 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
 
         CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
 
