@@ -7134,7 +7134,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1325073915
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7241,6 +7241,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HookTarget
   targetType: 2
+  canBeHooked: 1
+  animator: {fileID: 0}
+  targetCollider: {fileID: 0}
 --- !u!1 &1332353720
 GameObject:
   m_ObjectHideFlags: 0
@@ -8057,6 +8060,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HookTarget
   targetType: 0
+  canBeHooked: 1
+  animator: {fileID: 0}
+  targetCollider: {fileID: 0}
 --- !u!65 &1475940797
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8196,6 +8202,53 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5357400774519871302, guid: 6644c1fc4741d43fda98349c45ec0aef, type: 3}
   m_PrefabInstance: {fileID: 924771216}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1560004495 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8491863260572880994, guid: 1107df74b22018b47836504419033199, type: 3}
+  m_PrefabInstance: {fileID: 2111000512}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1560004496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560004495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 058967f5505ae46008f8d93f63bfad23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HookTarget
+  targetType: 2
+  canBeHooked: 1
+  animator: {fileID: 1560004498}
+  targetCollider: {fileID: 1560004497}
+--- !u!65 &1560004497
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560004495}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6, y: 0.6, z: 0.6}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &1560004498 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3067958039151425188, guid: 1107df74b22018b47836504419033199, type: 3}
+  m_PrefabInstance: {fileID: 2111000512}
   m_PrefabAsset: {fileID: 0}
 --- !u!43 &1607647178
 Mesh:
@@ -12028,7 +12081,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
   ImpulseDefinition:
     ImpulseChannel: 1
-    ImpulseShape: 3
+    ImpulseShape: 0
     CustomImpulseShape:
       serializedVersion: 2
       m_Curve:
@@ -12042,14 +12095,23 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.45914105
-        value: 0.47501758
+        time: 0.3624744
+        value: 0.35999846
         inSlope: -2.9116015
         outSlope: -2.9116015
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.21909656
+      - serializedVersion: 3
+        time: 0.7816673
+        value: 0.53464824
+        inSlope: -3.0686178
+        outSlope: -3.0686178
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.61831963
       - serializedVersion: 3
         time: 1
         value: 0.8059006
@@ -12062,7 +12124,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    ImpulseDuration: 0.2
+    ImpulseDuration: 0.3
     ImpulseType: 0
     DissipationRate: 0.25
     RawSignal: {fileID: 0}
@@ -12093,7 +12155,98 @@ MonoBehaviour:
     DissipationMode: 2
     DissipationDistance: 100
     PropagationSpeed: 343
-  DefaultVelocity: {x: 0.01, y: -0.01, z: 0.02}
+  DefaultVelocity: {x: 0.05, y: 0.04, z: 0.02}
+--- !u!1001 &2111000512
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4108164215386364814, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848849199908769251, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8491863260572880994, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_Name
+      value: pen_object
+      objectReference: {fileID: 0}
+    - target: {fileID: 8491863260572880994, guid: 1107df74b22018b47836504419033199, type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8491863260572880994, guid: 1107df74b22018b47836504419033199, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1560004497}
+    - targetCorrespondingSourceObject: {fileID: 8491863260572880994, guid: 1107df74b22018b47836504419033199, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1560004496}
+  m_SourcePrefab: {fileID: 100100000, guid: 1107df74b22018b47836504419033199, type: 3}
 --- !u!1 &2116453551
 GameObject:
   m_ObjectHideFlags: 0
@@ -33213,6 +33366,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletSkill
+  actButton: 1
+  maxScale: 0
+  minScale: 0
+  enlargeSpeed: 1
+  sprites: []
+  bulletPrefab: {fileID: 0}
+  shootingLine: {fileID: 0}
 --- !u!224 &2821582688936627503
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33773,6 +33933,14 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DissolveEffect
+  dissolve: {fileID: 0}
+  max: 0
+  min: 0
+  speed: 0
+  isAct: 0
+  image: {fileID: 0}
+  flipPage: {fileID: 0}
+  canAct: 0
 --- !u!4 &3685545999672940790
 Transform:
   m_ObjectHideFlags: 0
@@ -53382,6 +53550,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mark
+  isAct: 0
+  colors: []
+  currentPage: {fileID: 0}
+  index: 0
+  switchLayerDelay: 0
+  switchLayerDelayClose: 0
+  flipPage: {fileID: 0}
 --- !u!224 &4668500586085698472
 RectTransform:
   m_ObjectHideFlags: 0
@@ -63755,6 +63930,9 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RainSkill
+  bwShader: {fileID: 0}
+  shaderSpeed: 0
+  shaderRadius: 0
 --- !u!224 &5899510043366924261
 RectTransform:
   m_ObjectHideFlags: 0
@@ -64059,6 +64237,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mark
+  isAct: 0
+  colors: []
+  currentPage: {fileID: 0}
+  index: 0
+  switchLayerDelay: 0
+  switchLayerDelayClose: 0
+  flipPage: {fileID: 0}
 --- !u!1 &6433965885216867561
 GameObject:
   m_ObjectHideFlags: 0
@@ -64478,6 +64663,15 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrentPage
+  majorIndex: 0
+  disActMark: {fileID: 0}
+  ActMark: {fileID: 0}
+  marks: []
+  subPageIndex: 0
+  subPages: []
+  ArrowL: {fileID: 0}
+  ArrowR: {fileID: 0}
+  subPageDelayTime: 0
 --- !u!114 &7055977961667894027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64792,6 +64986,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mark
+  isAct: 0
+  colors: []
+  currentPage: {fileID: 0}
+  index: 0
+  switchLayerDelay: 0
+  switchLayerDelayClose: 0
+  flipPage: {fileID: 0}
 --- !u!114 &7556456351411773902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64804,6 +65005,12 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI
+  isAct: 0
+  playerController: {fileID: 0}
+  playerAni: {fileID: 0}
+  playerStatus: {fileID: 0}
+  playerInput: {fileID: 0}
+  Note: {fileID: 0}
 --- !u!198 &7656545470220777421
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -69579,7 +69786,7 @@ Transform:
   m_GameObject: {fileID: 70192781638037380}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.16, y: 1.24, z: -6}
+  m_LocalPosition: {x: -3.5322227, y: 0.94, z: -4.2}
   m_LocalScale: {x: 0.78614, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -70285,6 +70492,8 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlipPage
+  dissolveEffect: {fileID: 0}
+  canFlip: 0
 --- !u!1 &7815714592920092146
 GameObject:
   m_ObjectHideFlags: 0
@@ -75530,6 +75739,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mark
+  isAct: 0
+  colors: []
+  currentPage: {fileID: 0}
+  index: 0
+  switchLayerDelay: 0
+  switchLayerDelayClose: 0
+  flipPage: {fileID: 0}
 --- !u!1 &8344489841336539889
 GameObject:
   m_ObjectHideFlags: 0
@@ -76040,7 +76256,7 @@ MonoBehaviour:
   dashDuration: 0.15
   dashCooldown: 0.6
   dashEndCut: 0.1
-  lastDashTime: 258.74902
+  lastDashTime: 333.0728
   canAirDash: 1
   dashLookAhead: 0.5
   cornerCorrectionRange: 1
@@ -76103,13 +76319,13 @@ MonoBehaviour:
   hurtKnockbackDuration: 0.15
   hurtDuration: 0.5
   hookRange: 3
-  hookSpeed: 25
+  hookSpeed: 20
   hookStopDistance: 1
   hookLayer:
     serializedVersion: 2
     m_Bits: 1048576
   hookBodyOffsetX: 0.5
-  hookBodyOffsetY: 1.5
+  hookBodyOffsetY: 1
   hookShootSpeed: 40
   hookRetractSpeed: 25
   hookTipRadius: 0.3
@@ -76118,7 +76334,7 @@ MonoBehaviour:
   ropeResolution: 14
   hookLineRenderer: {fileID: 294305302}
   bounceAmplitude: 0.5
-  bounceFrequency: 10
+  bounceFrequency: 5
   ropeSAmount: 1.5
   ropeSFrequency: 1
   ropeSOffset: 0.35
@@ -76161,7 +76377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05d971b9a5d6247ee991c40b9b90d74c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 5
+  maxHealth: 100
   currentHealth: 0
   invincibilityDuration: 0.5
 --- !u!199 &8845397514906945528
@@ -81216,3 +81432,4 @@ SceneRoots:
   - {fileID: 1902579065}
   - {fileID: 1325073918}
   - {fileID: 1021006839}
+  - {fileID: 2111000512}

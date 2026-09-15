@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class HookShootState : PlayerState
 {
@@ -83,6 +84,15 @@ public class HookShootState : PlayerState
             {
                 HookTarget targetInfo = hit.collider.GetComponent<HookTarget>();
                 HookTargetType type = targetInfo != null ? targetInfo.targetType : HookTargetType.HookPoint;
+
+                if (targetInfo == null || !targetInfo.canBeHooked) { 
+                    return;
+                }
+
+                // Play Hook Animation
+                if (targetInfo != null) {
+                    targetInfo.TriggerHitAnimation();
+                }
 
                 manager.currentHookTarget = manager.CalculateHookDestination(hit.collider.transform.position, type);
                 manager.TransitionToState<HookState>();
