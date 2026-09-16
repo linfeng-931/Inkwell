@@ -6,6 +6,7 @@ public class HitBox : MonoBehaviour
     public Transform hitBoxCenter;
     public Vector3 hitBoxSize = new Vector3(1.5f, 1.5f, 1f);
     public LayerMask enemyLayer;
+    public LayerMask hookObjectLayer;
 
     private HashSet<Collider> alreadyHitEnemies = new HashSet<Collider>(); // avoid hit same enemy twice
     private bool isHitBoxActive = false;
@@ -25,10 +26,11 @@ public class HitBox : MonoBehaviour
     {
         Vector3 actualCenter = hitBoxCenter.position + hitBoxCenter.TransformDirection(currentOffset);
 
+
         // find all collider in hit box
         Collider[] hitColliders = Physics.OverlapBox(hitBoxCenter.position, hitBoxSize / 2f, hitBoxCenter.rotation, enemyLayer);
 
-        foreach(Collider col in hitColliders)
+        foreach (Collider col in hitColliders)
         {
             if (!alreadyHitEnemies.Contains(col))
             {
@@ -40,6 +42,27 @@ public class HitBox : MonoBehaviour
 
                 // later add voice
             }
+        }
+
+        // find all hook objects which was hitted
+        Collider[] hookObjectColliders = Physics.OverlapBox(hitBoxCenter.position, hitBoxSize / 2f, hitBoxCenter.rotation, hookObjectLayer);
+        foreach (Collider col in hookObjectColliders)
+        {
+            //Debug.Log(col.gameObject.name);
+            // Play hook object animation
+            GameObject hookGameObject = col.gameObject;
+
+
+
+            HookTarget hookTarget = hookGameObject.GetComponentInParent<HookTarget>();
+
+            if (hookTarget == null)
+            {
+                Debug.Log("§ä¤£¨ì hookTarget");
+                return;
+            }
+
+            hookTarget.TriggerHitAnimation();
         }
     }
 

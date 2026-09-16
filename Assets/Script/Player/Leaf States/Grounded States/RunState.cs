@@ -2,11 +2,20 @@ using UnityEngine;
 
 public class RunState : GroundedState
 {
+    private float footstepTimer;
+    private float footstepInterval = 0.1f;
+
     public RunState(PlayerController manager) : base(manager) { }
 
     public override void Enter()
     {
         base.Enter();
+        if (manager.footstepClip != null)
+        {
+            manager.audioManager.PlaySFX(manager.footstepClip);
+        }
+
+
         manager.animator.Play(PlayerAnimateHash.Run, 0, 0f);
     }
 
@@ -48,6 +57,12 @@ public class RunState : GroundedState
 
     public override void Exit()
     {
+        if (manager.audioManager != null)
+        {
+            manager.sfxAudioSource.Stop();
+        }
+
+
         base.Exit();
         manager.playerEnergy.canRecoverEnergy = false;
     }

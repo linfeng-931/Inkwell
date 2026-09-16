@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PlayerController : MonoBehaviour
 {
@@ -121,6 +122,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("Art Setting")]
     public GameObject playerFace;
+
+    [Header("SFX Setting")]
+    public AudioManager audioManager;
+    public AudioSource sfxAudioSource;
+    public AudioClip footstepClip;
+    public AudioClip hookClip;
+    public AudioClip atkClip;
 
     private void Awake()
     {

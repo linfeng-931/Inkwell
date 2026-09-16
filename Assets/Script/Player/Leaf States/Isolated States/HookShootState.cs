@@ -39,6 +39,10 @@ public class HookShootState : PlayerState
         // face the shooting direction
         manager.FaceTowards(manager.transform.position + shootDir * 10f);
 
+        if (manager.hookClip != null) {
+            manager.audioManager.PlaySFX(manager.hookClip);
+        }
+
         // show rope
         manager.hookLineRenderer.enabled = true;
         manager.hookLineRenderer.positionCount = Mathf.Max(2, manager.ropeResolution);

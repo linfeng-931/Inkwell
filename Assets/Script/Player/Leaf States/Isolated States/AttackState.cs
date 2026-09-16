@@ -14,6 +14,11 @@ public class AttackState : PlayerState
     {
         base.Enter();
 
+        if (manager.atkClip != null)
+        {
+            manager.audioManager.PlaySFX(manager.atkClip);
+        }
+
         // get and set attack data
         currentAttack = manager.currentComboList[manager.currentComboIndex];
         stateStartTime = Time.time;
