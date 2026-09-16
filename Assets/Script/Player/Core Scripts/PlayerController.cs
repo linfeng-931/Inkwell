@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour
     public Animator animator { get; private set; }
     public Rigidbody rig { get; private set; }
     public InputBufferManager inputBufferManager { get; private set; }
-    public CapsuleCollider col {get; private set;}
-    public PlayerEnergy playerEnergy {get; set;}
+    public CapsuleCollider col { get; private set; }
+    public PlayerEnergy playerEnergy { get; set; }
 
     [Header("Player Control Toggle")]
     public bool isPlayerInputEnabled = true;
@@ -55,11 +55,12 @@ public class PlayerController : MonoBehaviour
     public float dashDuration = 0.2f;
     public float dashCooldown = 0.6f;
     public float dashEndCut = 0.1f;
-    public float lastDashTime = -100f;
     public bool canAirDash = true;
     public float dashLookAhead = 0.5f;
     public float cornerCorrectionRange = 0.4f;
     public float correctionStep = 0.1f;
+
+    public float lastDashTime { get; set; } = -100f;
 
     private ParticleSystem[] dashParticleSystems;
 
@@ -68,9 +69,9 @@ public class PlayerController : MonoBehaviour
     public AttackData[] airCombo;
     public bool canAirAttack = true;
     public int damage = 1;
-    
-    public int currentComboIndex {get; set;} = 0;
-    public AttackData[] currentComboList {get; set;}
+
+    public int currentComboIndex { get; set; } = 0;
+    public AttackData[] currentComboList { get; set; }
 
     [Header("Hurt and Die Setting")]
     public float hurtKnockbackForce = 5f;
@@ -80,7 +81,7 @@ public class PlayerController : MonoBehaviour
     [Header("Hook Setting")]
     public float hookRange = 10f;
     public float hookSpeed = 25f; // move speed
-    public float hookStopDistance = 1f; 
+    public float hookStopDistance = 1f;
 
     public LayerMask hookLayer;
 
@@ -188,7 +189,7 @@ public class PlayerController : MonoBehaviour
     public bool CheckGrounded()
     {
         Bounds bounds = col.bounds;
-        
+
         float castRadius = bounds.extents.x * 0.9f; // avoid to detect wall
         Vector3 startPos = bounds.center - new Vector3(0, bounds.extents.y - 0.1f, 0);
         return Physics.SphereCast(startPos, castRadius, Vector3.down, out RaycastHit hit, 0.2f, groundLayer);
@@ -217,17 +218,13 @@ public class PlayerController : MonoBehaviour
     /// <param name="targetPos"></param>
     public void FaceTowards(Vector3 targetPos)
     {
-        Debug.Log("滑鼠目標位置: " + targetPos.x);
-        Debug.Log("玩家目前位置: " + transform.position.x);
-        if(targetPos.x > transform.position.x && !isFacingRight)
+        if (targetPos.x > transform.position.x && !isFacingRight)
         {
-            Debug.Log("玩家面向右側");
             isFacingRight = true;
             Flip();
         }
-        else if(targetPos.x < transform.position.x && isFacingRight)
+        else if (targetPos.x < transform.position.x && isFacingRight)
         {
-            Debug.Log("玩家面向左側");
             isFacingRight = false;
             Flip();
         }
@@ -248,7 +245,7 @@ public class PlayerController : MonoBehaviour
         // dash
         if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Dash))
         {
-            bool hasEnergy = playerEnergy.ConsumeEnergy(dashCost);
+            bool hasEnergy = playerEnergy.currentEnergy >= dashCost;
             if (hasEnergy)
             {
                 bool isCooldownReady = Time.time >= (lastDashTime + dashCooldown);
@@ -256,6 +253,8 @@ public class PlayerController : MonoBehaviour
 
                 if (isCooldownReady && hasSpaceToDash)
                 {
+                    playerEnergy.ConsumeEnergy(dashCost);
+                    
                     lastDashTime = Time.time;
                     if (!isGrounded)
                     {
@@ -264,6 +263,8 @@ public class PlayerController : MonoBehaviour
 
                     inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
                     TransitionToState<DashState>();
+
+                    return;
                 }
             }
         }
@@ -279,7 +280,7 @@ public class PlayerController : MonoBehaviour
     // control particle or other effect
     public void PlayDashParticle()
     {
-        foreach(ParticleSystem ps in dashParticleSystems)
+        foreach (ParticleSystem ps in dashParticleSystems)
         {
             ps.Play();
         }
@@ -287,7 +288,7 @@ public class PlayerController : MonoBehaviour
 
     public void StopDashParticle()
     {
-        foreach(ParticleSystem ps in dashParticleSystems)
+        foreach (ParticleSystem ps in dashParticleSystems)
         {
             ps.Stop();
         }
@@ -299,7 +300,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 GetMouseDirection()
     {
         Vector2 mouseScreenPos = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-        
+
         // get x, y plane
         Plane playerPlane = new Plane(Vector3.forward, transform.position);
         Ray ray = mainCam.ScreenPointToRay(mouseScreenPos);
@@ -309,7 +310,7 @@ public class PlayerController : MonoBehaviour
             Vector3 worldMousePos = ray.GetPoint(distance);
             return (worldMousePos - transform.position).normalized;
         }
-        
+
         return isFacingRight ? Vector3.right : Vector3.left;
     }
 
@@ -326,21 +327,21 @@ public class PlayerController : MonoBehaviour
             case HookTargetType.AirEnemy:
             case HookTargetType.GroundEnemy:
                 destination.x += directionToPlayerX * hookBodyOffsetX;
-                destination.y = targetPos.y; 
+                destination.y = targetPos.y;
                 break;
             case HookTargetType.HookPoint:
                 destination.x = targetPos.x;
                 destination.y = targetPos.y + hookBodyOffsetY;
                 break;
         }
-        destination.z = targetPos.z; 
+        destination.z = targetPos.z;
         return destination;
     }
 
     # region Gizmos
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red; 
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
 
         Gizmos.color = Color.green;

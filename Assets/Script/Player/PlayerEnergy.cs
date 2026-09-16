@@ -34,9 +34,9 @@ public class PlayerEnergy : MonoBehaviour
         }
     }
 
-    public bool ConsumeEnergy(float consumeEnergy)
+    public void ConsumeEnergy(float consumeEnergy)
     {
-        if (currentEnergy < consumeEnergy) return false;
+        if (currentEnergy < consumeEnergy) return;
 
         currentEnergy -= consumeEnergy;
         currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
@@ -44,6 +44,5 @@ public class PlayerEnergy : MonoBehaviour
         lastConsumeTime = Time.time;
         
         GameEvent.OnEnergyChanged.Invoke(currentEnergy, maxEnergy);
-        return true;
     }
 }
