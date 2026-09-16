@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class HookShootState : PlayerState
 {
@@ -19,6 +20,8 @@ public class HookShootState : PlayerState
     public override void Enter()
     {
         base.Enter();
+
+        manager.canTurn = false;
 
         shootDir = manager.GetMouseDirection();
         manager.currentHookTipPos = manager.transform.position;
@@ -81,6 +84,15 @@ public class HookShootState : PlayerState
             {
                 HookTarget targetInfo = hit.collider.GetComponent<HookTarget>();
                 HookTargetType type = targetInfo != null ? targetInfo.targetType : HookTargetType.HookPoint;
+
+                if (targetInfo == null || !targetInfo.canBeHooked) { 
+                    return;
+                }
+
+                // Play Hook Animation
+                if (targetInfo != null) {
+                    targetInfo.TriggerHitAnimation();
+                }
 
                 manager.currentHookTarget = manager.CalculateHookDestination(hit.collider.transform.position, type);
                 manager.TransitionToState<HookState>();
@@ -289,7 +301,7 @@ public class HookShootState : PlayerState
     public override void Exit()
     {
         base.Exit();
-
+        manager.canTurn = true;
         manager.hookLineRenderer.enabled = false;
         manager.hookLineRenderer.positionCount = 2;
     }
