@@ -32,6 +32,11 @@ public class Silverfish : MonoBehaviour, IEnemy
     public float attackCastTime = 0.3f;
     public float attackInterval = 1f;
 
+    [Header("Hurt Setting")]
+    public float hurtForceH = 0.1f;
+    public float hurtForceV = 0.1f;
+    public float hurtStunTime = 0.3f;
+
     [Header("Animate")]
     public Animator animator;
     public string idleAni = "Silverfish_Idle";
@@ -42,6 +47,8 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     private Rigidbody rig;
     private bool facingRight = false;
+
+    private bool isHurt = false;
 
     // prevent action after death
     private bool isDead = false;
@@ -115,7 +122,7 @@ public class Silverfish : MonoBehaviour, IEnemy
     {
         facingRight = !facingRight;
         Vector3 currentScale = transform.localScale;
-        currentScale.x *= -1; 
+        currentScale.x *= -1;
         transform.localScale = currentScale;
     }
 
@@ -159,20 +166,24 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     public void TakeDamage(int damage)
     {
-        if (fsm.State == States.Death || isDead) return;
-
-        if (damage <= 0) return;
+        if (fsm.State == States.Death) return;
+        if (isDead)
+        {
+            fsm.ChangeState(States.Death);
+            return;
+        }
 
         currentHealth -= damage;
 
         if (currentHealth <= 0)
         {
+            isDead = true;
             currentHealth = 0;
             fsm.ChangeState(States.Death);
         }
         else
         {
-            fsm.ChangeState(States.Hurt);
+            fsm.ChangeState(States.Hurt, StateTransition.Overwrite);
         }
     }
 
@@ -259,7 +270,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         StopHorizontalMovement();
     }
 
-
     void Chase_Update()
     {
         if (!IsPlayerInSight())
@@ -341,20 +351,21 @@ public class Silverfish : MonoBehaviour, IEnemy
         }
     }
 
-
     // Hurt
     IEnumerator Hurt_Enter()
     {
         StopMovement();
-
+        animator.Play(damagedAni, 0);
+        FlipToward(player.position.x);
         Vector3 knockbackDirection = new Vector3(facingRight ? -1f : 1f, 0f, 0f);
 
-        rig.AddForce( 
-            knockbackDirection * 3f + Vector3.up * 2f,
+        rig.AddForce(
+            knockbackDirection * hurtForceH + Vector3.up * hurtForceV,
             ForceMode.Impulse
         );
 
-        yield return new WaitForSeconds(0.5f); // hit stun
+        yield return new WaitForSeconds(hurtStunTime); // hit stun
+        isHurt = false;
 
         if (isDead) yield break;
 
@@ -377,7 +388,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         StopAllCoroutines();
 
         StopMovement();
-
         rig.isKinematic = true;
 
         // disable all colliders

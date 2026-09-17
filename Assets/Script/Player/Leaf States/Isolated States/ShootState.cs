@@ -11,6 +11,7 @@ public class ShootState : PlayerState
         base.Enter();
         stateTimer = 0f;
 
+        manager.canTurn = false;
         CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
 
         Vector3 shootDirection = manager.GetMouseDirection();
@@ -34,10 +35,7 @@ public class ShootState : PlayerState
         {
             if (manager.isGrounded)
             {
-                if (Mathf.Abs(manager.currentMoveX) > 0.1f)
-                    manager.TransitionToState<RunState>();
-                else
-                    manager.TransitionToState<IdleState>();
+                manager.TransitionToState<IdleState>();
             }
             else
             {
@@ -49,5 +47,6 @@ public class ShootState : PlayerState
     public override void Exit()
     {
         base.Exit();
+        manager.canTurn = true;
     }
 }

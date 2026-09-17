@@ -76595,6 +76595,8 @@ MonoBehaviour:
   hookRange: 3
   hookSpeed: 20
   hookStopDistance: 1
+  hookCooldown: 0.5
+  hookDamage: 1
   hookLayer:
     serializedVersion: 2
     m_Bits: 1048576
@@ -76639,7 +76641,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 5547473174594530871, guid: eaeed8c36410645718d4b99ec25e3bfe, type: 3}
   bulletSpawnPoint: {fileID: 463959217}
   shootBulletSpeed: 25
-  shootDuration: 0.2
+  shootDuration: 1
   canTurn: 1
   isFacingRight: 0
   playerFace: {fileID: 7740484553729513709}

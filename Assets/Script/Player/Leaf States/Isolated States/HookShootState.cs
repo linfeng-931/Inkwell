@@ -99,6 +99,12 @@ public class HookShootState : PlayerState
                 }
 
                 manager.currentHookTarget = manager.CalculateHookDestination(hit.collider.transform.position, type);
+
+                IEnemy enemy = hit.collider.GetComponentInParent<IEnemy>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(manager.hookDamage);
+                }
                 manager.TransitionToState<HookState>();
                 return;
             }

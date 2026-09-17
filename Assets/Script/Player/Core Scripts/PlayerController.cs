@@ -83,6 +83,8 @@ public class PlayerController : MonoBehaviour
     public float hookRange = 10f;
     public float hookSpeed = 25f; // move speed
     public float hookStopDistance = 1f;
+    public float hookCooldown = 0.5f;
+    public int hookDamage = 1;
 
     public LayerMask hookLayer;
 
@@ -286,15 +288,20 @@ public class PlayerController : MonoBehaviour
         // hook
         if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Hook))
         {
-            bool hasEnergy = playerEnergy.currentEnergy >= hookCost;
-            if (hasEnergy)
+            bool isCooldownReady = Time.time >= (lastDashTime + hookCooldown);
+
+            if (isCooldownReady)
             {
-                playerEnergy.ConsumeEnergy(hookCost);
+                bool hasEnergy = playerEnergy.currentEnergy >= hookCost;
+                if (hasEnergy)
+                {
+                    playerEnergy.ConsumeEnergy(hookCost);
 
-                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
-                TransitionToState<HookShootState>();
+                    inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
+                    TransitionToState<HookShootState>();
 
-                return;
+                    return;
+                }
             }
         }
 
