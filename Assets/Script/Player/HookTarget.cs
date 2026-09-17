@@ -24,15 +24,18 @@ public class HookTarget : MonoBehaviour
         StartCoroutine(HitRoutine());
     }
 
-    private IEnumerator HitRoutine() {
+    private IEnumerator HitRoutine()
+    {
         canBeHooked = false;
         if (targetCollider != null) targetCollider.enabled = false;
 
-        animator.SetTrigger("Hit");
+        if (animator != null)
+        {
+            animator.SetTrigger("Hit");
 
-        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("pen_object_open"));
-        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("pen_object_closed"));
-
+            yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("pen_object_open"));
+            yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("pen_object_closed"));
+        }
         canBeHooked = true;
         if (targetCollider != null) targetCollider.enabled = true;
     }
