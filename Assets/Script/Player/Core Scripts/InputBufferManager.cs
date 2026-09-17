@@ -13,7 +13,8 @@ public class InputBufferManager : MonoBehaviour
         Dash,
         Attack,
         Interact,
-        Hook
+        Hook,
+        Shoot
     }
 
     public float defaultBufferTimer = 0.2f;
@@ -34,6 +35,7 @@ public class InputBufferManager : MonoBehaviour
     public InputActionReference attackAction;
     public InputActionReference interactAction;
     public InputActionReference hookAction;
+    public InputActionReference shootAction;
 
     private void Update()
     {
@@ -53,6 +55,8 @@ public class InputBufferManager : MonoBehaviour
             BufferInput(InputActionType.Interact);
         if (hookAction.action.WasPressedThisFrame())
             BufferInput(InputActionType.Hook);
+        if (shootAction.action.WasPressedThisFrame())
+            BufferInput(InputActionType.Shoot);   
     }
 
     private void BufferInput(InputActionType type)

@@ -2240,6 +2240,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b96af306f95d4f96a864220fdd2bf76, type: 3}
+--- !u!1 &463959216
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 463959217}
+  m_Layer: 18
+  m_Name: bulletSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &463959217
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463959216}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.78, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6511908952230987660}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &468156419
 GameObject:
   m_ObjectHideFlags: 0
@@ -11919,6 +11950,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
+  hookObjectLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &2065044748
 GameObject:
   m_ObjectHideFlags: 0
@@ -13053,6 +13087,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: d194d19c-dc09-450b-96d2-64eda3f209fc
     m_ActionName: 'Player/Hook[/Keyboard/f]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c60c1730-53ad-450b-8aa9-1f80e460f15b
+    m_ActionName: 'Player/Shoot[/Keyboard/e]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -13093,7 +13131,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -33651,18 +33689,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2209091066729102261}
   m_CullTransparentMesh: 1
---- !u!114 &2772238913640240788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6636782896484275162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BulletSkill
 --- !u!224 &2821582688936627503
 RectTransform:
   m_ObjectHideFlags: 0
@@ -34208,6 +34234,14 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DissolveEffect
+  dissolve: {fileID: 0}
+  max: 0
+  min: 0
+  speed: 0
+  isAct: 0
+  image: {fileID: 0}
+  flipPage: {fileID: 0}
+  canAct: 0
 --- !u!4 &3685545999672940790
 Transform:
   m_ObjectHideFlags: 0
@@ -34258,7 +34292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &3822488512543742440
 GameObject:
   m_ObjectHideFlags: 0
@@ -53798,6 +53832,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mark
+  isAct: 0
+  colors: []
+  currentPage: {fileID: 0}
+  index: 0
+  switchLayerDelay: 0
+  switchLayerDelayClose: 0
+  flipPage: {fileID: 0}
 --- !u!224 &4668500586085698472
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58899,7 +58940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &5064913030944815757
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -64172,6 +64213,9 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RainSkill
+  bwShader: {fileID: 0}
+  shaderSpeed: 0
+  shaderRadius: 0
 --- !u!224 &5899510043366924261
 RectTransform:
   m_ObjectHideFlags: 0
@@ -64477,6 +64521,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mark
+  isAct: 0
+  colors: []
+  currentPage: {fileID: 0}
+  index: 0
+  switchLayerDelay: 0
+  switchLayerDelayClose: 0
+  flipPage: {fileID: 0}
 --- !u!1 &6433965885216867561
 GameObject:
   m_ObjectHideFlags: 0
@@ -64536,6 +64587,7 @@ Transform:
   - {fileID: 1729708716168173845}
   - {fileID: 797454519}
   - {fileID: 294305301}
+  - {fileID: 463959217}
   m_Father: {fileID: 6515561433134130585}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &6515561433134130585
@@ -64588,7 +64640,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6230741508555800800}
   - component: {fileID: 2193117796967080881}
-  - component: {fileID: 2772238913640240788}
   m_Layer: 7
   m_Name: bulletSkill
   m_TagString: Untagged
@@ -64895,6 +64946,15 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrentPage
+  majorIndex: 0
+  disActMark: {fileID: 0}
+  ActMark: {fileID: 0}
+  marks: []
+  subPageIndex: 0
+  subPages: []
+  ArrowL: {fileID: 0}
+  ArrowR: {fileID: 0}
+  subPageDelayTime: 0
 --- !u!114 &7055977961667894027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65209,6 +65269,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mark
+  isAct: 0
+  colors: []
+  currentPage: {fileID: 0}
+  index: 0
+  switchLayerDelay: 0
+  switchLayerDelayClose: 0
+  flipPage: {fileID: 0}
 --- !u!198 &7656545470220777421
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -65226,7 +65293,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -70690,6 +70757,8 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlipPage
+  dissolveEffect: {fileID: 0}
+  canFlip: 0
 --- !u!1 &7815714592920092146
 GameObject:
   m_ObjectHideFlags: 0
@@ -75949,6 +76018,13 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mark
+  isAct: 0
+  colors: []
+  currentPage: {fileID: 0}
+  index: 0
+  switchLayerDelay: 0
+  switchLayerDelayClose: 0
+  flipPage: {fileID: 0}
 --- !u!1 &8344489841336539889
 GameObject:
   m_ObjectHideFlags: 0
@@ -76416,6 +76492,7 @@ MonoBehaviour:
   attackAction: {fileID: -5969628810709159763, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
   interactAction: {fileID: -4701643691418671430, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
   hookAction: {fileID: -21522207210629572, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
+  shootAction: {fileID: -7253274237393013048, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
 --- !u!114 &8774398539635931322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76454,7 +76531,6 @@ MonoBehaviour:
   dashDuration: 0.15
   dashCooldown: 0.6
   dashEndCut: 0.1
-  lastDashTime: 333.0728
   canAirDash: 1
   dashLookAhead: 0.5
   cornerCorrectionRange: 1
@@ -76560,9 +76636,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  bulletPrefab: {fileID: 5547473174594530871, guid: eaeed8c36410645718d4b99ec25e3bfe, type: 3}
+  bulletSpawnPoint: {fileID: 463959217}
+  shootBulletSpeed: 25
+  shootDuration: 0.2
   canTurn: 1
   isFacingRight: 0
   playerFace: {fileID: 7740484553729513709}
+  audioManager: {fileID: 24221579}
+  sfxAudioSource: {fileID: 2011525687}
   footstepClip: {fileID: 8300000, guid: 1f417de8d3129413bb0fd43f9658699f, type: 3}
   hookClip: {fileID: 8300000, guid: 2cc43ade21d783b40b48688fa6130a7c, type: 3}
   atkClip: {fileID: 8300000, guid: 3dd5147f2c6a1e7458f4d708a77b86cd, type: 3}

@@ -113,6 +113,12 @@ public class PlayerController : MonoBehaviour
     public float ropeSOffset = 0.35f; // sense of fluidity
     public AnimationCurve ropeSGrowth = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f); // dynamic contraction curve
 
+    [Header("Shoot Setting")]
+    public GameObject bulletPrefab;
+    public Transform bulletSpawnPoint;
+    public float shootBulletSpeed = 25f;
+    public float shootDuration = 0.2f;
+
     private Camera mainCam;
     #endregion
 
@@ -280,8 +286,31 @@ public class PlayerController : MonoBehaviour
         // hook
         if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Hook))
         {
-            inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
-            TransitionToState<HookShootState>();
+            bool hasEnergy = playerEnergy.currentEnergy >= hookCost;
+            if (hasEnergy)
+            {
+                playerEnergy.ConsumeEnergy(hookCost);
+
+                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
+                TransitionToState<HookShootState>();
+
+                return;
+            }
+        }
+
+        // shoot
+        if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Shoot))
+        {
+            bool hasEnergy = playerEnergy.currentEnergy >= shootCost;
+            if (hasEnergy)
+            {
+                playerEnergy.ConsumeEnergy(shootCost);
+                
+                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Shoot);
+                TransitionToState<ShootState>();
+
+                return;
+            }
         }
     }
 

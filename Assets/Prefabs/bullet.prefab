@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4498043655510554879
 Transform:
   m_ObjectHideFlags: 0
@@ -9726,7 +9726,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5547473174594530871}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9801,9 +9801,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bf8b97ebbd8545e1a1118cee83e96e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  target: {x: 0, y: 0, z: 0}
   speed: 30
-  type: 0
+  normalVisual: {fileID: 1048869600405592835}
+  impactVisual: {fileID: 264593937659136944}
 --- !u!96 &3763529564916323299
 TrailRenderer:
   serializedVersion: 4

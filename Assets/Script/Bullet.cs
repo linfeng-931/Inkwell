@@ -2,72 +2,82 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public Vector3 target;
-    public float speed;
-    public int type = 0; //0player, 1enemy
+    [Header("Bullet Setting")]
+    public float speed = 25f;
 
-    private bool end;
-    private float timer;
-    private float existTimer;
-    private bool hasDir;
-    private Vector3 dir;
-    private Vector3 currentTarget;
+    [Header("Visual")]
+    [SerializeField] private GameObject normalVisual;
+    [SerializeField] private GameObject impactVisual; // hit collider
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private bool isDead; // bullet status
+    private float lifeTimer;
+    private float deadTimer;
+    private Vector3 moveDir;
+    private int type = 0; // 0: Player, 1: Enemy
+    private int damage = 2;
+
+    /// <summary>
+    /// for shooter
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <param name="bulletType"></param>
+    public void Initialize(Vector3 direction, int bulletType, int bulletDamage)
     {
-        if(type == 0) transform.position = GameObject.FindWithTag("Player").transform.position;
-        end = false;
-        timer = 0f;
-        existTimer = 0f;
-        hasDir = false;
+        moveDir = direction.normalized;
+        moveDir.z = 0;
+        
+        type = bulletType;
+        isDead = false;
+        damage = bulletDamage;
+        
+        normalVisual.SetActive(true);
+        impactVisual.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(target != null && !hasDir){
-            dir = (target- transform.position).normalized;
-            dir.z = 0;
-            dir = dir*1000f;
-            currentTarget = transform.position + dir;
-            hasDir = true;
-        }
-        if (hasDir && !end)
+        if (isDead)
         {
-            transform.position = Vector3.MoveTowards(transform.position, currentTarget, Time.deltaTime*speed);
-        }
-        
-        existTimer+=Time.deltaTime;
-        if(existTimer > 3f && !end)
-        {
-            transform.GetChild(1).gameObject.SetActive(true);
-            transform.GetChild(0).gameObject.SetActive(false);
-            end = true;
+            deadTimer += Time.deltaTime;
+            if (deadTimer > 0.5f) Destroy(gameObject);
+            return;
         }
 
-        if (end)
+        // fly
+        transform.position += moveDir * speed * Time.deltaTime;
+        
+        lifeTimer += Time.deltaTime;
+        if (lifeTimer > 3f)
         {
-            timer+=Time.deltaTime;
-            if(timer > 0.5f) Destroy(gameObject);
+            TriggerImpact();
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(type == 0)
+        if (isDead) return;
+
+        // ignore object according to type
+        if (type == 0 && (other.CompareTag("Player") || other.CompareTag("Body"))) return;
+        if (type == 1 && other.CompareTag("Enemy")) return;
+
+        // hit any object
+        TriggerImpact();
+
+        // hurt
+        if (other.CompareTag("Enemy"))
         {
-            if(other.CompareTag("Player") || other.CompareTag("Body")) return;
-            transform.GetChild(1).gameObject.SetActive(true);
-            transform.GetChild(0).gameObject.SetActive(false);
-            end = true;
+            other.GetComponent<IEnemy>().TakeDamage(damage);
         }
-        else if(type == 1)
-        {
-            if(other.CompareTag("Enemy")) return;
-            transform.GetChild(1).gameObject.SetActive(true);
-            transform.GetChild(0).gameObject.SetActive(false);
-            end = true;
-        }
+    }
+
+    /// <summary>
+    /// if trigger, handle the impact
+    /// </summary>
+    private void TriggerImpact()
+    {
+        isDead = true;
+        normalVisual.SetActive(false);
+        impactVisual.SetActive(true);
     }
 }
