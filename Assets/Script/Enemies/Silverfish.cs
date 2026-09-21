@@ -45,6 +45,10 @@ public class Silverfish : MonoBehaviour, IEnemy
     public string attackEndAni = "Silverfish_Attack_End";
     public string damagedAni = "Silverfish_Damaged";
 
+    [Header("SFX")]
+    public AudioManager audioManager;
+    public AudioClip atkSfx;
+
     private Rigidbody rig;
     private bool facingRight = false;
 
@@ -332,6 +336,7 @@ public class Silverfish : MonoBehaviour, IEnemy
 
         if (fsm.State == States.Attack && IsPlayerInAttackRange())
         {
+            audioManager.PlaySFX(atkSfx);
             playerHealth.TakeDamage(1, transform.position);
         }
 

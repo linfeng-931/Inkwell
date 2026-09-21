@@ -18,5 +18,5 @@ public class PlayerAnimateHash
     // hurt and deadth
     public static readonly int Hurt = Animator.StringToHash("Damadged");
     public static readonly int StrongFall = Animator.StringToHash("StrongFall");
-    public static readonly int Death = Animator.StringToHash("Death");
+    public static readonly int Dead = Animator.StringToHash("Dead");
 }
