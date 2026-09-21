@@ -3,7 +3,7 @@ using System.Collections;
 using MonsterLove.StateMachine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Mud : MonoBehaviour
+public class Muk : MonoBehaviour, IEnemy
 {
     public enum States { Idle, Attack, Hurt, Death }
     private StateMachine<States> fsm;
@@ -17,12 +17,21 @@ public class Mud : MonoBehaviour
     public GameObject mudBulletPrefab;
     public Transform attackStartPoint;
 
+    private float nextAttackTime = 0f;
+
     [Header("Attribute")]
     public int maxHealth = 4;
     private int currentHealth;
 
+    [Header("Animate")]
+    public Animator animator;
+    public string idleAni = "Muk_Idle";
+    public string attackAni = "Muk_Attack";
+    public string damagedAni = "Muk_Damaged";
+
     private Rigidbody rig;
     private bool facingRight = true;
+    private bool isDead = false;
 
     void Awake()
     {
@@ -33,14 +42,13 @@ public class Mud : MonoBehaviour
 
     void Update()
     {
-        if (fsm.State == States.Death) return;
+        if (fsm.State == States.Death || isDead) return;
     }
 
     private void FlipTowards(float targetX)
     {
         if ((targetX > transform.position.x && !facingRight) || (targetX < transform.position.x && facingRight))
         {
-            facingRight = !facingRight;
             facingRight = !facingRight;
             Vector3 currentScale = transform.localScale;
             currentScale.x *= -1;
@@ -50,22 +58,30 @@ public class Mud : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (fsm.State == States.Death) return;
+        if (isDead || fsm.State == States.Death) return;
 
         currentHealth -= damage;
-        if (currentHealth <= 0) fsm.ChangeState(States.Death);
-        else fsm.ChangeState(States.Hit);
+        if (currentHealth <= 0)
+        {
+            isDead = true;
+            currentHealth = 0;
+            fsm.ChangeState(States.Death, StateTransition.Overwrite);
+        }
+        else
+        {
+            fsm.ChangeState(States.Hurt, StateTransition.Overwrite);
+        }
     }
 
     // Idle
     void Idle_Enter()
     {
-        
+        animator.Play(idleAni, 0);
     }
 
     void Idle_Update()
     {
-        if (Vector3.Distance(transform.position, player.position) <= sightRange)
+        if (Time.time >= nextAttackTime && Vector3.Distance(transform.position, player.position) <= sightRange)
         {
             fsm.ChangeState(States.Attack);
         }
@@ -74,52 +90,38 @@ public class Mud : MonoBehaviour
     // Attack
     IEnumerator Attack_Enter()
     {
-        // shot mud continuously
-        while (true)
+        // before attack
+        animator.Play(attackAni, 0);
+        yield return new WaitForSeconds(0.6f);
+
+        // create new mud bullet
+        GameObject bullet = Instantiate(mudBulletPrefab, attackStartPoint.position, Quaternion.identity);
+
+        // set target at homing bullet script
+        if (bullet.TryGetComponent<Homingbullet>(out Homingbullet homingScript))
         {
-            // before attack
-            // animator.Play("Mud_Spit_Windup");
-            yield return new WaitForSeconds(0.5f);
-
-            // create new mud bullet
-            GameObject bullet = Instantiate(mudBulletPrefab, attackStartPoint.position, Quaternion.identity);
-
-            // set target at homing bullet script
-            if (bullet.TryGetComponent<Homingbullet>(out Homingbullet homingScript))
-            {
-                homingScript.SetTarget(player);
-            }
-
-            yield return new WaitForSeconds(attackCooldown);
+            homingScript.SetTarget(player);
         }
-    }
 
-    void Attack_Update()
-    {
-        if (player == null) return;
+        yield return new WaitForSeconds(0.4f);
 
-        // face player
-        FlipTowards(player.position.x);
-
-
-        // check player distance
-        if (Vector3.Distance(transform.position, player.position) > sightRange)
-        {
-            fsm.ChangeState(States.Idle);
-        }
+        nextAttackTime = Time.time + attackCooldown;
+        fsm.ChangeState(States.Idle);
     }
 
     // Hurt
     IEnumerator Hurt_Enter()
     {
+        animator.Play(damagedAni, 0);
         yield return new WaitForSeconds(0.4f);
-        fsm.ChangeState(States.Attack);
+
+        fsm.ChangeState(States.Idle);
     }
 
     // Death
     void Death_Enter()
     {
-        rig.velocity = Vector3.zero;
+        rig.linearVelocity = Vector3.zero;
         GetComponent<Collider>().enabled = false;
 
         // animator.Play("Mud_Melt");

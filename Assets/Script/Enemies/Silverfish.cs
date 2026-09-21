@@ -55,7 +55,6 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     private PlayerHealth playerHealth;
 
-
     void Awake()
     {
         rig = GetComponent<Rigidbody>();
@@ -166,12 +165,7 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     public void TakeDamage(int damage)
     {
-        if (fsm.State == States.Death) return;
-        if (isDead)
-        {
-            fsm.ChangeState(States.Death);
-            return;
-        }
+        if (isDead || fsm.State == States.Death) return;
 
         currentHealth -= damage;
 
@@ -179,7 +173,7 @@ public class Silverfish : MonoBehaviour, IEnemy
         {
             isDead = true;
             currentHealth = 0;
-            fsm.ChangeState(States.Death);
+            fsm.ChangeState(States.Death, StateTransition.Overwrite);
         }
         else
         {

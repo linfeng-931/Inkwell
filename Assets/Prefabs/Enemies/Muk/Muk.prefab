@@ -14,9 +14,6 @@ GameObject:
   - component: {fileID: 6969267379362438320}
   - component: {fileID: 867804083103808702}
   - component: {fileID: 4709771446672958394}
-  - component: {fileID: 4630572565052922104}
-  - component: {fileID: 5702722882301948235}
-  - component: {fileID: 2074851386840113390}
   m_Layer: 8
   m_Name: Muk
   m_TagString: Enemy
@@ -39,6 +36,7 @@ Transform:
   m_Children:
   - {fileID: 2639676238778623060}
   - {fileID: 5658490141338301845}
+  - {fileID: 8777942542398560652}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &55461235952785011
@@ -139,27 +137,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 428353d33db8b43c0b6d887141ded07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Muk
-  damage: 1
-  blood: 3
-  speed: 50
-  canRepel: 0
-  repelPlayer: 0
-  moveRange: 0
-  idleRange: 0
-  detectionRange: 4
-  otherObj: []
-  groundCheckPoint: {fileID: 0}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  checkRadius: 0.5
-  particleHurt: {fileID: 6610736204661125514}
-  HurtMaterial: {fileID: 2100000, guid: b9b8cd3bfe3a9435a8e0e30e8fc3f525, type: 2}
-  repelSpeed: 30
-  repelDistance: 1
-  DeadEffect: {fileID: 4123365093093318906, guid: 7f751b22b979b4c529155026c56a0b52, type: 3}
-  mud: {fileID: 2383981116317151363, guid: 8fe449550c8894f4f8d4c43a1739ed1f, type: 3}
-  attackDelayTime: 3
+  sightRange: 10
+  player: {fileID: 0}
+  attackCooldown: 2.5
+  mudBulletPrefab: {fileID: 2383981116317151363, guid: 8fe449550c8894f4f8d4c43a1739ed1f, type: 3}
+  attackStartPoint: {fileID: 8777942542398560652}
+  maxHealth: 4
+  animator: {fileID: 867804083103808702}
+  idleAni: Muk_Idle
+  attackAni: Muk_Attack
+  damagedAni: Muk_Damaged
 --- !u!95 &867804083103808702
 Animator:
   serializedVersion: 7
@@ -205,115 +192,6 @@ CapsuleCollider:
   m_Height: 2.7392073
   m_Direction: 0
   m_Center: {x: -0.15391207, y: -0.1795634, z: 0}
---- !u!108 &4630572565052922104
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3124865426017188996}
-  m_Enabled: 1
-  serializedVersion: 12
-  m_Type: 2
-  m_Color: {r: 0.9811321, g: 0.745105, b: 0.745105, a: 1}
-  m_Intensity: 2
-  m_Range: 2.82
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize2D: {x: 0.5, y: 0.5}
-  m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
-  m_ForceVisible: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
-  m_LightUnit: 1
-  m_LuxAtDistance: 1
-  m_EnableSpotReflector: 1
---- !u!114 &5702722882301948235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3124865426017188996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_CustomShadowLayers: 0
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
-  m_SoftShadowQuality: 0
-  m_RenderingLayersMask:
-    serializedVersion: 0
-    m_Bits: 1
-  m_ShadowRenderingLayersMask:
-    serializedVersion: 0
-    m_Bits: 1
-  m_Version: 4
-  m_LightLayerMask: 1
-  m_ShadowLayerMask: 1
-  m_RenderingLayers: 1
-  m_ShadowRenderingLayers: 1
---- !u!114 &2074851386840113390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3124865426017188996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c8bca95f7c947b4db5fb152a0d693d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: com.cqf.urpvolumetricfog.runtime::VolumetricAdditionalLight
-  anisotropy: -0.107
-  scattering: 0.08
-  radius: 0.2
 --- !u!1 &5665860196928515551
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2639676238778623060}
   - component: {fileID: 8212367538453194550}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -367,6 +245,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.40481523, y: 0.51553357, z: 0.22965562}
   m_Center: {x: -0.000000014901161, y: -0.16289788, z: 0.037840784}
+--- !u!1 &6563889468335774644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8777942542398560652}
+  m_Layer: 8
+  m_Name: attackStartPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8777942542398560652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6563889468335774644}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.492, y: 0.754, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6845023366606878756}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7570754178309572431
 GameObject:
   m_ObjectHideFlags: 0

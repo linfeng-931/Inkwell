@@ -26,7 +26,6 @@ public class HitBox : MonoBehaviour
     {
         Vector3 actualCenter = hitBoxCenter.position + hitBoxCenter.TransformDirection(currentOffset);
 
-
         // find all collider in hit box
         Collider[] hitColliders = Physics.OverlapBox(hitBoxCenter.position, hitBoxSize / 2f, hitBoxCenter.rotation, enemyLayer);
 
@@ -52,13 +51,10 @@ public class HitBox : MonoBehaviour
             // Play hook object animation
             GameObject hookGameObject = col.gameObject;
 
-
-
             HookTarget hookTarget = hookGameObject.GetComponentInParent<HookTarget>();
 
             if (hookTarget == null)
             {
-                Debug.Log("§ä¤£¨ì hookTarget");
                 return;
             }
 
