@@ -17,39 +17,29 @@
 			"Name": "角度 Z"
 		},
 		{
-			"Id": "ParamBodyAngleX",
+			"Id": "ParamChestY",
 			"GroupId": "ParamGroup2",
-			"Name": "身体旋转 X"
+			"Name": "胸Y"
 		},
 		{
-			"Id": "ParamBodyAngleY",
+			"Id": "ParamChestAngleZ",
 			"GroupId": "ParamGroup2",
-			"Name": "身体旋转 Y"
+			"Name": "胸旋轉Z"
 		},
 		{
-			"Id": "ParamBreath",
+			"Id": "ParamWaistY",
 			"GroupId": "ParamGroup2",
-			"Name": "呼吸"
+			"Name": "腰Y"
 		},
 		{
-			"Id": "Hair",
-			"GroupId": "ParamGroup6",
-			"Name": "頭髮x"
-		},
-		{
-			"Id": "Ear",
-			"GroupId": "ParamGroup6",
-			"Name": "耳朵y"
+			"Id": "ParamWaistAngleZ",
+			"GroupId": "ParamGroup2",
+			"Name": "腰旋轉Z"
 		},
 		{
 			"Id": "ParamEyeOpen",
 			"GroupId": "ParamGroup3",
 			"Name": "眼 开闭"
-		},
-		{
-			"Id": "ParamEyeDamaged",
-			"GroupId": "ParamGroup3",
-			"Name": "眼 受傷"
 		},
 		{
 			"Id": "ParamLeftArmR",
@@ -92,9 +82,14 @@
 			"Name": "右握拳"
 		},
 		{
-			"Id": "ParamTail",
+			"Id": "ParamPelvisX",
 			"GroupId": "ParamGroup9",
-			"Name": "尾巴"
+			"Name": "胯X"
+		},
+		{
+			"Id": "ParamPelvisY",
+			"GroupId": "ParamGroup9",
+			"Name": "胯Y"
 		},
 		{
 			"Id": "ParamLeftLegX",
@@ -112,9 +107,14 @@
 			"Name": "左腿Z"
 		},
 		{
-			"Id": "ParamLeftFoot",
+			"Id": "ParamLegFootY",
 			"GroupId": "ParamGroup9",
-			"Name": "左腳"
+			"Name": "左腳Y"
+		},
+		{
+			"Id": "ParamLeftFootAngleZ",
+			"GroupId": "ParamGroup9",
+			"Name": "左腳Z"
 		},
 		{
 			"Id": "ParamRightLegX",
@@ -132,9 +132,14 @@
 			"Name": "右腿Z"
 		},
 		{
-			"Id": "ParamRightFoot",
+			"Id": "ParamRightFootY",
 			"GroupId": "ParamGroup9",
-			"Name": "右腳"
+			"Name": "右腳Y"
+		},
+		{
+			"Id": "ParamRightFootAngleZ",
+			"GroupId": "ParamGroup9",
+			"Name": "右腳Z"
 		},
 		{
 			"Id": "ParamAttack",
@@ -231,10 +236,6 @@
 		[
 			"ParamAngleX",
 			"ParamAngleY"
-		],
-		[
-			"ParamBodyAngleX",
-			"ParamBodyAngleY"
 		],
 		[
 			"ParamLeftLegX",

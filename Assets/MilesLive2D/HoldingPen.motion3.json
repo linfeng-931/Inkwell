@@ -5,9 +5,9 @@
 		"Fps": 30.0,
 		"Loop": true,
 		"AreBeziersRestricted": true,
-		"CurveCount": 40,
-		"TotalSegmentCount": 40,
-		"TotalPointCount": 142,
+		"CurveCount": 41,
+		"TotalSegmentCount": 41,
+		"TotalPointCount": 146,
 		"UserDataCount": 0,
 		"TotalUserDataSize": 0
 	},
@@ -89,7 +89,7 @@
 		},
 		{
 			"Target": "Parameter",
-			"Id": "ParamBodyAngleX",
+			"Id": "ParamChestY",
 			"Segments": [
 				0,
 				0,
@@ -104,7 +104,7 @@
 		},
 		{
 			"Target": "Parameter",
-			"Id": "ParamBodyAngleY",
+			"Id": "ParamChestAngleZ",
 			"Segments": [
 				0,
 				0,
@@ -119,7 +119,7 @@
 		},
 		{
 			"Target": "Parameter",
-			"Id": "ParamBreath",
+			"Id": "ParamWaistY",
 			"Segments": [
 				0,
 				0,
@@ -134,22 +134,7 @@
 		},
 		{
 			"Target": "Parameter",
-			"Id": "Hair",
-			"Segments": [
-				0,
-				-0.526,
-				1,
-				0.044,
-				-0.526,
-				0.089,
-				-0.524,
-				0.133,
-				-0.523
-			]
-		},
-		{
-			"Target": "Parameter",
-			"Id": "Ear",
+			"Id": "ParamWaistAngleZ",
 			"Segments": [
 				0,
 				0,
@@ -165,21 +150,6 @@
 		{
 			"Target": "Parameter",
 			"Id": "ParamEyeOpen",
-			"Segments": [
-				0,
-				1,
-				1,
-				0.044,
-				1,
-				0.089,
-				1,
-				0.133,
-				1
-			]
-		},
-		{
-			"Target": "Parameter",
-			"Id": "ParamEyeDamaged",
 			"Segments": [
 				0,
 				1,
@@ -314,17 +284,32 @@
 		},
 		{
 			"Target": "Parameter",
-			"Id": "ParamTail",
+			"Id": "ParamPelvisX",
 			"Segments": [
 				0,
-				-1.717,
+				0,
 				1,
 				0.044,
-				-1.717,
+				0,
 				0.089,
-				-1.787,
+				0,
 				0.133,
-				-1.815
+				0
+			]
+		},
+		{
+			"Target": "Parameter",
+			"Id": "ParamPelvisY",
+			"Segments": [
+				0,
+				0,
+				1,
+				0.044,
+				0,
+				0.089,
+				0,
+				0.133,
+				0
 			]
 		},
 		{
@@ -374,7 +359,22 @@
 		},
 		{
 			"Target": "Parameter",
-			"Id": "ParamLeftFoot",
+			"Id": "ParamLegFootY",
+			"Segments": [
+				0,
+				0,
+				1,
+				0.044,
+				0,
+				0.089,
+				0,
+				0.133,
+				0
+			]
+		},
+		{
+			"Target": "Parameter",
+			"Id": "ParamLeftFootAngleZ",
 			"Segments": [
 				0,
 				0,
@@ -434,7 +434,22 @@
 		},
 		{
 			"Target": "Parameter",
-			"Id": "ParamRightFoot",
+			"Id": "ParamRightFootY",
+			"Segments": [
+				0,
+				0,
+				1,
+				0.044,
+				0,
+				0.089,
+				0,
+				0.133,
+				0
+			]
+		},
+		{
+			"Target": "Parameter",
+			"Id": "ParamRightFootAngleZ",
 			"Segments": [
 				0,
 				0,
