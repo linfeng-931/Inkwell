@@ -29,7 +29,15 @@ public class Muk : MonoBehaviour, IEnemy
     public string attackAni = "Muk_Attack";
     public string damagedAni = "Muk_Damaged";
 
+    [Header("Hurt and Death Setting")]
+    public ParticleSystem hurtParticle;
+    public ParticleSystem deadParticle;
+    public Material hurtMaterial;
+
+    private Material originalMaterial;
+
     private Rigidbody rig;
+    private SpriteRenderer spriteRenderer;
     private bool facingRight = true;
     private bool isDead = false;
 
@@ -38,6 +46,8 @@ public class Muk : MonoBehaviour, IEnemy
         rig = GetComponent<Rigidbody>();
         currentHealth = maxHealth;
         fsm = StateMachine<States>.Initialize(this, States.Idle);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalMaterial = spriteRenderer.material;
     }
 
     void Update()
@@ -113,7 +123,12 @@ public class Muk : MonoBehaviour, IEnemy
     IEnumerator Hurt_Enter()
     {
         animator.Play(damagedAni, 0);
-        yield return new WaitForSeconds(0.4f);
+        spriteRenderer.material = hurtMaterial;
+        hurtParticle.Play();
+        yield return new WaitForSeconds(0.1f);
+
+        spriteRenderer.material = originalMaterial;
+        yield return new WaitForSeconds(0.3f);
 
         fsm.ChangeState(States.Idle);
     }
@@ -122,9 +137,13 @@ public class Muk : MonoBehaviour, IEnemy
     void Death_Enter()
     {
         rig.linearVelocity = Vector3.zero;
+
         GetComponent<Collider>().enabled = false;
 
-        // animator.Play("Mud_Melt");
-        Destroy(gameObject, 1.5f);
+        deadParticle.transform.SetParent(null); 
+        deadParticle.Play();
+        Destroy(deadParticle.gameObject, 2f); 
+
+        Destroy(gameObject, 0.5f);
     }
 }

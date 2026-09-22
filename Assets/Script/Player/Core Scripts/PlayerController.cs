@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 currentHookTipPos { get; set; }
     public Vector3 currentHookTarget { get; set; }
+    public float lastHookTime { get; set; } = -100f;
 
     [Header("Hook Rope")]
     public int ropeResolution = 10; // line effect
@@ -120,6 +121,9 @@ public class PlayerController : MonoBehaviour
     public Transform bulletSpawnPoint;
     public float shootBulletSpeed = 25f;
     public float shootDuration = 0.2f;
+    public float shootCooldown = 0.2f;
+
+    public float lastShootTime { get; set; } = -100f;
 
     private Camera mainCam;
     #endregion
@@ -270,8 +274,8 @@ public class PlayerController : MonoBehaviour
                 if (isCooldownReady && hasSpaceToDash)
                 {
                     playerEnergy.ConsumeEnergy(dashCost);
-                    
                     lastDashTime = Time.time;
+
                     if (!isGrounded)
                     {
                         canAirDash = false;
@@ -288,14 +292,15 @@ public class PlayerController : MonoBehaviour
         // hook
         if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Hook))
         {
-            bool isCooldownReady = Time.time >= (lastDashTime + hookCooldown);
-
-            if (isCooldownReady)
+            bool hasEnergy = playerEnergy.currentEnergy >= hookCost;
+            if (hasEnergy)
             {
-                bool hasEnergy = playerEnergy.currentEnergy >= hookCost;
-                if (hasEnergy)
+                bool isCooldownReady = Time.time >= (lastHookTime + hookCooldown);
+
+                if (isCooldownReady)
                 {
                     playerEnergy.ConsumeEnergy(hookCost);
+                    lastHookTime = Time.time;
 
                     inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
                     TransitionToState<HookShootState>();
@@ -311,12 +316,18 @@ public class PlayerController : MonoBehaviour
             bool hasEnergy = playerEnergy.currentEnergy >= shootCost;
             if (hasEnergy)
             {
-                playerEnergy.ConsumeEnergy(shootCost);
-                
-                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Shoot);
-                TransitionToState<ShootState>();
+                bool isCooldownReady = Time.time >= (lastShootTime + shootCooldown);
 
-                return;
+                if (isCooldownReady)
+                {
+                    playerEnergy.ConsumeEnergy(shootCost);
+                    lastShootTime = Time.time;
+                    
+                    inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Shoot);
+                    TransitionToState<ShootState>();
+
+                    return;
+                }
             }
         }
     }

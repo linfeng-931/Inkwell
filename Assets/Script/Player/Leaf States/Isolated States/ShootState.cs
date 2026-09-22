@@ -11,6 +11,9 @@ public class ShootState : PlayerState
         base.Enter();
         stateTimer = 0f;
 
+        manager.rig.linearVelocity = new Vector3(0f, manager.rig.linearVelocity.y, 0f);
+        
+        manager.animator.Play(PlayerAnimateHash.Idle, 0, 0f);
         manager.canTurn = false;
         CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
 
