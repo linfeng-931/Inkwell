@@ -171,14 +171,13 @@ public class PlayerController : MonoBehaviour
         if (isPlayerInputEnabled)
         {
             currentMoveX = inputBufferManager.moveInputX;
+            CheckGlobalAbilities();
         }
 
         if (canTurn)
         {
             HandleTurning();
         }
-
-        CheckGlobalAbilities();
 
         currentState.Update();
     }
@@ -392,6 +391,31 @@ public class PlayerController : MonoBehaviour
         destination.z = targetPos.z;
         return destination;
     }
+
+    #region GameEvent
+    private void OnEnable()
+    {
+        GameEvent.OnInteractStateChanged += HandleInteractState;
+    }
+
+    private void OnDisable()
+    {
+        GameEvent.OnInteractStateChanged -= HandleInteractState;
+    }
+
+    private void HandleInteractState(bool isInteract) // use game event to enter interact
+    {
+        if (isInteract)
+        {
+            TransitionToState<InteractState>();
+        }
+        else
+        {
+            if(isGrounded) TransitionToState<IdleState>();
+            else TransitionToState<FallState>();
+        }
+    }
+    #endregion
 
     # region Gizmos
     private void OnDrawGizmos()

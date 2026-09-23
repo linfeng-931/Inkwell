@@ -106,7 +106,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
         currentHealth = maxHealth;
-        GameEvent.OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
 
         if (fadeAni != null)
         {
@@ -130,7 +130,7 @@ public class PlayerHealth : MonoBehaviour
         // Update player info
         currentHealth -= hazardDamage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        GameEvent.OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
 
         // Is player die or not
         if (currentHealth <= 0) {
