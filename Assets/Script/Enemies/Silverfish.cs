@@ -73,18 +73,15 @@ public class Silverfish : MonoBehaviour, IEnemy
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
     }
 
-
     void Start()
     {
         fsm.ChangeState(States.Idle);
     }
 
-
     void Update()
     {
         if (fsm.State == States.Death || isDead) return;
     }
-
 
     /// <summary>
     /// check if enemy will touch wall or edge
@@ -120,7 +117,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         return isWallAhead || isEdgeAhead;
     }
 
-
     private void Turn()
     {
         facingRight = !facingRight;
@@ -128,7 +124,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         currentScale.x *= -1;
         transform.localScale = currentScale;
     }
-
 
     private void FlipToward(float targetX)
     {
@@ -148,24 +143,21 @@ public class Silverfish : MonoBehaviour, IEnemy
         Turn();
     }
 
-
     private bool IsPlayerInSight()
     {
         Vector3 dirToPlayer = player.position - transform.position;
-        float distToPlayer = dirToPlayer.magnitude;
+        float distToPlayer = dirToPlayer.sqrMagnitude;
 
         bool checkY = player.position.y >= (transform.position.y - 0.5f);
 
-        return (distToPlayer <= sightRange) && checkY;
+        return (distToPlayer <= sightRange * sightRange) && checkY;
     }
-
 
     private bool IsPlayerInAttackRange()
     {
         float sqrDistance = (player.position - transform.position).sqrMagnitude;
         return sqrDistance <= attackRange * attackRange;
     }
-
 
     public void TakeDamage(int damage)
     {
@@ -195,7 +187,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         return Physics.Raycast(transform.position, forwardDir, separationRadius, enemyLayer);
     }
 
-
     #region State
 
     // Idle (stop)
@@ -217,7 +208,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         }
     }
 
-
     void Idle_Update()
     {
         if (IsPlayerInSight())
@@ -225,7 +215,6 @@ public class Silverfish : MonoBehaviour, IEnemy
             fsm.ChangeState(States.Chase);
         }
     }
-
 
     // Idle (Patrol)
     void Patrol_Enter()
@@ -236,7 +225,6 @@ public class Silverfish : MonoBehaviour, IEnemy
             Turn();
         }
     }
-
 
     void Patrol_Update()
     {
@@ -259,7 +247,6 @@ public class Silverfish : MonoBehaviour, IEnemy
             0f
         );
     }
-
 
     // Chase
     void Chase_Enter()
@@ -311,12 +298,10 @@ public class Silverfish : MonoBehaviour, IEnemy
         }
     }
 
-
     void Chase_Exit()
     {
         StopHorizontalMovement();
     }
-
 
     // Attack
     IEnumerator Attack_Enter()
@@ -378,7 +363,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         }
     }
 
-
     // Death
     void Death_Enter()
     {
@@ -401,7 +385,6 @@ public class Silverfish : MonoBehaviour, IEnemy
     }
 
     #endregion
-
 
     #region Gizmos
 
@@ -427,7 +410,6 @@ public class Silverfish : MonoBehaviour, IEnemy
     {
         rig.linearVelocity = Vector3.zero;
     }
-
 
     private void StopHorizontalMovement()
     {

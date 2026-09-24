@@ -10054,12 +10054,15 @@ MonoBehaviour:
   attackInterval: 1
   hurtForceH: 1
   hurtForceV: 1
+  hurtStunTime: 0.3
   animator: {fileID: 2980973970034205491}
   idleAni: Silverfish_Idle
   walkAni: Silverfish_Walk
   attackAni: Silverfish_Attack
   attackEndAni: Silverfish_Attack_End
   damagedAni: Silverfish_Damaged
+  audioManager: {fileID: 0}
+  atkSfx: {fileID: 8300000, guid: 51d06565a16ff4640993f306b4229bbf, type: 3}
 --- !u!54 &3946360408629014194
 Rigidbody:
   m_ObjectHideFlags: 0
