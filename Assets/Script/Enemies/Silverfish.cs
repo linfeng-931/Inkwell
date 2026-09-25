@@ -17,7 +17,8 @@ public class Silverfish : MonoBehaviour, IEnemy
     [Header("Detect Setting")]
     public float sightRange = 6f;
     public float attackRange = 1.5f;
-    public Transform player;
+
+    private Transform player;
 
     [Header("Prevent Setting")]
     public Transform edgeCheckPoint;
@@ -51,12 +52,6 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     private Rigidbody rig;
     private bool facingRight = false;
-
-    private bool isHurt = false;
-
-    // prevent action after death
-    private bool isDead = false;
-
     private PlayerHealth playerHealth;
 
     void Awake()
@@ -69,18 +64,19 @@ public class Silverfish : MonoBehaviour, IEnemy
         rig.constraints = RigidbodyConstraints.FreezeRotation;
 
         fsm = StateMachine<States>.Initialize(this, States.Idle);
-
-        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
     }
 
     void Start()
     {
+        player = MapManager.Instance.player.transform;
+        playerHealth = player.GetComponent<PlayerHealth>();
+        audioManager = MapManager.Instance.audioManager;
         fsm.ChangeState(States.Idle);
     }
 
     void Update()
     {
-        if (fsm.State == States.Death || isDead) return;
+        if (fsm.State == States.Death) return;
     }
 
     /// <summary>
@@ -161,13 +157,12 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     public void TakeDamage(int damage)
     {
-        if (isDead || fsm.State == States.Death) return;
+        if (fsm.State == States.Death) return;
 
         currentHealth -= damage;
 
         if (currentHealth <= 0)
         {
-            isDead = true;
             currentHealth = 0;
             fsm.ChangeState(States.Death, StateTransition.Overwrite);
         }
@@ -198,9 +193,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         yield return new WaitForSeconds(
             Random.Range(2f, 3f)
         );
-
-        if (isDead)
-            yield break;
 
         if (fsm.State == States.Idle)
         {
@@ -314,22 +306,18 @@ public class Silverfish : MonoBehaviour, IEnemy
         yield return new WaitForSeconds(attackCastTime); // ready
 
         animator.Play(attackAni, 0);
+        audioManager.PlaySFX(atkSfx);
         yield return new WaitForSeconds(0.03f); // go
-
-        if (isDead)
-            yield break;
 
         if (fsm.State == States.Attack && IsPlayerInAttackRange())
         {
-            audioManager.PlaySFX(atkSfx);
             playerHealth.TakeDamage(1, transform.position);
         }
 
         yield return new WaitForSeconds(0.25f);
         animator.Play(attackEndAni, 0);
         yield return new WaitForSeconds(attackInterval);
-        if (!isDead &&
-            fsm.State == States.Attack)
+        if (fsm.State == States.Attack)
         {
             fsm.ChangeState(States.Chase);
         }
@@ -349,9 +337,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         );
 
         yield return new WaitForSeconds(hurtStunTime); // hit stun
-        isHurt = false;
-
-        if (isDead) yield break;
 
         if (IsPlayerInSight())
         {
@@ -366,8 +351,6 @@ public class Silverfish : MonoBehaviour, IEnemy
     // Death
     void Death_Enter()
     {
-        isDead = true;
-
         StopAllCoroutines();
 
         StopMovement();

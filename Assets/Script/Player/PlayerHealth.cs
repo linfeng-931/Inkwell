@@ -14,13 +14,6 @@ public class PlayerHealth : MonoBehaviour
     private bool isInvincible = false;
     private float invincibilityTimer = 0f;
 
-    [Header("Respawn")]
-    public Vector3 lastCheckpointPosition;
-
-    [Header("Animation")]
-    public Animator fadeAni;
-    public float fadeOutWaitTime = 0.5f;
-
     private PlayerController playerController;
     public event Action OnDeath;
 
@@ -28,7 +21,7 @@ public class PlayerHealth : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         currentHealth = maxHealth;
-        lastCheckpointPosition = transform.position;
+
         //init player health
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
     }
@@ -43,11 +36,6 @@ public class PlayerHealth : MonoBehaviour
                 isInvincible = false;
             }
         }
-    }
-
-    public void UpdateCheckpoint(Vector3 newPoint)
-    {
-        lastCheckpointPosition = newPoint;
     }
 
     /// <summary>
@@ -81,72 +69,46 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        OnDeath?.Invoke();
-        playerController.animator.Play(PlayerAnimateHash.Dead, 0, 0f);
-        StartCoroutine(RespawnRoutine());
+        playerController.TransitionToState<DeathState>();
+
+        StartCoroutine(ResetHealth(1.5f));
     }
 
-    // Die and respawn at save point
-    private IEnumerator RespawnRoutine() {
-        // Disabled player input
-        playerController.isPlayerInputEnabled = false;
-        playerController.rig.linearVelocity = Vector3.zero;
-
-
-
-        // Play Animation
-        if (fadeAni != null)
-        {
-            fadeAni.SetTrigger("changeScene");
-        }
-
-        if (fadeOutWaitTime > 0f)
-        {
-            yield return new WaitForSeconds(fadeOutWaitTime);
-        }
-
+    /// <summary>
+    /// reset player health
+    /// </summary>
+    /// <param name="waitTime">suit to fade ani or other need</param>
+    /// <returns></returns>
+    private IEnumerator ResetHealth(float waitTime) {
+        yield return new WaitForSeconds(waitTime);
         currentHealth = maxHealth;
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
-
-        if (fadeAni != null)
-        {
-            fadeAni.SetTrigger("returnStart");
-        }
-
-        yield return new WaitForSeconds(0.2f);
-
-        // Reset Player Data
-        transform.position = lastCheckpointPosition;
-        playerController.rig.position = lastCheckpointPosition;
-        playerController.rig.linearVelocity = Vector3.zero;
-
-        // Recover player input
-        playerController.isPlayerInputEnabled = true;
-        playerController.TransitionToState<IdleState>();
     }
 
-    // Hurt and respawn at specific point
-    public IEnumerator RespawnFromHazard(Vector3 hazardRespawnPos, int hazardDamage = 1) {
+    /// <summary>
+    /// Hurt and respawn at specific point, handle health and enter hurt state
+    /// </summary>
+    /// <param name="hazardRespawnPos"></param>
+    /// <param name="hazardDamage"></param>
+    public void RespawnFromHazard(Vector3 hazardRespawnPos, int hazardDamage = 1) {
         // Update player info
-        currentHealth -= hazardDamage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth - hazardDamage, 0, maxHealth);
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
 
         // Is player die or not
         if (currentHealth <= 0) {
             Die();
-            yield break;
+            return;
         }
-
-        // Respawn
-        playerController.rig.linearVelocity = Vector3.zero;
-        playerController.rig.position = hazardRespawnPos;
-        transform.position = hazardRespawnPos;
 
         // Start invincibility frames
         isInvincible = true;
         invincibilityTimer = invincibilityDuration;
 
-        playerController.TransitionToState<IdleState>();
+        // Respawn
+        playerController.hazardRespawnPosition = hazardRespawnPos;
+        playerController.isHazardHurt = true;
+
+        playerController.TransitionToState<HurtState>();
     }
 }

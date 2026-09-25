@@ -12,4 +12,5 @@ public static class GameEvent
 
     // other ui event
     public static Action OnToggleNote;
+    public static Action<bool> OnToggleFade;
 }

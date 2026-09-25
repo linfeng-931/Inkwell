@@ -44,16 +44,16 @@ public class Bee : MonoBehaviour, IEnemy
     public float separationWeight = 2f;
     public LayerMask enemyLayer;
 
+    [Header("SFX")]
+    public AudioManager audioManager;
+    public AudioClip atkSfx;
+
     private Coroutine idleCoroutine;
     private Coroutine hurtCoroutine;
     private Coroutine attackCoroutine;
 
     // prevent repeated damage from OnTriggerEnter
     private float nextDamageTime = 0f;
-
-    // prevent action after death
-    private bool isDead = false;
-
 
     void Awake()
     {
@@ -70,12 +70,14 @@ public class Bee : MonoBehaviour, IEnemy
 
     void Start()
     {
+        player = MapManager.Instance.player.transform;
+        //audioManager = MapManager.Instance.audioManager;
         fsm.ChangeState(States.Idle);
     }
 
     void Update()
     {
-        if (fsm.State == States.Death || isDead)
+        if (fsm.State == States.Death)
             return;
     }
 
@@ -143,18 +145,18 @@ public class Bee : MonoBehaviour, IEnemy
 
     public void TakeDamage(int damage)
     {
-        if (fsm.State == States.Death || isDead) return;
+        if (fsm.State == States.Death) return;
 
         currentHealth -= damage;
 
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            fsm.ChangeState(States.Death);
+            fsm.ChangeState(States.Death, StateTransition.Overwrite);
         }
         else
         {
-            fsm.ChangeState(States.Hurt);
+            fsm.ChangeState(States.Hurt, StateTransition.Overwrite);
         }
     }
 
@@ -365,7 +367,6 @@ public class Bee : MonoBehaviour, IEnemy
         FlipToward(player.position.x);
 
         yield return new WaitForSeconds(0.5f);
-        if (isDead) yield break;
 
         bodyAnimator.Play(attackAni, 0);
 
@@ -377,7 +378,7 @@ public class Bee : MonoBehaviour, IEnemy
 
         yield return new WaitForSeconds(1.5f);
 
-        if (!isDead && fsm.State == States.Attack)
+        if (fsm.State == States.Attack)
         {
             fsm.ChangeState(States.Chase);
         }
@@ -407,7 +408,7 @@ public class Bee : MonoBehaviour, IEnemy
 
         yield return new WaitForSeconds(1f);
 
-        if (!isDead && fsm.State == States.Hurt)
+        if (fsm.State == States.Hurt)
         {
             fsm.ChangeState(States.Chase);
         }
@@ -417,8 +418,6 @@ public class Bee : MonoBehaviour, IEnemy
     // Death
     void Death_Enter()
     {
-        isDead = true;
-
         StopAllCoroutines();
 
         StopMovement();
@@ -443,9 +442,6 @@ public class Bee : MonoBehaviour, IEnemy
 
     void OnTriggerEnter(Collider other)
     {
-        if (isDead)
-            return;
-
         if (!other.CompareTag("Player"))
             return;
 

@@ -31,6 +31,7 @@ public class PlayerStateFactory
         states[typeof(HookState)] = new HookState(context);
         states[typeof(HookShootState)] = new HookShootState(context);
         states[typeof(ShootState)] = new ShootState(context);
+        states[typeof(DeathState)] = new DeathState(context);
     }
 
     /// <summary>

@@ -45,6 +45,10 @@ public class Yak : MonoBehaviour, IEnemy
     public string attackEndAni = "Yak_Attack_End";
     public string damagedAni = "Yak_Damaged";
 
+    [Header("SFX")]
+    public AudioManager audioManager;
+    public AudioClip atkSfx;
+    
     private Rigidbody rig;
     private bool facingRight = false;
     private PlayerHealth playerHealth;
@@ -55,6 +59,14 @@ public class Yak : MonoBehaviour, IEnemy
         currentHealth = maxHealth;
         fsm = StateMachine<States>.Initialize(this, States.Idle);
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
+    }
+
+    void Start()
+    {
+        player = MapManager.Instance.player.transform;
+        playerHealth = player.GetComponent<PlayerHealth>();
+        //audioManager = MapManager.Instance.audioManager;
+        fsm.ChangeState(States.Idle);
     }
 
     void Update()

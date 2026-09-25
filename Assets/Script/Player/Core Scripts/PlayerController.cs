@@ -78,6 +78,10 @@ public class PlayerController : MonoBehaviour
     public float hurtKnockbackForce = 5f;
     public float hurtKnockbackDuration = 0.1f;
     public float hurtDuration = 0.8f;
+    public float fadeOutWaitTime = 0.5f;
+    public bool isHazardHurt = false;
+    public Vector3 hazardRespawnPosition;
+    public Vector3 lastCheckpointPosition;
 
     [Header("Hook Setting")]
     public float hookRange = 10f;
@@ -122,10 +126,10 @@ public class PlayerController : MonoBehaviour
     public float shootBulletSpeed = 25f;
     public float shootDuration = 0.2f;
     public float shootCooldown = 0.2f;
-
     public float lastShootTime { get; set; } = -100f;
 
-    private Camera mainCam;
+    public Camera mainCam { get; set; }
+
     #endregion
 
     [Header("Turn Setting")]
@@ -150,15 +154,15 @@ public class PlayerController : MonoBehaviour
         inputBufferManager = GetComponent<InputBufferManager>();
         col = GetComponent<CapsuleCollider>();
         playerEnergy = GetComponent<PlayerEnergy>();
+        mainCam = Camera.main;
 
         dashParticleSystems = dashParticle.GetComponentsInChildren<ParticleSystem>();
-
-        mainCam = Camera.main;
     }
 
     void Start()
     {
         stateFactory = new PlayerStateFactory(this);
+        lastCheckpointPosition = transform.position;
 
         //original state
         TransitionToState<IdleState>();
@@ -321,7 +325,7 @@ public class PlayerController : MonoBehaviour
                 {
                     playerEnergy.ConsumeEnergy(shootCost);
                     lastShootTime = Time.time;
-                    
+
                     inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Shoot);
                     TransitionToState<ShootState>();
 
@@ -392,6 +396,11 @@ public class PlayerController : MonoBehaviour
         return destination;
     }
 
+    public void UpdateCheckpoint(Vector3 newPoint)
+    {
+        lastCheckpointPosition = newPoint;
+    }
+
     #region GameEvent
     private void OnEnable()
     {
@@ -411,7 +420,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if(isGrounded) TransitionToState<IdleState>();
+            if (isGrounded) TransitionToState<IdleState>();
             else TransitionToState<FallState>();
         }
     }

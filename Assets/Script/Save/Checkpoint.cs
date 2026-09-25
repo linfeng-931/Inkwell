@@ -8,11 +8,8 @@ public class Checkpoint : MonoBehaviour
         if (other.CompareTag("Player")) {
             Vector3 respawnPos = transform.position;
 
-            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.UpdateCheckpoint(respawnPos);
-            }
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            playerController.UpdateCheckpoint(respawnPos);
         }
     }
 }
