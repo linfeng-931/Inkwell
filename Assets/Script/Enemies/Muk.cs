@@ -10,7 +10,8 @@ public class Muk : MonoBehaviour, IEnemy
 
     [Header("Detect Setting")]
     public float sightRange = 10f;
-    public Transform player;
+    
+    private Transform player;
 
     [Header("Attack Setting")]
     public float attackCooldown = 2.5f;
@@ -36,10 +37,13 @@ public class Muk : MonoBehaviour, IEnemy
 
     private Material originalMaterial;
 
+    [Header("SFX")]
+    public AudioManager audioManager;
+    public AudioClip atkSfx;
+
     private Rigidbody rig;
     private SpriteRenderer spriteRenderer;
     private bool facingRight = true;
-    private bool isDead = false;
 
     void Awake()
     {
@@ -50,9 +54,11 @@ public class Muk : MonoBehaviour, IEnemy
         originalMaterial = spriteRenderer.material;
     }
 
-    void Update()
+    void Start()
     {
-        if (fsm.State == States.Death || isDead) return;
+        player = MapManager.Instance.player.transform;
+        audioManager = MapManager.Instance.audioManager;
+        fsm.ChangeState(States.Idle);
     }
 
     private void FlipTowards(float targetX)
@@ -68,12 +74,11 @@ public class Muk : MonoBehaviour, IEnemy
 
     public void TakeDamage(int damage)
     {
-        if (isDead || fsm.State == States.Death) return;
+        if (fsm.State == States.Death) return;
 
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
-            isDead = true;
             currentHealth = 0;
             fsm.ChangeState(States.Death, StateTransition.Overwrite);
         }

@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6845023366606878756
 Transform:
   m_ObjectHideFlags: 0
@@ -151,6 +151,8 @@ MonoBehaviour:
   hurtParticle: {fileID: 5544293536887587518}
   deadParticle: {fileID: 3813292928109485755}
   hurtMaterial: {fileID: 2100000, guid: 28e0dea49106d41fe827aa68e09a1804, type: 2}
+  audioManager: {fileID: 0}
+  atkSfx: {fileID: 0}
 --- !u!95 &867804083103808702
 Animator:
   serializedVersion: 7

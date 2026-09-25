@@ -18,7 +18,8 @@ public class Bee : MonoBehaviour, IEnemy
     [Header("Detect Setting")]
     public float sightRange = 8f;
     public float attackRange = 5f;
-    public Transform player;
+    
+    private Transform player;
 
     [Header("Attack Setting")]
     public GameObject needlePrefab;
@@ -71,7 +72,7 @@ public class Bee : MonoBehaviour, IEnemy
     void Start()
     {
         player = MapManager.Instance.player.transform;
-        //audioManager = MapManager.Instance.audioManager;
+        audioManager = MapManager.Instance.audioManager;
         fsm.ChangeState(States.Idle);
     }
 

@@ -24,8 +24,9 @@ public class Yak : MonoBehaviour, IEnemy
     public float sightRange = 8f;
     public float attackRange = 5f;
     public float hurtPlayerRange = 1f;
-    public Transform player;
     public Transform hurtPlayerPoint;
+
+    private Transform player;
 
     [Header("Prevent Setting")]
     public Transform edgeCheckPoint;
@@ -48,7 +49,7 @@ public class Yak : MonoBehaviour, IEnemy
     [Header("SFX")]
     public AudioManager audioManager;
     public AudioClip atkSfx;
-    
+
     private Rigidbody rig;
     private bool facingRight = false;
     private PlayerHealth playerHealth;
@@ -65,7 +66,7 @@ public class Yak : MonoBehaviour, IEnemy
     {
         player = MapManager.Instance.player.transform;
         playerHealth = player.GetComponent<PlayerHealth>();
-        //audioManager = MapManager.Instance.audioManager;
+        audioManager = MapManager.Instance.audioManager;
         fsm.ChangeState(States.Idle);
     }
 
