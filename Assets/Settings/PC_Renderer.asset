@@ -83,7 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: RenderObjects
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.RenderObjects
-  m_Active: 0
+  m_Active: 1
   settings:
     passTag: RenderObjects
     Event: 600
@@ -91,7 +91,7 @@ MonoBehaviour:
       RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
-        m_Bits: 262144
+        m_Bits: 262400
       PassNames: []
     overrideMaterial: {fileID: 2100000, guid: 4378d3e78fc42425f9cb4cddf466fb66, type: 2}
     overrideMaterialPassIndex: 0
