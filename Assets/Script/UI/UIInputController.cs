@@ -9,9 +9,12 @@ public class UIInputController : MonoBehaviour
     [Header("Presenter")]
     public NotePresenter notePresenter;
 
+    private bool isInCutscene = false;
+
     private void OnEnable()
     {
         toggleNoteAction.action.performed += OnToggleNoteInput;
+        GameEvent.OnCutsceneStateChanged += state => isInCutscene = state;
     }
 
     private void OnDisable()
@@ -21,6 +24,7 @@ public class UIInputController : MonoBehaviour
 
     private void OnToggleNoteInput(InputAction.CallbackContext context)
     {
+        if (isInCutscene) return;
         GameEvent.OnToggleNote.Invoke();
     }
 }

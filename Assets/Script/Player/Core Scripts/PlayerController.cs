@@ -130,6 +130,11 @@ public class PlayerController : MonoBehaviour
 
     public Camera mainCam { get; set; }
 
+    [Header("Cutscene Setting")]
+    public Transform cutscenePosition;
+    public bool requireGroundedForCutscene;
+    public bool isCutsceneReady;
+
     #endregion
 
     [Header("Turn Setting")]
@@ -335,7 +340,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // control particle or other effect
+    /// <summary>
+    /// control particle or other effect
+    /// </summary>
     public void PlayDashParticle()
     {
         foreach (ParticleSystem ps in dashParticleSystems)
@@ -399,6 +406,18 @@ public class PlayerController : MonoBehaviour
     public void UpdateCheckpoint(Vector3 newPoint)
     {
         lastCheckpointPosition = newPoint;
+    }
+
+    /// <summary>
+    /// setup target pos and enter cutscene state
+    /// </summary>
+    /// <param name="startPosition"></param>
+    /// <param name="requireGrounded"></param>
+    public void EnterCutscene(Transform startPosition = null, bool requireGrounded = false)
+    {
+        cutscenePosition = startPosition;
+        requireGroundedForCutscene = requireGrounded;
+        TransitionToState<CutsceneState>();
     }
 
     #region GameEvent

@@ -212,10 +212,7 @@ public class Silverfish : MonoBehaviour, IEnemy
     void Patrol_Enter()
     {
         animator.Play(walkAni, 0);
-        if (Random.value > 0.5f)
-        {
-            Turn();
-        }
+        Turn();
     }
 
     void Patrol_Update()

@@ -15967,7 +15967,7 @@ MonoBehaviour:
   hookCost: 35
   shootCost: 35
   runSpeed: 4
-  walkSpeed: 3
+  walkSpeed: 1
   acceleration: 40
   deceleration: 40
   gravityScale: 2
@@ -16099,6 +16099,9 @@ MonoBehaviour:
   shootBulletSpeed: 25
   shootDuration: 1
   shootCooldown: 0.2
+  cutscenePosition: {fileID: 0}
+  requireGroundedForCutscene: 0
+  isCutsceneReady: 0
   canTurn: 1
   isFacingRight: 0
   playerFace: {fileID: 5298951275974237127}
@@ -32678,6 +32681,7 @@ GameObject:
   - component: {fileID: 464195403624122686}
   - component: {fileID: 5755733014511459047}
   - component: {fileID: 184266486331942297}
+  - component: {fileID: 3412895210241369307}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -32742,6 +32746,23 @@ MonoBehaviour:
   audioManager: {fileID: 519834762200090711}
   startingMap: Story_TheCore
   startingSpawnID: TheCore_1
+--- !u!114 &3412895210241369307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5140091982739845266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449daedb35cef45f1a98e4bcdf162e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CutsceneManager
+  playerController: {fileID: 1572666921265124869}
+  cinemachineBrain: {fileID: 3552185899397396125}
+  playerAnimator: {fileID: 364098715005616607}
+  playerAniTrackName: '@Player_Ani'
+  dialogueSignalTrackName: '@Dialogue_Signal'
 --- !u!1 &5256295156954638658
 GameObject:
   m_ObjectHideFlags: 0
@@ -70168,6 +70189,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2301813988177266136}
   m_SourcePrefab: {fileID: 100100000, guid: 17c50ff6269644245b51c3b5fa42710e, type: 3}
+--- !u!95 &364098715005616607 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9023069289301124338, guid: 17c50ff6269644245b51c3b5fa42710e, type: 3}
+  m_PrefabInstance: {fileID: 8662085010877162797}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1648434976614592702 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7986433055640294803, guid: 17c50ff6269644245b51c3b5fa42710e, type: 3}
