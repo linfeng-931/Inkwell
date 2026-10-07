@@ -1,0 +1,15 @@
+{
+    "dialogues": [
+        {
+            "id": "tree_start",
+            "texts": [
+                "content",
+                "content2"
+            ],
+            "playCondition": "",
+            "actions": [
+                {"type": "set_flag", "key": "checked_tree", "value": "true"}
+            ]
+        }
+    ]
+}

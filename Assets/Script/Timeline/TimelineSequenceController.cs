@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEngine.Playables;
 
 [RequireComponent(typeof(PlayableDirector))]
-public class TimelineSequenceController : MonoBehaviour
+public class TimelineSequenceController : MonoBehaviour, INotificationReceiver
 {
     public Transform startPosition;
     public bool requireGrounded = true;
     [SerializeField] private bool triggerOnce = true;
     public PlayableDirector director;
-    
+
     private bool hasTriggered = false;
 
     private void Awake()
@@ -18,9 +18,19 @@ public class TimelineSequenceController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(hasTriggered && triggerOnce) return;
-        hasTriggered = true;
+        if (hasTriggered && triggerOnce) return;
+        if (other.CompareTag("Player"))
+        {
+            hasTriggered = true;
+            CutsceneManager.Instance.StartCutscene(this);
+        }
+    }
 
-        CutsceneManager.Instance.StartCutscene(this);
+    public void OnNotify(Playable origin, INotification notification, object context)
+    {
+        if (notification is DialogueMarker dialogueMarker)
+        {
+            CutsceneManager.Instance.PauseForDialogue(dialogueMarker.dialogueId);
+        }
     }
 }

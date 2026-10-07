@@ -16,4 +16,10 @@ public static class GameEvent
 
     // cutscene (true = enter, false = exist)
     public static Action<bool> OnCutsceneStateChanged;
+
+    // dialogue
+    public static Action OnDialogueOpened;
+    public static Action OnDialogueClosed;
+    public static Action<string> OnDialogueLineUpdated;
+    public static Action OnDialogueNextPressed;
 }

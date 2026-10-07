@@ -24,6 +24,16 @@ public class CutsceneManager : MonoBehaviour
         Instance = this;
     }
 
+    private void OnEnable()
+    {
+        GameEvent.OnDialogueClosed += ResumeTimeline;
+    }
+
+    private void OnDisable()
+    {
+        GameEvent.OnDialogueClosed -= ResumeTimeline;
+    }
+
     /// <summary>
     /// get request from TimelineSequenceController
     /// </summary>
@@ -74,5 +84,23 @@ public class CutsceneManager : MonoBehaviour
 
         GameEvent.OnCutsceneStateChanged.Invoke(false);
         playerController.TransitionToState<IdleState>();
+    }
+
+    public void PauseForDialogue(string dialogueId)
+    {
+        if(currentDirector != null)
+        {
+            currentDirector.Pause();
+        }
+
+        DialogueManager.Instance.TryPlayDialogue(dialogueId, true);
+    }
+
+    private void ResumeTimeline()
+    {
+        if(currentDirector != null && currentDirector.state == PlayState.Paused)
+        {
+            currentDirector.Play();
+        }
     }
 }
