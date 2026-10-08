@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviour
     private const string BGM_KEY = "BGM_Volume";
     private const string SFX_KEY = "SFX_Volume";
 
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -29,9 +30,9 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         // Set default music volume
-        SetMasterVolume(PlayerPrefs.GetFloat(MASTER_KEY, 0.8f));
-        SetBGMVolume(PlayerPrefs.GetFloat(BGM_KEY, 0.8f));
-        SetSFXVolume(PlayerPrefs.GetFloat(SFX_KEY, 0.8f));
+        SetMasterVolume(PlayerPrefs.GetFloat(MASTER_KEY, 0.5f));
+        SetBGMVolume(PlayerPrefs.GetFloat(BGM_KEY, 0.5f));
+        SetSFXVolume(PlayerPrefs.GetFloat(SFX_KEY, 0.5f));
     }
 
     public void SetMasterVolume(float sliderValue)
@@ -65,11 +66,32 @@ public class AudioManager : MonoBehaviour
         bgmSource.Play();
     }
 
-    public void PlaySFX(AudioClip clip)
+    // Play type 0 = play, 1 = play on shot
+    public void PlaySFX(AudioClip clip, int playType = 1)
     {
         if (clip != null)
         {
-            sfxSource.PlayOneShot(clip);
+            if (playType == 0)
+            {
+                if (sfxSource.clip == clip && sfxSource.isPlaying) return;
+
+                sfxSource.clip = clip;
+                sfxSource.loop = true;
+                sfxSource.Play();
+            }
+            else {
+                sfxSource.PlayOneShot(clip);
+            }
+            
+        }
+    }
+
+    public void StopSFX()
+    {
+        if (sfxSource != null)
+        {
+            sfxSource.Stop();
+            sfxSource.loop = false;
         }
     }
 }

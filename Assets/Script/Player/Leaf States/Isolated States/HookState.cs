@@ -25,7 +25,7 @@ public class HookState : PlayerState
         {
             manager.hookLineRenderer.enabled = true;
         }
-        
+
         // reset attribute
         manager.canAirDash = true;
         manager.currentAirJumps = 1; 

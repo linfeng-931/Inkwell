@@ -39,6 +39,12 @@ public class DashState : PlayerState
         // switch playerMesh and dashParticle
         manager.playerFace.SetActive(false);
         manager.PlayDashParticle();
+
+        // Play SFX
+        if (manager.hookClip != null)
+        {
+            manager.audioManager.PlaySFX(manager.dashClip);
+        }
     }
 
     public override void Update()

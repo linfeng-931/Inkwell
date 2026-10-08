@@ -3,36 +3,37 @@ using UnityEngine;
 public class JumpState : AirborneState
 {
     private bool hasAppliedJumpCut;
+    private float stateEnterTime;
+
+    private const float MIN_JUMP_HOLD_DURATION = 0.08f;
+
+    private const float MAX_JUMP_DURATION = 1.2f;
 
     public JumpState(PlayerController manager) : base(manager) { }
 
     public override void Enter()
     {
         base.Enter();
+        stateEnterTime = Time.time;
         hasAppliedJumpCut = false;
-        manager.rig.linearVelocity = new Vector3(manager.rig.linearVelocity.x, manager.jumpForce, 0f);
+
+        if (manager.jumpClip != null)
+        {
+            manager.audioManager.PlaySFX(manager.jumpClip);
+        }
+
+        Vector3 v = manager.rig.linearVelocity;
+        manager.rig.linearVelocity = new Vector3(v.x, manager.jumpForce, 0f);
         manager.animator.Play(PlayerAnimateHash.JumpStart, 0, 0f);
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        if (manager.currentState != this) return;
-
-        if (!hasAppliedJumpCut && !manager.inputBufferManager.isJumpHeld)
-        {
-            ApplyJumpCut();
-        }
-
-        if (manager.rig.linearVelocity.y <= 0)
-        {
-            manager.TransitionToState<FallState>();
-        }
     }
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        if (manager.currentState != this) return;
+
+        CheckAndApplyJumpCut();
+        CheckTransitionToFall();
     }
 
     public override void Exit()
@@ -41,20 +42,29 @@ public class JumpState : AirborneState
         base.Exit();
     }
 
-    /// <summary>
-    /// handle variable jump height
-    /// </summary>
-    private void ApplyJumpCut()
+    private void CheckTransitionToFall()
     {
-        if(manager.rig.linearVelocity.y > 0)
-        {
-            manager.rig.linearVelocity = new Vector3(
-                manager.rig.linearVelocity.x,
-                manager.rig.linearVelocity.y * manager.jumpCutMultiplier,
-                0f
-            );
-        }
+        bool isFalling = manager.rig.linearVelocity.y <= 0f;
+        bool exceededMaxDuration = Time.time - stateEnterTime >= MAX_JUMP_DURATION;
 
+        if (isFalling || exceededMaxDuration)
+        {
+            manager.TransitionToState<FallState>();
+        }
+    }
+
+
+    private void CheckAndApplyJumpCut()
+    {
+        if (hasAppliedJumpCut) return;
+        if (Time.time - stateEnterTime < MIN_JUMP_HOLD_DURATION) return;
+        if (manager.inputBufferManager.isJumpHeld) return;
+
+        Vector3 v = manager.rig.linearVelocity;
+        if (v.y > 0f)
+        {
+            manager.rig.linearVelocity = new Vector3(v.x, v.y * manager.jumpCutMultiplier, 0f);
+        }
         hasAppliedJumpCut = true;
     }
 }

@@ -29,6 +29,15 @@ public class PlayerEnergy : MonoBehaviour
         {
             currentEnergy += energyRecoveryRate * Time.deltaTime;
             currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
+
+            if (currentEnergy == maxEnergy) {
+                // Play Sound Effect
+                PlayerController manager = GetComponent<PlayerController>();
+                manager.audioManager.PlaySFX(manager.fullOffEnergy);
+
+                // Change Player Energy UI color
+                EnergyUI energyUI = GetComponent<EnergyUI>();
+            }
             
             GameEvent.OnEnergyChanged.Invoke(currentEnergy, maxEnergy);
         }

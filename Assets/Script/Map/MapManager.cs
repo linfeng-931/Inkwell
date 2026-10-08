@@ -115,5 +115,6 @@ public class MapManager : MonoBehaviour
         OnMapSetupComplete.Invoke();
         
         GameEvent.OnToggleFade(true);
+        playerController.UpdateCheckpoint(finalSpawnPos.position);
     }
 }

@@ -14,6 +14,7 @@ public class AttackState : PlayerState
     {
         base.Enter();
 
+        // Play SFX
         if (manager.atkClip != null)
         {
             manager.audioManager.PlaySFX(manager.atkClip);

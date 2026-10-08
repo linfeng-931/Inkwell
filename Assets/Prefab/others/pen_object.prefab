@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5082859485043761186}
   - component: {fileID: 7052424315533038612}
   - component: {fileID: 4441214012682745915}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: ink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6909519680666539502}
   - component: {fileID: 3067958039151425188}
-  m_Layer: 0
+  - component: {fileID: 6265699803576251662}
+  - component: {fileID: 3933700602529902694}
+  m_Layer: 20
   m_Name: pen_object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,8 +141,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.111, y: 2.76, z: -0.51}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8346367976932347880}
   - {fileID: 8470031933244099130}
@@ -169,6 +171,43 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &6265699803576251662
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8491863260572880994}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6, y: 0.6, z: 0.6}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3933700602529902694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8491863260572880994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 058967f5505ae46008f8d93f63bfad23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HookTarget
+  targetType: 2
+  canBeHooked: 1
+  animator: {fileID: 3067958039151425188}
+  targetCollider: {fileID: 6265699803576251662}
 --- !u!1001 &8214882756413861329
 PrefabInstance:
   m_ObjectHideFlags: 0

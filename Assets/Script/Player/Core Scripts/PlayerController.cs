@@ -148,8 +148,12 @@ public class PlayerController : MonoBehaviour
     public AudioManager audioManager;
     public AudioSource sfxAudioSource;
     public AudioClip footstepClip;
+    public AudioClip jumpClip;
     public AudioClip hookClip;
     public AudioClip atkClip;
+    public AudioClip dashClip;
+    public AudioClip outOffEnergy;
+    public AudioClip fullOffEnergy;
 
     private void Awake()
     {
@@ -295,6 +299,10 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
             }
+            else {
+                audioManager.PlaySFX(outOffEnergy);
+                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
+            }
         }
 
         // hook
@@ -316,6 +324,11 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
             }
+            else
+            {
+                audioManager.PlaySFX(outOffEnergy);
+                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
+            }
         }
 
         // shoot
@@ -336,6 +349,11 @@ public class PlayerController : MonoBehaviour
 
                     return;
                 }
+            }
+            else
+            {
+                audioManager.PlaySFX(outOffEnergy);
+                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Shoot);
             }
         }
     }
@@ -418,6 +436,24 @@ public class PlayerController : MonoBehaviour
         cutscenePosition = startPosition;
         requireGroundedForCutscene = requireGrounded;
         TransitionToState<CutsceneState>();
+    }
+
+    // Control every teleportation, include
+    // 1. Spawn in specific location when scene change
+    // 2. Spawn in specific location when hurt in sky or etc
+    // 3. Spawn in specific location when player totally died
+    public void TeleportTo(Vector3 targetPosition, bool resetVelocity = true)
+    {
+        if (resetVelocity && rig != null)
+        {
+            rig.linearVelocity = Vector3.zero;
+            rig.angularVelocity = Vector3.zero;
+        }
+        transform.position = targetPosition;
+        if (rig != null)
+        {
+            rig.position = targetPosition;
+        }
     }
 
     #region GameEvent

@@ -12,7 +12,7 @@ public class RunState : GroundedState
         base.Enter();
         if (manager.footstepClip != null)
         {
-            manager.audioManager.PlaySFX(manager.footstepClip);
+            manager.audioManager.PlaySFX(manager.footstepClip,0);
         }
 
 
@@ -59,7 +59,7 @@ public class RunState : GroundedState
     {
         if (manager.audioManager != null)
         {
-            manager.sfxAudioSource.Stop();
+            manager.audioManager.StopSFX();
         }
 
 
