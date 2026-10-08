@@ -132,6 +132,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 464195403624122686, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+      propertyPath: interactAction
+      value: 
+      objectReference: {fileID: -4701643691418671430, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
     - target: {fileID: 1493047390410650736, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
@@ -474,7 +478,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2048403190}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0

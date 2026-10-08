@@ -26,6 +26,13 @@ public class TimelineSequenceController : MonoBehaviour, INotificationReceiver
         }
     }
 
+    public void TriggerTimeline()
+    {
+        if(hasTriggered && triggerOnce) return;
+        hasTriggered = true;
+        CutsceneManager.Instance.StartCutscene(this);
+    }
+
     public void OnNotify(Playable origin, INotification notification, object context)
     {
         if (notification is DialogueMarker dialogueMarker)

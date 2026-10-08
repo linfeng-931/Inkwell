@@ -13,6 +13,7 @@ public static class GameEvent
     // other ui event
     public static Action OnToggleNote;
     public static Action<bool> OnToggleFade;
+    public static Action OnWorldInteractPressed;
 
     // cutscene (true = enter, false = exist)
     public static Action<bool> OnCutsceneStateChanged;

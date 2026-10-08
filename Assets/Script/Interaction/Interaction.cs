@@ -1,97 +1,100 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Interaction : MonoBehaviour
 {
+    [Header("Setting")]
     public float detectionRange;
-    public GameObject InteractionKey;
-    public bool canInteract;
+    public GameObject interactionKeyUI;
+    public Animator keyAnimator;
 
-    private bool readyInteractionKey;
-    private GameObject player;
+    [Header("Interaction Type")]
+    public string targetDialogueId;
+    public TimelineSequenceController targetTimeline;
+
     private Transform playerTrans;
-    private float interactionKeyScale;
-    private float scaleChangeSpeed;
-    private float timer;
+    private bool isPlayerInRange = false;
+    private bool hasInteracted = false;
     private bool puzzleComplete = false;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerTrans = player.transform;
-        canInteract = false;
-        readyInteractionKey = false;
-        interactionKeyScale = 0f;
-        InteractionKey.transform.localScale = new Vector3(interactionKeyScale, interactionKeyScale, 1);
-        scaleChangeSpeed = 1;
-        timer = 0f;
+        playerTrans = MapManager.Instance.player.transform;;
     }
 
     void Update()
     {
-        if (puzzleComplete)
-            if (puzzleComplete)
-            {
-                if (InteractionKey.transform.localScale != Vector3.zero)
-                {
-                    InteractionKey.transform.localScale = Vector3.zero;
-                }
-            }
+        if(puzzleComplete || hasInteracted) return;
 
-        if (Vector3.Distance(playerTrans.position, transform.position) < detectionRange)
+        // detect player position
+        float distance = Vector3.Distance(playerTrans.position, transform.position);
+        bool inRange = distance < detectionRange;
+
+        // change status
+        if(inRange != isPlayerInRange)
         {
-            InteractionKeyIn();
-            if (Input.GetKeyDown(KeyCode.E))
+            isPlayerInRange = inRange;
+            UpdateUIState(isPlayerInRange);
+
+            if (isPlayerInRange)
             {
-                canInteract = true;
+                GameEvent.OnWorldInteractPressed += HandleInteractPressed;
             }
+            else
+            {
+                GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
+            }
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (isPlayerInRange)
+        {
+            GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
+        }
+    }
+
+    private void UpdateUIState(bool show)
+    {
+        if (show)
+        {
+            keyAnimator.SetTrigger("show");
         }
         else
         {
-            InteractionKeyOut();
+            keyAnimator.SetTrigger("hide");
         }
+    }
+    
+    private void HandleInteractPressed()
+    {
+        if(!isPlayerInRange || hasInteracted) return;
 
-        if (canInteract)
+        hasInteracted = true;
+        UpdateUIState(false);
+        GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
+
+        if(targetDialogueId != "")
         {
-            if(timer < 0.5f) timer += Time.deltaTime;
-            
-            if ((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)) && timer >= 0.5f)
-            {
-                canInteract = false;
-                timer = 0f;
-            }
+            DialogueManager.Instance.TryPlayDialogue(targetDialogueId, false);
         }
-    }
-
-    void InteractionKeyIn()
-    {
-        if(readyInteractionKey) return;
-
-        interactionKeyScale += Time.deltaTime*scaleChangeSpeed;
-        if(interactionKeyScale >= 0.1f){
-            interactionKeyScale = 0.1f;
-            readyInteractionKey = true;
+        
+        if(targetTimeline != null)
+        {
+            targetTimeline.TriggerTimeline();
         }
-        InteractionKey.transform.localScale = new Vector3(interactionKeyScale, interactionKeyScale, 1);
-    }
-    void InteractionKeyOut()
-    {
-        if(!readyInteractionKey) return;
-
-        interactionKeyScale -= Time.deltaTime*scaleChangeSpeed;
-        if(interactionKeyScale <= 0f){
-            interactionKeyScale = 0f;
-            readyInteractionKey = false;
-        }
-        InteractionKey.transform.localScale = new Vector3(interactionKeyScale, interactionKeyScale, 1);
-    }
-
-    public bool GetCanInteract()
-    {
-        return canInteract;
     }
 
     public void SetPuzzleComplete()
     {
         puzzleComplete = true;
+        UpdateUIState(false);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 }
