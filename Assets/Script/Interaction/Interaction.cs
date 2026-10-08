@@ -49,10 +49,7 @@ public class Interaction : MonoBehaviour
 
     private void OnDisable()
     {
-        if (isPlayerInRange)
-        {
-            GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
-        }
+        GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
     }
 
     private void UpdateUIState(bool show)

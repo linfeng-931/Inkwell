@@ -52,7 +52,7 @@ public class UIInputController : MonoBehaviour
     private void OnInteractionInput(InputAction.CallbackContext context)
     {
         if(isInCutscene || !canInteract) return;
-        GameEvent.OnWorldInteractPressed.Invoke();
+        GameEvent.OnWorldInteractPressed?.Invoke();
     }
 
     private void HandleCutsceneStateChanged(bool state)
