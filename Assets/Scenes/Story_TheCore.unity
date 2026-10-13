@@ -2012,6 +2012,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 17
       objectReference: {fileID: 0}
+    - target: {fileID: -945156223624509016, guid: 8814cb7b958231d4ba073482f7c2b006, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.11
+      objectReference: {fileID: 0}
     - target: {fileID: -603605124668940358, guid: 8814cb7b958231d4ba073482f7c2b006, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -2019,6 +2023,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8814cb7b958231d4ba073482f7c2b006, type: 3}
       propertyPath: m_Name
       value: B1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1358869260129457632, guid: 8814cb7b958231d4ba073482f7c2b006, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.11
       objectReference: {fileID: 0}
     - target: {fileID: 3666782860149397598, guid: 8814cb7b958231d4ba073482f7c2b006, type: 3}
       propertyPath: m_Layer
@@ -2328,7 +2336,7 @@ MonoBehaviour:
       Size: {x: 0.8, y: 0.8}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0.4, z: 0}
+  TargetOffset: {x: 0, y: 2.2, z: 0}
   Damping: {x: 0.5, y: 1, z: 1}
   Lookahead:
     Enabled: 1
