@@ -3,6 +3,10 @@ using UnityEngine;
 
 public static class GameEvent
 {
+    // load and save data
+    public static Action OnGameLoaded;
+    public static Action OnGameSaved;
+    
     // player action
     public static Action<bool> OnInteractStateChanged;
 

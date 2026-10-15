@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 
 [RequireComponent(typeof(PlayableDirector))]
@@ -8,6 +9,7 @@ public class TimelineSequenceController : MonoBehaviour, INotificationReceiver
     public bool requireGrounded = true;
     [SerializeField] private bool triggerOnce = true;
     public PlayableDirector director;
+    public UnityEvent onTimelineFinished;
 
     private bool hasTriggered = false;
 
@@ -39,5 +41,10 @@ public class TimelineSequenceController : MonoBehaviour, INotificationReceiver
         {
             CutsceneManager.Instance.PauseForDialogue(dialogueMarker.dialogueId);
         }
+    }
+
+    public void FinishSequence()
+    {
+        onTimelineFinished?.Invoke();
     }
 }

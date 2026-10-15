@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 184266486331942297, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+      propertyPath: fadeAni
+      value: 
+      objectReference: {fileID: 818491645}
     - target: {fileID: 7234762558533245788, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.5
@@ -176,6 +180,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+--- !u!95 &818491645 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7310742654634182124, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+  m_PrefabInstance: {fileID: 818491644}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -24,6 +24,12 @@ public class PlayerHealth : MonoBehaviour
 
         //init player health
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
+        GameEvent.OnGameLoaded += Load;
+    }
+
+    void OnDestroy()
+    {
+        GameEvent.OnGameLoaded -= Load;
     }
 
     void Update()
@@ -110,5 +116,19 @@ public class PlayerHealth : MonoBehaviour
         playerController.isHazardHurt = true;
 
         playerController.TransitionToState<HurtState>();
+    }
+
+    private void Load()
+    {
+        var data = SaveManager.Instance.currentSave.player;
+        this.currentHealth = data.health;
+        this.maxHealth = data.maxHealth;
+    }
+
+    public void Save()
+    {
+        var data = SaveManager.Instance.currentSave.player;
+        data.health = this.currentHealth;
+        data.maxHealth = this.maxHealth;
     }
 }

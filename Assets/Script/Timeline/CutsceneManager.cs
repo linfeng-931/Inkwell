@@ -18,6 +18,7 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField] private string dialogueSignalTrackName = "@Dialogue_Signal";
 
     private PlayableDirector currentDirector;
+    private TimelineSequenceController currentSequence;
 
     private void Awake()
     {
@@ -43,6 +44,7 @@ public class CutsceneManager : MonoBehaviour
         if (currentDirector != null) return; // is playing
 
         currentDirector = sequence.director;
+        currentSequence = sequence;
         StartCoroutine(ExecuteCutsceneStepsRoutine(sequence));
     }
 
@@ -84,6 +86,9 @@ public class CutsceneManager : MonoBehaviour
 
         GameEvent.OnCutsceneStateChanged.Invoke(false);
         playerController.TransitionToState<IdleState>();
+
+        currentSequence.FinishSequence();
+        currentSequence = null;
     }
 
     public void PauseForDialogue(string dialogueId)

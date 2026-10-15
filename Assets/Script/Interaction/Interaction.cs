@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class Interaction : MonoBehaviour
@@ -11,6 +12,7 @@ public class Interaction : MonoBehaviour
     [Header("Interaction Type")]
     public string targetDialogueId;
     public TimelineSequenceController targetTimeline;
+    public UnityEvent otherInteract;
 
     private Transform playerTrans;
     private bool isPlayerInRange = false;
@@ -76,11 +78,16 @@ public class Interaction : MonoBehaviour
         {
             DialogueManager.Instance.TryPlayDialogue(targetDialogueId, false);
         }
-        
-        if(targetTimeline != null)
+        else if(targetTimeline != null)
         {
             targetTimeline.TriggerTimeline();
         }
+        else
+        {
+            otherInteract?.Invoke();
+        }
+
+        // add catch obj, watch obj, other action
     }
 
     public void SetPuzzleComplete()
