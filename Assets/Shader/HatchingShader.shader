@@ -166,9 +166,17 @@ Shader "Custom/Hatching_RealLit_Transparent_SceneColor"
                 combinedHatch *= lerp(h0_final, half3(1, 1, 1), smoothstep(_Hatch0_Start, _Hatch0_End, totalLight));
                 combinedHatch *= lerp(h1_final, half3(1, 1, 1), smoothstep(_Hatch1_Start, _Hatch1_End, totalLight));
 
-                half4 baseCol = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
-                half3 finalRGB = baseCol.rgb * combinedHatch;
-                
+                half4 baseTex = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv);
+                half4 baseCol = baseTex * _BaseColor;
+
+                // 只使用 Base Map 貼圖本身的 Alpha
+                half hatchAlpha = baseTex.a;
+
+                // Alpha 為 0 時，排線恢復為白色（不影響原本的乘色結果）
+                half3 hatchEffect = lerp(half3(1, 1, 1), combinedHatch, hatchAlpha);
+
+                half3 finalRGB = baseCol.rgb * hatchEffect;
+
                 return half4(finalRGB, 1.0);
             }
             ENDHLSL
