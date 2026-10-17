@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioMixer masterMixer;
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource uiSource;
 
     private const string MASTER_KEY = "Master_Volume";
     private const string BGM_KEY = "BGM_Volume";
@@ -92,6 +93,30 @@ public class AudioManager : MonoBehaviour
         {
             sfxSource.Stop();
             sfxSource.loop = false;
+        }
+    }
+
+    public void PlayUISFX(AudioClip clip, bool stopPrevious = true)
+    {
+        if (clip == null || uiSource == null) return;
+
+        if (stopPrevious)
+        {
+            uiSource.Stop();
+            uiSource.clip = clip;
+            uiSource.Play();
+        }
+        else
+        {
+            uiSource.PlayOneShot(clip);
+        }
+    }
+
+    public void StopUISFX()
+    {
+        if (uiSource != null)
+        {
+            uiSource.Stop();
         }
     }
 }
