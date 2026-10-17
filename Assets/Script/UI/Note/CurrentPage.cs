@@ -77,7 +77,7 @@ public class CurrentPage : MonoBehaviour
 
             if(changeLastMark && changeMainMark)
             {
-                marks[lastIndex].setAct(false);
+                marks[lastIndex].SetVisualAct(false);
                 lastIndex = majorIndex;
                 timer = 0f;
                 changeLastMark = false;

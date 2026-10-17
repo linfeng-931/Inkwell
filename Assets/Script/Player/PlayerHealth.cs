@@ -25,11 +25,13 @@ public class PlayerHealth : MonoBehaviour
         //init player health
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
         GameEvent.OnGameLoaded += Load;
+        GameEvent.OnGameSaved += Save;
     }
 
     void OnDestroy()
     {
         GameEvent.OnGameLoaded -= Load;
+        GameEvent.OnGameSaved -= Save;
     }
 
     void Update()

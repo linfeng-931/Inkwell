@@ -4,25 +4,19 @@ using UnityEngine.UI;
 public class DissolveEffect : MonoBehaviour
 {
     public Material dissolve;
-    public float max;
-    public float min;
-    public float speed;
-    public bool isAct;
+    public float max = 1f;
+    public float min = 0f;
+    public float speed = 2f;
     public Image image;
-    public FlipPage flipPage;
-    public bool canAct;
 
+    private bool isAct;
     private bool already;
     private float current;
     private float timer;
 
     void Start()
     {
-        isAct = false;
-        already = false;
-        timer = 0f;
         current = min;
-        canAct = true;
     }
 
     void Update()
@@ -43,8 +37,7 @@ public class DissolveEffect : MonoBehaviour
             }
             dissolve.SetFloat("_CutoffHeight", current);
         }
-
-        if(!isAct && already)
+        else if(!isAct && already)
         {
             image.enabled = false;
 
@@ -52,17 +45,14 @@ public class DissolveEffect : MonoBehaviour
             if(current <= min){
                 current = min;
                 already = false;
-                canAct = true;
                 timer = 0f;
             }
             dissolve.SetFloat("_CutoffHeight", current);
         }
     }
 
-    public void setIsAct(bool flag)
+    public void SetIsAct(bool flag)
     {
-        if(!canAct) return;
         isAct = flag;
-        canAct = false;
     }
 }

@@ -4,14 +4,20 @@ public class NotePresenter : MonoBehaviour
 {
     [SerializeField] private NoteView view;
     private CanvasGroup viewCanvasGroup;
+    private NoteModel model;
 
     private void Awake()
     {
         viewCanvasGroup = view.GetComponent<CanvasGroup>();
+        model = new NoteModel();
+        view.Initialize(this);
     }
 
     private void Start()
     {
+        model.Initialize(view.GetSubPageAmounts());
+        model.majorIndex = 0; // set default page (0 = inventory)
+        view.InitDefaultState(model.majorIndex, model.GetCurrentSubPage(), model.subPageAmount[model.majorIndex]);
         view.OnExit();
     }
 
@@ -37,5 +43,39 @@ public class NotePresenter : MonoBehaviour
             UIManager.Instance.OpenPanel(view);
             GameEvent.OnInteractStateChanged.Invoke(true);
         }
+    }
+
+    public void OnMarkClicked(int newIndex)
+    {
+        if(model.majorIndex == newIndex || view.isAnimating) return;
+
+        int lastIndex = model.majorIndex;
+        model.majorIndex = newIndex;
+
+        bool isFlipLeft = lastIndex < newIndex;
+        view.SwitchMajorPage(lastIndex, newIndex, model.GetCurrentSubPage(), model.subPageAmount[newIndex], isFlipLeft);
+    }
+
+    public void OnArrowClicked(bool isLeft)
+    {
+        if(view.isAnimating) return;
+
+        int currentSubPage = model.GetCurrentSubPage();
+        int lastSubPage = currentSubPage;
+
+        if(isLeft && currentSubPage > 0)
+        {
+            currentSubPage--;
+        }
+        else if(!isLeft && currentSubPage < model.subPageAmount[model.majorIndex] - 1)
+        {
+            currentSubPage++;
+        }
+
+        if(currentSubPage == lastSubPage) return;
+
+        model.subPageIndexMemory[model.majorIndex] = currentSubPage;
+
+        view.SwitchSubPage(model.majorIndex, lastSubPage, currentSubPage, model.subPageAmount[model.majorIndex]);
     }
 }

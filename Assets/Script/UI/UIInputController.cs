@@ -38,14 +38,14 @@ public class UIInputController : MonoBehaviour
     private void OnToggleNoteInput(InputAction.CallbackContext context)
     {
         if (isInCutscene) return;
-        GameEvent.OnToggleNote.Invoke();
+        GameEvent.OnToggleNote?.Invoke();
     }
 
     private void OnDialogueInput(InputAction.CallbackContext context)
     {
         if (isInCutscene)
         {
-            GameEvent.OnDialogueNextPressed.Invoke();
+            GameEvent.OnDialogueNextPressed?.Invoke();
         }
     }
 

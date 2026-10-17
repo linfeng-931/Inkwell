@@ -21,6 +21,14 @@ public class PlayerEnergy : MonoBehaviour
 
         //init player Energy
         GameEvent.OnEnergyChanged.Invoke(currentEnergy, maxEnergy);
+        GameEvent.OnGameLoaded += Load;
+        GameEvent.OnGameSaved += Save;
+    }
+
+    void OnDestroy()
+    {
+        GameEvent.OnGameLoaded -= Load;
+        GameEvent.OnGameSaved -= Save;
     }
 
     void Update()
@@ -53,5 +61,19 @@ public class PlayerEnergy : MonoBehaviour
         lastConsumeTime = Time.time;
         
         GameEvent.OnEnergyChanged.Invoke(currentEnergy, maxEnergy);
+    }
+
+    private void Load()
+    {
+        var data = SaveManager.Instance.currentSave.player;
+        this.currentEnergy = data.energy;
+        this.maxEnergy = data.maxEnergy;
+    }
+
+    public void Save()
+    {
+        var data = SaveManager.Instance.currentSave.player;
+        data.energy = this.currentEnergy;
+        data.maxEnergy = this.maxEnergy;
     }
 }
