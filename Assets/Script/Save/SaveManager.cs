@@ -4,12 +4,20 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance;
     public GameSaveData currentSave{get; private set;} = new GameSaveData();
+    
+    // global parameter (prevent destory)
+    public static string currentSaveFileName {get; private set;}
+    public static string pendingFileName = ""; 
+    public static bool isPendingLoad = false;
+    public static bool isPendingNewGame = false;
 
+    private string lastSaveKey = "lastPlayedSaveSlot";
     private string SaveDirectory => Application.persistentDataPath;
 
     private void Awake()
@@ -17,7 +25,6 @@ public class SaveManager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -25,12 +32,77 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    public bool SaveGame(string fileName)
+    void Start()
     {
+        if (isPendingLoad)
+        {
+            if (LoadGame(pendingFileName))
+            {
+                isPendingLoad = false;
+            }
+        }
+        else if (isPendingNewGame)
+        {
+            if(StartNewGame(pendingFileName, true))
+            {
+                isPendingNewGame = false;
+            }
+        }
+    }
+
+    public void Button_SaveGame()
+    {
+        SaveGame();
+    }
+
+    public void Button_LoadGame(string fileName)
+    {
+        string filePath = Path.Combine(SaveDirectory, $"{fileName}.json");
+        
+        if (File.Exists(filePath))
+        {
+            pendingFileName = fileName;
+            isPendingLoad = true;
+            isPendingNewGame = false;
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            Debug.LogWarning("找不到存檔！");
+        }
+    }
+
+    public bool StartNewGame(string fileName, bool overwrite = false)
+    {
+        string filePath = Path.Combine(SaveDirectory, $"{fileName}.json");
+
+        if(!overwrite && File.Exists(filePath))
+        {
+            return false;
+        }
+        currentSaveFileName = fileName;
+        currentSave = new GameSaveData();
+
+        UpdateLastPlayedSaveName(fileName);
+
+        bool isSuccess = SaveGame();
+        if (isSuccess)
+        {
+            GameEvent.OnGameLoaded?.Invoke();
+        }
+
+        return isSuccess;
+    }
+
+    public bool SaveGame(string fileName = "")
+    {
+        fileName = string.IsNullOrEmpty(fileName) ? currentSaveFileName : fileName;
+
         try{
             currentSave.meta.saveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             string json = JsonConvert.SerializeObject(currentSave, Formatting.Indented);
-            string filePath = Path.Combine(Application.persistentDataPath, $"{fileName}.json");
+            string filePath = Path.Combine(SaveDirectory, $"{fileName}.json");
             File.WriteAllText(filePath, json);
 
             GameEvent.OnGameSaved?.Invoke();
@@ -45,7 +117,7 @@ public class SaveManager : MonoBehaviour
 
     public bool LoadGame(string fileName)
     {
-        string filePath = Path.Combine(Application.persistentDataPath, $"{fileName}.json");
+        string filePath = Path.Combine(SaveDirectory, $"{fileName}.json");
         if (!File.Exists(filePath))
         {
             return false;
@@ -54,6 +126,9 @@ public class SaveManager : MonoBehaviour
         try{
             string json = File.ReadAllText(filePath);
             currentSave = JsonConvert.DeserializeObject<GameSaveData>(json);
+
+            currentSaveFileName = fileName;
+            UpdateLastPlayedSaveName(fileName);
 
             GameEvent.OnGameLoaded?.Invoke();
             return true;
@@ -68,7 +143,7 @@ public class SaveManager : MonoBehaviour
     public void DeleteSave(string fileName)
     {
         string filePath = Path.Combine(Application.persistentDataPath, $"{fileName}.json");
-        if (!File.Exists(filePath))
+        if (File.Exists(filePath))
         {
             File.Delete(filePath);
         }
@@ -81,5 +156,16 @@ public class SaveManager : MonoBehaviour
         FileInfo[] info = dir.GetFiles("*.json").OrderByDescending(p => p.LastWriteTime).ToArray();
 
         return info.Select(f => Path.GetFileNameWithoutExtension(f.Name)).ToList();
+    }
+
+    public string GetLastPlayedSaveName()
+    {
+        return PlayerPrefs.GetString(lastSaveKey, "");
+    }
+
+    private void UpdateLastPlayedSaveName(string fileName)
+    {
+        PlayerPrefs.SetString(lastSaveKey, fileName);
+        PlayerPrefs.Save();
     }
 }

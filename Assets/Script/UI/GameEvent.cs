@@ -15,6 +15,7 @@ public static class GameEvent
     public static Action<float, float> OnEnergyChanged;
 
     // other ui event
+    public static Action OnEscapePressed;
     public static Action OnToggleNote;
     public static Action<bool> OnToggleFade;
     public static Action OnWorldInteractPressed;
@@ -27,4 +28,8 @@ public static class GameEvent
     public static Action OnDialogueClosed;
     public static Action<string> OnDialogueLineUpdated;
     public static Action OnDialogueNextPressed;
+
+    // item introduction
+    public static Action OnItemIntroOpened;
+    public static Action OnItemIntroClosed;
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Unity.Microsoft.GDK;
 using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
@@ -168,8 +167,9 @@ public class DialogueManager : MonoBehaviour
             case "play_timeline":
                 break;
             case "auto_save":
-                string fileName = string.IsNullOrEmpty(action.key) ? "AutoSave" : action.key;
-                SaveManager.Instance.SaveGame(fileName);
+                string currentSlot = SaveManager.currentSaveFileName;
+                string autoSaveName = $"AutoSave_{currentSlot}";
+                SaveManager.Instance.SaveGame(autoSaveName);
                 break;
             default:
                 break;

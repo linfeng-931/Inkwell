@@ -5,8 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public void OnClickNewGame()
+    public void OnClickNewGame(string fileName)
     {
+        SaveManager.pendingFileName = fileName;
+        SaveManager.isPendingNewGame = true;
+        SaveManager.isPendingLoad = false;
+
         StartCoroutine(NewGameRoutine());
     }
 
@@ -17,9 +21,20 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("BaseScene", LoadSceneMode.Single);
     }
 
-    public void OnClickLoadGame()
+    public void OnClickLoadGame(string fileName)
     {
-        
+        SaveManager.pendingFileName = fileName;
+        SaveManager.isPendingLoad = true;
+        SaveManager.isPendingNewGame = false;
+
+        StartCoroutine(LoadGameRoutine());
+    }
+    
+    private IEnumerator LoadGameRoutine()
+    {
+        GameEvent.OnToggleFade(false);
+        yield return new WaitForSeconds(1.2f);
+        SceneManager.LoadScene("BaseScene", LoadSceneMode.Single);
     }
 
     public void OnClickSetting()

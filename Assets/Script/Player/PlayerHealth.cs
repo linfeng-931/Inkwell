@@ -129,8 +129,14 @@ public class PlayerHealth : MonoBehaviour
 
     public void Save()
     {
-        var data = SaveManager.Instance.currentSave.player;
-        data.health = this.currentHealth;
-        data.maxHealth = this.maxHealth;
+        var data = SaveManager.Instance.currentSave;
+
+        if(data.player == null)
+        {
+            data.player = new PlayerStateData();
+        }
+
+        data.player.health = this.currentHealth;
+        data.player.maxHealth = this.maxHealth;
     }
 }

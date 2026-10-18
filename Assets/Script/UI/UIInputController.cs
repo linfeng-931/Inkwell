@@ -4,6 +4,9 @@ using UnityEngine.InputSystem;
 
 public class UIInputController : MonoBehaviour
 {
+    [Header("General Player Input")]
+    public InputActionReference cancelAction;
+
     [Header("Player Input")]
     public InputActionReference toggleNoteAction;
     public InputActionReference dialogueAction;
@@ -20,6 +23,7 @@ public class UIInputController : MonoBehaviour
         toggleNoteAction.action.performed += OnToggleNoteInput;
         dialogueAction.action.performed += OnDialogueInput;
         interactAction.action.performed += OnInteractionInput;
+        cancelAction.action.performed += OnCancelInput;
 
         GameEvent.OnCutsceneStateChanged += HandleCutsceneStateChanged;
         GameEvent.OnInteractStateChanged += HandleInteractStateChanged;
@@ -30,6 +34,7 @@ public class UIInputController : MonoBehaviour
         toggleNoteAction.action.performed -= OnToggleNoteInput;
         dialogueAction.action.performed -= OnDialogueInput;
         interactAction.action.performed -= OnInteractionInput;
+        cancelAction.action.performed -= OnCancelInput;
 
         GameEvent.OnCutsceneStateChanged -= HandleCutsceneStateChanged;
         GameEvent.OnInteractStateChanged -= HandleInteractStateChanged;
@@ -37,7 +42,7 @@ public class UIInputController : MonoBehaviour
 
     private void OnToggleNoteInput(InputAction.CallbackContext context)
     {
-        if (isInCutscene) return;
+        if (isInCutscene || !canInteract) return;
         GameEvent.OnToggleNote?.Invoke();
     }
 
@@ -53,6 +58,12 @@ public class UIInputController : MonoBehaviour
     {
         if(isInCutscene || !canInteract) return;
         GameEvent.OnWorldInteractPressed?.Invoke();
+    }
+
+    private void OnCancelInput(InputAction.CallbackContext context)
+    {
+        if (isInCutscene) return; 
+        GameEvent.OnEscapePressed?.Invoke();
     }
 
     private void HandleCutsceneStateChanged(bool state)

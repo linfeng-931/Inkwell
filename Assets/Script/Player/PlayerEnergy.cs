@@ -72,8 +72,14 @@ public class PlayerEnergy : MonoBehaviour
 
     public void Save()
     {
-        var data = SaveManager.Instance.currentSave.player;
-        data.energy = this.currentEnergy;
-        data.maxEnergy = this.maxEnergy;
+        var data = SaveManager.Instance.currentSave;
+
+        if(data.player == null)
+        {
+            data.player = new PlayerStateData();
+        }
+
+        data.player.energy = this.currentEnergy;
+        data.player.maxEnergy = this.maxEnergy;
     }
 }

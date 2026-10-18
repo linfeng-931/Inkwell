@@ -86,8 +86,6 @@ public class Interaction : MonoBehaviour
         {
             otherInteract?.Invoke();
         }
-
-        // add catch obj, watch obj, other action
     }
 
     public void SetPuzzleComplete()

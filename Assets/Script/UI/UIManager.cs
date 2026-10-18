@@ -4,10 +4,20 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
-   
+
     private Stack<BasePanel> panelStack = new Stack<BasePanel>();  // record current windows
     
     private void Awake() => Instance = this;
+
+    private void OnEnable()
+    {
+        GameEvent.OnEscapePressed += CloseTopPanel;
+    }
+
+    private void OnDisable()
+    {
+        GameEvent.OnEscapePressed -= CloseTopPanel;
+    }
 
     public void OpenPanel(BasePanel panel)
     {
@@ -33,6 +43,10 @@ public class UIManager : MonoBehaviour
         if (panelStack.Count > 0)
         {
             panelStack.Peek().OnResume();
+        }
+        else if(panelStack.Count == 0)
+        {
+            GameEvent.OnInteractStateChanged.Invoke(false);
         }
     }
 }

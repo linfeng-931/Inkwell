@@ -8,6 +8,7 @@ public class InteractState : PlayerState
     {
         base.Enter();
         manager.isPlayerInputEnabled = false;
+        manager.canTurn = false;
     }
 
     public override void Update()
@@ -19,5 +20,6 @@ public class InteractState : PlayerState
     {
         base.Exit();
         manager.isPlayerInputEnabled = true;
+        manager.canTurn = true;
     }
 }

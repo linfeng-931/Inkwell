@@ -38,8 +38,8 @@ public class NoteData
 public class GameSaveData
 {
     public SaveMetaData meta = new SaveMetaData();
-    public PlayerStateData player = new PlayerStateData();
-    public NoteData bag = new NoteData();
+    public PlayerStateData player = null;
+    public NoteData bag = null;
     
     // story flag
     public Dictionary<string, bool> flags = new Dictionary<string, bool>();
