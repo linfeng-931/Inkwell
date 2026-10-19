@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
+    public bool canSave = true; // for Demo
+
     public static SaveManager Instance;
     public GameSaveData currentSave{get; private set;} = new GameSaveData();
     
@@ -97,6 +99,8 @@ public class SaveManager : MonoBehaviour
 
     public bool SaveGame(string fileName = "")
     {
+        if(!canSave) return false;
+
         fileName = string.IsNullOrEmpty(fileName) ? currentSaveFileName : fileName;
 
         try{

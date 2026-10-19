@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class NotePresenter : MonoBehaviour
 {
     [SerializeField] private NoteView view;
+    [SerializeField] private ItemIntroViewForNote itemIntroViewForNote;
     private CanvasGroup viewCanvasGroup;
     private NoteModel model;
 
@@ -36,12 +38,16 @@ public class NotePresenter : MonoBehaviour
         if (viewCanvasGroup.alpha > 0)
         {
             UIManager.Instance.CloseTopPanel();
+            itemIntroViewForNote.RefreshItemPage();
             GameEvent.OnInteractStateChanged.Invoke(false);
+            GameEvent.OnNoteStateChanged?.Invoke(false);
+            EventSystem.current.SetSelectedGameObject(null);
         }
         else
         {
             UIManager.Instance.OpenPanel(view);
             GameEvent.OnInteractStateChanged.Invoke(true);
+            GameEvent.OnNoteStateChanged?.Invoke(true);
         }
     }
 

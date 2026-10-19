@@ -167,9 +167,7 @@ public class DialogueManager : MonoBehaviour
             case "play_timeline":
                 break;
             case "auto_save":
-                string currentSlot = SaveManager.currentSaveFileName;
-                string autoSaveName = $"AutoSave_{currentSlot}";
-                SaveManager.Instance.SaveGame(autoSaveName);
+                SaveManager.Instance.SaveGame();
                 break;
             default:
                 break;

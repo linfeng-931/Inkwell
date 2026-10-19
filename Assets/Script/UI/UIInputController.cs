@@ -17,6 +17,7 @@ public class UIInputController : MonoBehaviour
 
     private bool isInCutscene = false;
     private bool canInteract = true;
+    private bool isNoteOpen = false;
 
     private void OnEnable()
     {
@@ -27,6 +28,7 @@ public class UIInputController : MonoBehaviour
 
         GameEvent.OnCutsceneStateChanged += HandleCutsceneStateChanged;
         GameEvent.OnInteractStateChanged += HandleInteractStateChanged;
+        GameEvent.OnNoteStateChanged += HandleNoteStateChanged;
     }
 
     private void OnDisable()
@@ -38,12 +40,20 @@ public class UIInputController : MonoBehaviour
 
         GameEvent.OnCutsceneStateChanged -= HandleCutsceneStateChanged;
         GameEvent.OnInteractStateChanged -= HandleInteractStateChanged;
+        GameEvent.OnNoteStateChanged -= HandleNoteStateChanged;
     }
 
     private void OnToggleNoteInput(InputAction.CallbackContext context)
     {
-        if (isInCutscene || !canInteract) return;
+        if (isInCutscene) return;
+        if(!canInteract && !isNoteOpen) return;
+
         GameEvent.OnToggleNote?.Invoke();
+    }
+
+    private void HandleNoteStateChanged(bool state)
+    {
+        isNoteOpen = state;
     }
 
     private void OnDialogueInput(InputAction.CallbackContext context)

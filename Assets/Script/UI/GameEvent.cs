@@ -17,6 +17,7 @@ public static class GameEvent
     // other ui event
     public static Action OnEscapePressed;
     public static Action OnToggleNote;
+    public static Action<bool> OnNoteStateChanged;
     public static Action<bool> OnToggleFade;
     public static Action OnWorldInteractPressed;
 
@@ -32,4 +33,5 @@ public static class GameEvent
     // item introduction
     public static Action OnItemIntroOpened;
     public static Action OnItemIntroClosed;
+    public static Action OnItemIntroChange; // for note
 }

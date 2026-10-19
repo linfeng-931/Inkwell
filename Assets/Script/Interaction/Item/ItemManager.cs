@@ -48,7 +48,7 @@ public class ItemManager : MonoBehaviour
         return true;
     }
 
-    public void ExecuteItemIntro(string id)
+    public void ExecuteItemIntro(string id, bool isInNote)
     {
         // disable player action
         GameEvent.OnInteractStateChanged.Invoke(true);
@@ -56,12 +56,47 @@ public class ItemManager : MonoBehaviour
         currentItem = GetItemData(id);
 
         // show ui
-        GameEvent.OnItemIntroOpened.Invoke();
+        if (isInNote)
+        {
+            GameEvent.OnItemIntroChange.Invoke();
+        }
+        else
+        {
+            GameEvent.OnItemIntroOpened.Invoke();
+        }
     }
 
     public ItemData GetItemData(string id)
     {
         itemDictionary.TryGetValue(id, out ItemData item);
         return item;
+    }
+
+    /// <summary>
+    /// catch obj and record in saveManager
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="amount"></param>
+    public void PlayerGetItem(string id, bool autoSave = true, int amount = 1)
+    {
+        if(SaveManager.Instance.currentSave.bag == null)
+        {
+            SaveManager.Instance.currentSave.bag = new NoteData();
+        }
+        else
+        {
+            if (SaveManager.Instance.currentSave.bag.items.ContainsKey(id))
+            {
+                SaveManager.Instance.currentSave.bag.items[id] += amount;
+            }
+            else{
+                SaveManager.Instance.currentSave.bag.items.Add(id, amount);
+            }
+        }
+
+        if (autoSave)
+        {
+            SaveManager.Instance.SaveGame();
+        }
     }
 }
