@@ -60,6 +60,12 @@ public class MapManager : MonoBehaviour
         StartCoroutine(TransitionToMap(newMapName, targetSpawnID));
     }
 
+    /// <summary>
+    /// map to map
+    /// </summary>
+    /// <param name="newMapName"></param>
+    /// <param name="targetSpawnID"></param>
+    /// <returns></returns>
     private IEnumerator TransitionToMap(string newMapName, string targetSpawnID)
     {
         //fading ani
@@ -92,7 +98,8 @@ public class MapManager : MonoBehaviour
 
         //handle player position and face
         Transform finalSpawnPos = null;
-        SpawnPointInfo[] allSpawnPoints = FindObjectsByType<SpawnPointInfo>(FindObjectsSortMode.None);
+        SceneController sceneController = FindAnyObjectByType<SceneController>();
+        SpawnPointInfo[] allSpawnPoints = sceneController.spawnPointInfos;
 
         foreach(var spawnPoint in allSpawnPoints)
         {
@@ -121,10 +128,15 @@ public class MapManager : MonoBehaviour
         playerController.UpdateCheckpoint(finalSpawnPos.position);
     }
 
+    /// <summary>
+    /// main menu to map
+    /// </summary>
+    /// <param name="newMapName"></param>
+    /// <param name="targetSpawnID"></param>
+    /// <returns></returns>
     private IEnumerator FirstLoad(string newMapName, string targetSpawnID)
     {
         fadeAni.speed = 0f;
-        //處理使用者輸入
         player.SetActive(false); // diactivate all player action
 
         //unload map, don't unload if is startingMap
@@ -151,7 +163,8 @@ public class MapManager : MonoBehaviour
 
         //handle player position and face
         Transform finalSpawnPos = null;
-        SpawnPointInfo[] allSpawnPoints = FindObjectsByType<SpawnPointInfo>(FindObjectsSortMode.None);
+        SceneController sceneController = FindAnyObjectByType<SceneController>();
+        SpawnPointInfo[] allSpawnPoints = sceneController.spawnPointInfos;
 
         foreach(var spawnPoint in allSpawnPoints)
         {
@@ -180,9 +193,38 @@ public class MapManager : MonoBehaviour
         //fading ani
         fadeAni.speed = 1f;
         yield return new WaitForSeconds(1.2f);
-
         
         playerController.UpdateCheckpoint(finalSpawnPos.position);
         GameEvent.OnInteractStateChanged(false);
+    }
+
+    public void ChangeMapToMainMenu()
+    {
+        StartCoroutine(TransitionToMainMenu());
+    }
+
+    private IEnumerator TransitionToMainMenu()
+    {
+        GameEvent.OnToggleFade(false);
+        player.SetActive(false);
+        yield return new WaitForSeconds(1.2f);
+        SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
+    }
+
+    public void QuitGameWithFade()
+    {
+        StartCoroutine(QuitGameRoutine());
+    }
+
+    private IEnumerator QuitGameRoutine()
+    {
+        GameEvent.OnToggleFade(false);
+        player.SetActive(false);
+        yield return new WaitForSeconds(1.2f);
+        Application.Quit();
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #endif
     }
 }

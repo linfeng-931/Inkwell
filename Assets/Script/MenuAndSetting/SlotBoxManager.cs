@@ -7,6 +7,11 @@ public class SlotBoxManager : MonoBehaviour
 
     void Start()
     {
+        Refresh();
+    }
+
+    public void Refresh()
+    {
         List<string> allSaveFiles = SaveManager.Instance.GetAllSaveFiles();
         foreach(SlotBox slotBox in slotBoxes)
         {
@@ -19,6 +24,5 @@ public class SlotBoxManager : MonoBehaviour
                 slotBox.Initialize(false);
             }
         }
-        
     }
 }

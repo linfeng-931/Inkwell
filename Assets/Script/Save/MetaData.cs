@@ -10,19 +10,18 @@ using Newtonsoft.Json;
 public class SaveMetaData
 {
     public string saveTime;
-    public float playTime;
-    public string currentLocation;
-    public int playerLevel;
+    public float playTime = 0f;
+    public string currentLocation = "核心";
 }
 
 [Serializable]
 public class PlayerStateData
 {
-    public int health;
-    public int maxHealth;
-    public float energy;
-    public float maxEnergy;
-    public Vector3 position;
+    public int health = 5;
+    public int maxHealth = 5;
+    public float energy = 100f;
+    public float maxEnergy = 100f;
+    public string spawnPoint = "TheCore_1";
 }
 
 [Serializable]
@@ -39,7 +38,7 @@ public class GameSaveData
 {
     public SaveMetaData meta = new SaveMetaData();
     public PlayerStateData player = null;
-    public NoteData bag = null;
+    public NoteData note = null;
     
     // story flag
     public Dictionary<string, bool> flags = new Dictionary<string, bool>();

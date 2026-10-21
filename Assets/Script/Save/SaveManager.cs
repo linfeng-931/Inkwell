@@ -21,6 +21,7 @@ public class SaveManager : MonoBehaviour
 
     private string lastSaveKey = "lastPlayedSaveSlot";
     private string SaveDirectory => Application.persistentDataPath;
+    private float startTime;
 
     private void Awake()
     {
@@ -39,7 +40,8 @@ public class SaveManager : MonoBehaviour
         if (isPendingLoad)
         {
             if (LoadGame(pendingFileName))
-            {
+            {  
+                startTime = Time.time;
                 isPendingLoad = false;
             }
         }
@@ -47,6 +49,7 @@ public class SaveManager : MonoBehaviour
         {
             if(StartNewGame(pendingFileName, true))
             {
+                startTime = Time.time;
                 isPendingNewGame = false;
             }
         }
@@ -102,14 +105,17 @@ public class SaveManager : MonoBehaviour
         if(!canSave) return false;
 
         fileName = string.IsNullOrEmpty(fileName) ? currentSaveFileName : fileName;
-
+        GameEvent.OnGameSaved?.Invoke();
+        
         try{
             currentSave.meta.saveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            currentSave.meta.playTime += Time.time - startTime;
+            startTime = Time.time;
+            
             string json = JsonConvert.SerializeObject(currentSave, Formatting.Indented);
             string filePath = Path.Combine(SaveDirectory, $"{fileName}.json");
             File.WriteAllText(filePath, json);
 
-            GameEvent.OnGameSaved?.Invoke();
             return true;
         }
         catch (Exception e)
@@ -153,6 +159,10 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// for main menu slot box (button status)
+    /// </summary>
+    /// <returns></returns>
     public List<string> GetAllSaveFiles()
     {
         if(!Directory.Exists(SaveDirectory)) return new List<string>();
@@ -160,6 +170,28 @@ public class SaveManager : MonoBehaviour
         FileInfo[] info = dir.GetFiles("*.json").OrderByDescending(p => p.LastWriteTime).ToArray();
 
         return info.Select(f => Path.GetFileNameWithoutExtension(f.Name)).ToList();
+    }
+
+    /// <summary>
+    /// for main menu slot box (face)
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
+    public SaveMetaData GetSaveMetaData(string fileName)
+    {
+        string filePath = Path.Combine(SaveDirectory, $"{fileName}.json");
+        try
+        {
+            string json = File.ReadAllText(filePath);
+            // only get meta data
+            var data = JsonConvert.DeserializeObject<GameSaveData>(json);
+            return data.meta;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+            return null;
+        }
     }
 
     public string GetLastPlayedSaveName()

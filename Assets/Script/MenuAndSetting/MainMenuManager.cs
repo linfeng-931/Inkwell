@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
+    public string currentDeleteGame {get; set;} = "";
+
     public void OnClickNewGame(string fileName)
     {
         SaveManager.pendingFileName = fileName;
@@ -29,6 +31,12 @@ public class MainMenuManager : MonoBehaviour
 
         StartCoroutine(LoadGameRoutine());
     }
+
+    public void OnDeleteGame()
+    {
+        SaveManager.Instance.DeleteSave(currentDeleteGame);
+        currentDeleteGame = "";
+    }
     
     private IEnumerator LoadGameRoutine()
     {
@@ -44,11 +52,17 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnClickQuit()
     {
+        StartCoroutine(QuitRoutine());
+    }
+
+    private IEnumerator QuitRoutine()
+    {
+        GameEvent.OnToggleFade(false);
+        yield return new WaitForSeconds(1.2f);
         Application.Quit();
 
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #endif
     }
-
 }
