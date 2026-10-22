@@ -217,6 +217,16 @@
 			"Name": "關閉手和武器"
 		},
 		{
+			"Id": "ParamWeaponOpacity",
+			"GroupId": "ParamGroup14",
+			"Name": "武器不透明度"
+		},
+		{
+			"Id": "ParamAllOpacity",
+			"GroupId": "ParamGroup14",
+			"Name": "全體不透明度"
+		},
+		{
 			"Id": "ParamHair",
 			"GroupId": "ParamGroup10",
 			"Name": "頭髮"
@@ -230,26 +240,6 @@
 			"Id": "ParamTail",
 			"GroupId": "ParamGroup10",
 			"Name": "尾巴"
-		},
-		{
-			"Id": "Param_Angle_Rotation30",
-			"GroupId": "ParamGroup12",
-			"Name": "[0]Scarf_back_f旋转"
-		},
-		{
-			"Id": "Param_Angle_Rotation31",
-			"GroupId": "ParamGroup12",
-			"Name": "[1]Scarf_back_f旋转"
-		},
-		{
-			"Id": "Param_Angle_Rotation32",
-			"GroupId": "ParamGroup12",
-			"Name": "[2]Scarf_back_f旋转"
-		},
-		{
-			"Id": "Param_Angle_Rotation33",
-			"GroupId": "ParamGroup12",
-			"Name": "[3]Scarf_back_f旋转"
 		},
 		{
 			"Id": "Param_Angle_Rotation34",
@@ -270,6 +260,26 @@
 			"Id": "Param_Angle_Rotation37",
 			"GroupId": "ParamGroup13",
 			"Name": "[3]Scarf_back_b旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation30",
+			"GroupId": "ParamGroup12",
+			"Name": "[0]Scarf_back_f旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation31",
+			"GroupId": "ParamGroup12",
+			"Name": "[1]Scarf_back_f旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation32",
+			"GroupId": "ParamGroup12",
+			"Name": "[2]Scarf_back_f旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation33",
+			"GroupId": "ParamGroup12",
+			"Name": "[3]Scarf_back_f旋转"
 		}
 	],
 	"ParameterGroups": [
@@ -321,7 +331,12 @@
 		{
 			"Id": "ParamGroup5",
 			"GroupId": "",
-			"Name": "動作"
+			"Name": "攻擊動作"
+		},
+		{
+			"Id": "ParamGroup14",
+			"GroupId": "",
+			"Name": "不透明度"
 		},
 		{
 			"Id": "ParamGroup10",
@@ -329,14 +344,14 @@
 			"Name": "物理控制"
 		},
 		{
-			"Id": "ParamGroup12",
-			"GroupId": "",
-			"Name": "Scarf_back_f旋轉"
-		},
-		{
 			"Id": "ParamGroup13",
 			"GroupId": "",
 			"Name": "Scarf_back_b旋轉"
+		},
+		{
+			"Id": "ParamGroup12",
+			"GroupId": "",
+			"Name": "Scarf_back_f旋轉"
 		}
 	],
 	"Parts": [
