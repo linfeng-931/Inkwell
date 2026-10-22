@@ -30,7 +30,7 @@ public class Muk : MonoBehaviour, IEnemy
     public string attackAni = "Muk_Attack";
     public string damagedAni = "Muk_Damaged";
 
-    [Header("Hurt and Death Setting")]
+    [Header("Hurt and Death Effect")]
     public ParticleSystem hurtParticle;
     public ParticleSystem deadParticle;
     public Material hurtMaterial;

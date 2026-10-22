@@ -73,6 +73,7 @@ public class PlayerController : MonoBehaviour
 
     public int currentComboIndex { get; set; } = 0;
     public AttackData[] currentComboList { get; set; }
+    public bool canAttack { get; set; } = true; // for story
 
     [Header("Hurt and Die Setting")]
     public float hurtKnockbackForce = 5f;

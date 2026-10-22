@@ -6,6 +6,7 @@ public static class GameEvent
     // load and save data
     public static Action OnGameLoaded;
     public static Action OnGameSaved;
+    public static Action<string> OnFlagUpdated; // for story
     
     // player action
     public static Action<bool> OnInteractStateChanged;
@@ -16,6 +17,7 @@ public static class GameEvent
 
     // other ui event
     public static Action OnEscapePressed;
+    public static Action currentCloseCallback;
     public static Action OnToggleNote;
     public static Action<bool> OnNoteStateChanged;
     public static Action<bool> OnToggleFade;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AirborneState : PlayerState
 {
-    // apex ­¿²v¦w¥þ½d³ò,«OÃÒ²b­«¤O¥Ã»·¬°¥¿
+    // apex ï¿½ï¿½ï¿½vï¿½wï¿½ï¿½ï¿½dï¿½ï¿½,ï¿½Oï¿½Ò²bï¿½ï¿½ï¿½Oï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
     private const float MIN_APEX_MULTIPLIER = 0.2f;
 
     public AirborneState(PlayerController manager) : base(manager) { }
@@ -63,7 +63,7 @@ public class AirborneState : PlayerState
         {
             manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
 
-            if (manager.canAirAttack)
+            if (manager.canAirAttack && manager.canAttack)
             {
                 manager.currentComboList = manager.airCombo;
                 manager.currentComboIndex = 0;
@@ -84,8 +84,8 @@ public class AirborneState : PlayerState
     }
 
     /// <summary>
-    /// ¦Û­q­«¤O(ª«²z¤O¥²¶·¦b FixedUpdate ¬I¥[)¡C
-    /// ³»ÂIªþªñ­°§C­«¤O§Î¦¨º¢ªÅ·P,­¿²v¦³¤U­­,²b­«¤O¤£·|³Q©è®ø¨ì¹s¡C
+    /// ï¿½Û­qï¿½ï¿½ï¿½O(ï¿½ï¿½ï¿½zï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½b FixedUpdate ï¿½Iï¿½[)ï¿½C
+    /// ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ñ­°§Cï¿½ï¿½ï¿½Oï¿½Î¦ï¿½ï¿½ï¿½ï¿½Å·P,ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Uï¿½ï¿½,ï¿½bï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½|ï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½sï¿½C
     /// </summary>
     private void ApplyGravity()
     {
@@ -98,7 +98,7 @@ public class AirborneState : PlayerState
             gravityMult *= Mathf.Clamp(manager.apexHangTimeMultiplier, MIN_APEX_MULTIPLIER, 1f);
         }
 
-        // Rigidbody ¥»¨­¤w¦³ 1g,³o¸Ì¥u¸É®tÃB
+        // Rigidbody ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½ 1g,ï¿½oï¿½Ì¥uï¿½É®tï¿½B
         Vector3 extraGravity = Physics.gravity * (gravityMult - 1f);
         manager.rig.AddForce(extraGravity, ForceMode.Acceleration);
     }
@@ -115,7 +115,7 @@ public class AirborneState : PlayerState
         manager.rig.linearVelocity = new Vector3(newSpeedX, manager.rig.linearVelocity.y, 0f);
     }
 
-    /// <returns>true ªí¥Ü¤w¤Á´«ª¬ºA,©I¥sºÝÀ³¥ß¨è¤¤¤î«áÄò³B²z</returns>
+    /// <returns>true ï¿½ï¿½ï¿½Ü¤wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½A,ï¿½Iï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ß¨è¤¤ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½z</returns>
     private bool HandleLedgeSnap()
     {
         // must have horizontal input to trigger ledge snap

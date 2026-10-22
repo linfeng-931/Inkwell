@@ -1,0 +1,430 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "ParamGroup",
+			"Name": "角度 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "ParamGroup",
+			"Name": "角度 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "ParamGroup",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "ParamChestY",
+			"GroupId": "ParamGroup2",
+			"Name": "胸Y"
+		},
+		{
+			"Id": "ParamChestAngleZ",
+			"GroupId": "ParamGroup2",
+			"Name": "胸旋轉Z"
+		},
+		{
+			"Id": "ParamWaistY",
+			"GroupId": "ParamGroup2",
+			"Name": "腰Y"
+		},
+		{
+			"Id": "ParamWaistAngleZ",
+			"GroupId": "ParamGroup2",
+			"Name": "腰旋轉Z"
+		},
+		{
+			"Id": "ParamEyeOpen",
+			"GroupId": "ParamGroup3",
+			"Name": "眼 开闭"
+		},
+		{
+			"Id": "ParamDamagedEyes",
+			"GroupId": "ParamGroup3",
+			"Name": "眼 受傷"
+		},
+		{
+			"Id": "ParamLeftArmX",
+			"GroupId": "ParamGroup7",
+			"Name": "左手臂X"
+		},
+		{
+			"Id": "ParamLeftArmY",
+			"GroupId": "ParamGroup7",
+			"Name": "左手臂Y"
+		},
+		{
+			"Id": "ParamLeftArmR",
+			"GroupId": "ParamGroup7",
+			"Name": "左手臂旋轉"
+		},
+		{
+			"Id": "ParamLeftForearmR",
+			"GroupId": "ParamGroup7",
+			"Name": "左小臂旋轉"
+		},
+		{
+			"Id": "ParamLeftHandR",
+			"GroupId": "ParamGroup7",
+			"Name": "左手旋轉"
+		},
+		{
+			"Id": "ParamRightArmX",
+			"GroupId": "ParamGroup7",
+			"Name": "右手臂X"
+		},
+		{
+			"Id": "ParamRightArmY",
+			"GroupId": "ParamGroup7",
+			"Name": "右手臂Y"
+		},
+		{
+			"Id": "ParamRightArmR",
+			"GroupId": "ParamGroup7",
+			"Name": "右手臂旋轉"
+		},
+		{
+			"Id": "ParamRightForearmR",
+			"GroupId": "ParamGroup7",
+			"Name": "右小臂旋轉"
+		},
+		{
+			"Id": "ParamRightHandR",
+			"GroupId": "ParamGroup7",
+			"Name": "右手旋轉"
+		},
+		{
+			"Id": "ParamLeftHand",
+			"GroupId": "ParamGroup8",
+			"Name": "左握拳"
+		},
+		{
+			"Id": "ParamRightThumb",
+			"GroupId": "ParamGroup8",
+			"Name": "右握拳"
+		},
+		{
+			"Id": "ParamPelvisX",
+			"GroupId": "ParamGroup9",
+			"Name": "胯X"
+		},
+		{
+			"Id": "ParamTailX",
+			"GroupId": "ParamGroup9",
+			"Name": "尾巴X"
+		},
+		{
+			"Id": "ParamTailY",
+			"GroupId": "ParamGroup9",
+			"Name": "尾巴Y"
+		},
+		{
+			"Id": "ParamPelvisY",
+			"GroupId": "ParamGroup9",
+			"Name": "胯Y"
+		},
+		{
+			"Id": "ParamPelvisTrans",
+			"GroupId": "ParamGroup9",
+			"Name": "胯變形"
+		},
+		{
+			"Id": "ParamLeftLegX",
+			"GroupId": "ParamGroup11",
+			"Name": "左腿X"
+		},
+		{
+			"Id": "ParamLeftLegY",
+			"GroupId": "ParamGroup11",
+			"Name": "左腿Y"
+		},
+		{
+			"Id": "ParamLeftLegZ",
+			"GroupId": "ParamGroup11",
+			"Name": "左腿Z"
+		},
+		{
+			"Id": "ParamLeftFootX",
+			"GroupId": "ParamGroup11",
+			"Name": "左腳X"
+		},
+		{
+			"Id": "ParamLegFootY",
+			"GroupId": "ParamGroup11",
+			"Name": "左腳Y"
+		},
+		{
+			"Id": "ParamLeftFootAngleZ",
+			"GroupId": "ParamGroup11",
+			"Name": "左腳Z"
+		},
+		{
+			"Id": "ParamRightLegX",
+			"GroupId": "ParamGroup11",
+			"Name": "右腿X"
+		},
+		{
+			"Id": "ParamRightLegY",
+			"GroupId": "ParamGroup11",
+			"Name": "右腿Y"
+		},
+		{
+			"Id": "ParamRightLegZ",
+			"GroupId": "ParamGroup11",
+			"Name": "右腿Z"
+		},
+		{
+			"Id": "ParamrRightFootX",
+			"GroupId": "ParamGroup11",
+			"Name": "右腳X"
+		},
+		{
+			"Id": "ParamRightFootY",
+			"GroupId": "ParamGroup11",
+			"Name": "右腳Y"
+		},
+		{
+			"Id": "ParamRightFootAngleZ",
+			"GroupId": "ParamGroup11",
+			"Name": "右腳Z"
+		},
+		{
+			"Id": "ParamWeaponX",
+			"GroupId": "ParamGroup4",
+			"Name": "武器X"
+		},
+		{
+			"Id": "ParamWeaponY",
+			"GroupId": "ParamGroup4",
+			"Name": "武器Y"
+		},
+		{
+			"Id": "ParamWeaponAngelZ",
+			"GroupId": "ParamGroup4",
+			"Name": "武器Z"
+		},
+		{
+			"Id": "ParamAttack",
+			"GroupId": "ParamGroup5",
+			"Name": "攻擊切換"
+		},
+		{
+			"Id": "ParamReachOutHand",
+			"GroupId": "ParamGroup5",
+			"Name": "關閉手和武器"
+		},
+		{
+			"Id": "ParamHair",
+			"GroupId": "ParamGroup10",
+			"Name": "頭髮"
+		},
+		{
+			"Id": "ParamEars",
+			"GroupId": "ParamGroup10",
+			"Name": "耳朵"
+		},
+		{
+			"Id": "ParamTail",
+			"GroupId": "ParamGroup10",
+			"Name": "尾巴"
+		},
+		{
+			"Id": "Param_Angle_Rotation30",
+			"GroupId": "ParamGroup12",
+			"Name": "[0]Scarf_back_f旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation31",
+			"GroupId": "ParamGroup12",
+			"Name": "[1]Scarf_back_f旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation32",
+			"GroupId": "ParamGroup12",
+			"Name": "[2]Scarf_back_f旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation33",
+			"GroupId": "ParamGroup12",
+			"Name": "[3]Scarf_back_f旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation34",
+			"GroupId": "ParamGroup13",
+			"Name": "[0]Scarf_back_b旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation35",
+			"GroupId": "ParamGroup13",
+			"Name": "[1]Scarf_back_b旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation36",
+			"GroupId": "ParamGroup13",
+			"Name": "[2]Scarf_back_b旋转"
+		},
+		{
+			"Id": "Param_Angle_Rotation37",
+			"GroupId": "ParamGroup13",
+			"Name": "[3]Scarf_back_b旋转"
+		}
+	],
+	"ParameterGroups": [
+		{
+			"Id": "ParamGroup",
+			"GroupId": "",
+			"Name": "頭xyz"
+		},
+		{
+			"Id": "ParamGroup2",
+			"GroupId": "",
+			"Name": "身體xyz"
+		},
+		{
+			"Id": "ParamGroup6",
+			"GroupId": "",
+			"Name": "頭"
+		},
+		{
+			"Id": "ParamGroup3",
+			"GroupId": "",
+			"Name": "眼睛"
+		},
+		{
+			"Id": "ParamGroup7",
+			"GroupId": "",
+			"Name": "手"
+		},
+		{
+			"Id": "ParamGroup8",
+			"GroupId": "",
+			"Name": "手掌"
+		},
+		{
+			"Id": "ParamGroup9",
+			"GroupId": "",
+			"Name": "下半身"
+		},
+		{
+			"Id": "ParamGroup11",
+			"GroupId": "",
+			"Name": "腳"
+		},
+		{
+			"Id": "ParamGroup4",
+			"GroupId": "",
+			"Name": "武器"
+		},
+		{
+			"Id": "ParamGroup5",
+			"GroupId": "",
+			"Name": "動作"
+		},
+		{
+			"Id": "ParamGroup10",
+			"GroupId": "",
+			"Name": "物理控制"
+		},
+		{
+			"Id": "ParamGroup12",
+			"GroupId": "",
+			"Name": "Scarf_back_f旋轉"
+		},
+		{
+			"Id": "ParamGroup13",
+			"GroupId": "",
+			"Name": "Scarf_back_b旋轉"
+		}
+	],
+	"Parts": [
+		{
+			"Id": "Part",
+			"Name": "資料夾 1"
+		},
+		{
+			"Id": "Part4",
+			"Name": "右手"
+		},
+		{
+			"Id": "Part13",
+			"Name": "武器手"
+		},
+		{
+			"Id": "Part12",
+			"Name": "weapon_分開"
+		},
+		{
+			"Id": "Part3",
+			"Name": "左手"
+		},
+		{
+			"Id": "Heads",
+			"Name": "頭部"
+		},
+		{
+			"Id": "Part6",
+			"Name": "左腳"
+		},
+		{
+			"Id": "Part2",
+			"Name": "上半身"
+		},
+		{
+			"Id": "Part5",
+			"Name": "下半身"
+		},
+		{
+			"Id": "scarf_back_f_Skinning",
+			"Name": "scarf_back_f(蒙皮)"
+		},
+		{
+			"Id": "scarf_back_b_Skinning",
+			"Name": "scarf_back_b(蒙皮)"
+		},
+		{
+			"Id": "eye_damaged",
+			"Name": "eye_damaged"
+		}
+	],
+	"CombinedParameters": [
+		[
+			"ParamAngleX",
+			"ParamAngleY"
+		],
+		[
+			"ParamLeftArmX",
+			"ParamLeftArmY"
+		],
+		[
+			"ParamRightArmX",
+			"ParamRightArmY"
+		],
+		[
+			"ParamTailX",
+			"ParamTailY"
+		],
+		[
+			"ParamLeftLegX",
+			"ParamLeftLegY"
+		],
+		[
+			"ParamLeftFootX",
+			"ParamLegFootY"
+		],
+		[
+			"ParamRightLegX",
+			"ParamRightLegY"
+		],
+		[
+			"ParamrRightFootX",
+			"ParamRightFootY"
+		],
+		[
+			"ParamWeaponX",
+			"ParamWeaponY"
+		]
+	]
+}

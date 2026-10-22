@@ -8,6 +8,9 @@ public class NotePresenter : MonoBehaviour
     private CanvasGroup viewCanvasGroup;
     private NoteModel model;
 
+    // for story
+    public bool canOpenNote {get; set;} = true;
+
     private void Awake()
     {
         viewCanvasGroup = view.GetComponent<CanvasGroup>();
@@ -35,6 +38,8 @@ public class NotePresenter : MonoBehaviour
 
     public void ToggleNote()
     {
+        if(!canOpenNote) return;
+        
         if (viewCanvasGroup.alpha > 0)
         {
             UIManager.Instance.CloseTopPanel();

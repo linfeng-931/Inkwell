@@ -13,6 +13,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
     }
+    public string currentDeleteGame { get; set; } = "";
 
     public void OnClickNewGame(string fileName)
     {
@@ -39,7 +40,13 @@ public class MainMenuManager : MonoBehaviour
 
         StartCoroutine(LoadGameRoutine());
     }
-    
+
+    public void OnDeleteGame()
+    {
+        SaveManager.Instance.DeleteSave(currentDeleteGame);
+        currentDeleteGame = "";
+    }
+
     private IEnumerator LoadGameRoutine()
     {
         GameEvent.OnToggleFade(false);
@@ -55,14 +62,22 @@ public class MainMenuManager : MonoBehaviour
     public void OnClickQuit()
     {
         PlaySFX();
-        Application.Quit();
-
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+        StartCoroutine(QuitRoutine());
     }
 
-    public void PlaySFX() {
+    private IEnumerator QuitRoutine()
+    {
+        GameEvent.OnToggleFade(false);
+        yield return new WaitForSeconds(1.2f);
+        Application.Quit();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
+
+    public void PlaySFX()
+    {
         audioManager.PlayUISFX(clickSFX);
     }
 }

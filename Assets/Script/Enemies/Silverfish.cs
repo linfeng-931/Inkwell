@@ -46,12 +46,20 @@ public class Silverfish : MonoBehaviour, IEnemy
     public string attackEndAni = "Silverfish_Attack_End";
     public string damagedAni = "Silverfish_Damaged";
 
+    [Header("Hurt and Death Effect")]
+    public ParticleSystem hurtParticle;
+    public ParticleSystem deadParticle;
+    public Material hurtMaterial;
+
+    private Material originalMaterial;
+
     [Header("SFX")]
     public AudioManager audioManager;
     public AudioClip atkSfx;
 
     private Rigidbody rig;
     private bool facingRight = false;
+    private SpriteRenderer spriteRenderer;
     private PlayerHealth playerHealth;
 
     void Awake()
@@ -59,6 +67,8 @@ public class Silverfish : MonoBehaviour, IEnemy
         rig = GetComponent<Rigidbody>();
 
         currentHealth = maxHealth;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalMaterial = spriteRenderer.material;
 
         // Prevent unwanted rotation
         rig.constraints = RigidbodyConstraints.FreezeRotation;
@@ -325,6 +335,8 @@ public class Silverfish : MonoBehaviour, IEnemy
     {
         StopMovement();
         animator.Play(damagedAni, 0);
+        spriteRenderer.material = hurtMaterial;
+        hurtParticle.Play();
         FlipToward(player.position.x);
         Vector3 knockbackDirection = new Vector3(facingRight ? -1f : 1f, 0f, 0f);
 
@@ -332,6 +344,10 @@ public class Silverfish : MonoBehaviour, IEnemy
             knockbackDirection * hurtForceH + Vector3.up * hurtForceV,
             ForceMode.Impulse
         );
+
+        yield return new WaitForSeconds(0.1f);
+
+        spriteRenderer.material = originalMaterial;
 
         yield return new WaitForSeconds(hurtStunTime); // hit stun
 
@@ -360,6 +376,10 @@ public class Silverfish : MonoBehaviour, IEnemy
         {
             col.enabled = false;
         }
+
+        deadParticle.transform.SetParent(null); 
+        deadParticle.Play();
+        Destroy(deadParticle.gameObject, 2f); 
 
         Destroy(gameObject, 2f);
     }

@@ -39,11 +39,13 @@ public class GroundedState : PlayerState
             manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
             
             // ground attack
-            manager.currentComboList = manager.groundCombo;
-            manager.currentComboIndex = 0;
-            
-            manager.TransitionToState<AttackState>();
-            return;
+            if(manager.canAttack){
+                manager.currentComboList = manager.groundCombo;
+                manager.currentComboIndex = 0;
+                
+                manager.TransitionToState<AttackState>();
+                return;
+            }
         }
     }
 }
