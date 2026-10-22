@@ -30,7 +30,14 @@ public class DialoguePresenter : MonoBehaviour
     
     private void HandleLineUpdated(string text)
     {
-        view.UpdateDialogueText(text);
+        if (view.IsTyping)
+        {
+            view.CompleteText();
+        }
+        else
+        {
+            view.UpdateDialogueText(text);
+        }
     }
 
     private void HandleDialogueClosed()

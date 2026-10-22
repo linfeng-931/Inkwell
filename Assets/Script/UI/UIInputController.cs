@@ -74,6 +74,8 @@ public class UIInputController : MonoBehaviour
     {
         if (isInCutscene) return; 
         GameEvent.OnEscapePressed?.Invoke();
+        GameEvent.currentCloseCallback?.Invoke();
+        GameEvent.currentCloseCallback = null;
     }
 
     private void HandleCutsceneStateChanged(bool state)

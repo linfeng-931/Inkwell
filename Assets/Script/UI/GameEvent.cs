@@ -17,6 +17,7 @@ public static class GameEvent
 
     // other ui event
     public static Action OnEscapePressed;
+    public static Action currentCloseCallback;
     public static Action OnToggleNote;
     public static Action<bool> OnNoteStateChanged;
     public static Action<bool> OnToggleFade;

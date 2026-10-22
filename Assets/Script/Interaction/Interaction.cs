@@ -1,17 +1,35 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum InteractActionType
+{
+    Dialogue,
+    Timeline,
+    Other
+}
+
+[System.Serializable]
+public class InteractAction
+{
+    public InteractActionType actionType;
+
+    public string dialogueId;
+    public TimelineSequenceController timeline;
+    public UnityEvent otherInteract;
+}
+
 public class Interaction : MonoBehaviour
 {
+
+
     [Header("Setting")]
     public float detectionRange;
     public GameObject interactionKeyUI;
     public Animator keyAnimator;
 
-    [Header("Interaction Type")]
-    public string targetDialogueId;
-    public TimelineSequenceController targetTimeline;
-    public UnityEvent otherInteract;
+    [Header("After Interact")]
+    public List<InteractAction> interactionSequence = new List<InteractAction>();
 
     private Transform playerTrans;
     private bool isPlayerInRange = false;
@@ -20,19 +38,19 @@ public class Interaction : MonoBehaviour
 
     void Start()
     {
-        playerTrans = MapManager.Instance.player.transform;;
+        playerTrans = MapManager.Instance.player.transform;
     }
 
     void Update()
     {
-        if(puzzleComplete || hasInteracted) return;
+        if (puzzleComplete || hasInteracted) return;
 
         // detect player position
         float distance = Vector3.Distance(playerTrans.position, transform.position);
         bool inRange = distance < detectionRange;
 
         // change status
-        if(inRange != isPlayerInRange)
+        if (inRange != isPlayerInRange)
         {
             isPlayerInRange = inRange;
             UpdateUIState(isPlayerInRange);
@@ -64,26 +82,31 @@ public class Interaction : MonoBehaviour
             keyAnimator.SetTrigger("hide");
         }
     }
-    
+
     private void HandleInteractPressed()
     {
-        if(!isPlayerInRange || hasInteracted) return;
+        if (!isPlayerInRange || hasInteracted) return;
 
         hasInteracted = true;
         UpdateUIState(false);
         GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
 
-        if(targetDialogueId != "")
+        foreach (var action in interactionSequence)
         {
-            DialogueManager.Instance.TryPlayDialogue(targetDialogueId, false);
-        }
-        else if(targetTimeline != null)
-        {
-            targetTimeline.TriggerTimeline();
-        }
-        else
-        {
-            otherInteract?.Invoke();
+            switch (action.actionType)
+            {
+                case InteractActionType.Dialogue:
+                    DialogueManager.Instance.TryPlayDialogue(action.dialogueId, false);
+                    break;
+
+                case InteractActionType.Timeline:
+                    action.timeline.TriggerTimeline();
+                    break;
+
+                case InteractActionType.Other:
+                    action.otherInteract?.Invoke();
+                    break;
+            }
         }
     }
 

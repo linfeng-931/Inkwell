@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5270410308104966845, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7234762558533245788, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.5
@@ -178,8 +182,70 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7776843285594795385, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 818491647}
   m_SourcePrefab: {fileID: 100100000, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+--- !u!114 &818491645 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7342989743697189994, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+  m_PrefabInstance: {fileID: 818491644}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818491646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ba180376830a46e7a2cb7c982d5f184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NotePresenter
+--- !u!1 &818491646 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7776843285594795385, guid: 9f170f0ce36fb4645b48497b7287503a, type: 3}
+  m_PrefabInstance: {fileID: 818491644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &818491647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818491646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efc194345f2ce4a239aa4140175e2b8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlagListener
+  flagID: player_note
+  onUnlocked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 818491645}
+        m_TargetAssemblyTypeName: NotePresenter, Assembly-CSharp
+        m_MethodName: set_canOpenNote
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onLocked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 818491645}
+        m_TargetAssemblyTypeName: NotePresenter, Assembly-CSharp
+        m_MethodName: set_canOpenNote
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
