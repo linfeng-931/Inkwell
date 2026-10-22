@@ -5,7 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public string currentDeleteGame {get; set;} = "";
+    [Header("Main Menu Button SFX")]
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private AudioClip clickSFX;
+
+    private void Awake()
+    {
+        if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
+    }
+    public string currentDeleteGame { get; set; } = "";
 
     public void OnClickNewGame(string fileName)
     {
@@ -18,6 +26,7 @@ public class MainMenuManager : MonoBehaviour
 
     private IEnumerator NewGameRoutine()
     {
+        PlaySFX();
         GameEvent.OnToggleFade(false);
         yield return new WaitForSeconds(1.2f);
         SceneManager.LoadScene("BaseScene", LoadSceneMode.Single);
@@ -37,7 +46,7 @@ public class MainMenuManager : MonoBehaviour
         SaveManager.Instance.DeleteSave(currentDeleteGame);
         currentDeleteGame = "";
     }
-    
+
     private IEnumerator LoadGameRoutine()
     {
         GameEvent.OnToggleFade(false);
@@ -47,11 +56,12 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnClickSetting()
     {
-        
+        PlaySFX();
     }
 
     public void OnClickQuit()
     {
+        PlaySFX();
         StartCoroutine(QuitRoutine());
     }
 
@@ -61,8 +71,13 @@ public class MainMenuManager : MonoBehaviour
         yield return new WaitForSeconds(1.2f);
         Application.Quit();
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+#endif
+    }
+
+    public void PlaySFX()
+    {
+        audioManager.PlayUISFX(clickSFX);
     }
 }

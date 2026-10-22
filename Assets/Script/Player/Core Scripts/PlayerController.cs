@@ -156,6 +156,18 @@ public class PlayerController : MonoBehaviour
     public AudioClip outOffEnergy;
     public AudioClip fullOffEnergy;
 
+    [Header("Time line Control")]
+    private PlayerLoadout loadout;
+    private static bool IsCombatState(System.Type t) =>
+    t == typeof(AttackState) || t == typeof(DashState) ||
+    t == typeof(HookShootState) || t == typeof(ShootState);
+
+    [Header("Player Status")]
+    public bool CanMove => !PlayerLock.IsLocked(PlayerLockType.Movement);
+    public bool CanFight => (loadout == null || loadout.CombatEnabled)
+                            && !PlayerLock.IsLocked(PlayerLockType.Combat);
+    public bool canJump = false;
+
     private void Awake()
     {
         //init components
@@ -167,6 +179,7 @@ public class PlayerController : MonoBehaviour
         mainCam = Camera.main;
 
         dashParticleSystems = dashParticle.GetComponentsInChildren<ParticleSystem>();
+        loadout = GetComponent<PlayerLoadout>();
     }
 
     void Start()
@@ -182,9 +195,10 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
 
+
         if (isPlayerInputEnabled)
         {
-            currentMoveX = inputBufferManager.moveInputX;
+            currentMoveX = CanMove ? inputBufferManager.moveInputX : 0f;
             CheckGlobalAbilities();
         }
 
@@ -207,6 +221,10 @@ public class PlayerController : MonoBehaviour
     /// <typeparam name="T"></typeparam>
     public void TransitionToState<T>() where T : PlayerState
     {
+        // Lock Player Attack or Jump
+        if (IsJumpState(typeof(T)) && (!canJump || !CanMove)) { return; }
+        if (!CanFight && IsCombatState(typeof(T))) { return; }
+
         PlayerState newState = stateFactory.GetState<T>();
 
         //have uncompleted action, requesting to exit current state
@@ -218,6 +236,9 @@ public class PlayerController : MonoBehaviour
         currentState = newState;
         currentState.Enter();
     }
+
+    private static bool IsJumpState(System.Type t) =>
+    t == typeof(JumpState) || t == typeof(DoubleJumpState);
 
     public bool CheckGrounded()
     {
@@ -275,6 +296,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void CheckGlobalAbilities()
     {
+        // Disabled player skill
+        if (!CanFight) {return; }
+
         // dash
         if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Dash))
         {

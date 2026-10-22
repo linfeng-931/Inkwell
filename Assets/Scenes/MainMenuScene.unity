@@ -925,7 +925,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 397944970}
-  - {fileID: 1647384235}
+  - {fileID: 1456705699}
   - {fileID: 139096905}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2152,6 +2152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8d66f4601c7840a599c252dd59ca4be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
+  audioManager: {fileID: 0}
+  clickSFX: {fileID: 8300000, guid: 54ef77b6fde82e843b8f60009467fe72, type: 3}
 --- !u!4 &397944970
 Transform:
   m_ObjectHideFlags: 0
@@ -4921,7 +4923,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 958434691}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &958434694
 Camera:
   m_ObjectHideFlags: 0
@@ -6279,7 +6281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   menuBtnGray: {fileID: 21300000, guid: 514436dee8f576c448e2cec93d53be95, type: 3}
   menuBtnYellow: {fileID: 21300000, guid: 34426568bd9726849a482bf8a1eea7e6, type: 3}
-  audioManager: {fileID: 1647384234}
+  audioManager: {fileID: 0}
   writing: {fileID: 8300000, guid: 89f490048ad90204da4526984bf00dd4, type: 3}
 --- !u!1 &1561386657
 GameObject:
@@ -7465,7 +7467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuButtonEvent
   menuBtnGray: {fileID: 21300000, guid: 514436dee8f576c448e2cec93d53be95, type: 3}
   menuBtnYellow: {fileID: 21300000, guid: 34426568bd9726849a482bf8a1eea7e6, type: 3}
-  audioManager: {fileID: 1647384234}
+  audioManager: {fileID: 0}
   writing: {fileID: 8300000, guid: 89f490048ad90204da4526984bf00dd4, type: 3}
 --- !u!1 &1898995122
 GameObject:
@@ -7752,7 +7754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuButtonEvent
   menuBtnGray: {fileID: 21300000, guid: 514436dee8f576c448e2cec93d53be95, type: 3}
   menuBtnYellow: {fileID: 21300000, guid: 34426568bd9726849a482bf8a1eea7e6, type: 3}
-  audioManager: {fileID: 1647384234}
+  audioManager: {fileID: 0}
   writing: {fileID: 8300000, guid: 89f490048ad90204da4526984bf00dd4, type: 3}
 --- !u!1 &1967663091
 GameObject:

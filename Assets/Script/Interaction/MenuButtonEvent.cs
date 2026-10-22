@@ -20,6 +20,7 @@ public class MenuButtonEvent : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         buttonImage = GetComponent<Image>();
         buttonText = GetComponentInChildren<TextMeshProUGUI>();
+        if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
