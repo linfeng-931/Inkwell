@@ -5,6 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
+    [Header("Main Menu Button SFX")]
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private AudioClip clickSFX;
+
+    private void Awake()
+    {
+        if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
+    }
+
     public void OnClickNewGame(string fileName)
     {
         SaveManager.pendingFileName = fileName;
@@ -16,6 +25,7 @@ public class MainMenuManager : MonoBehaviour
 
     private IEnumerator NewGameRoutine()
     {
+        PlaySFX();
         GameEvent.OnToggleFade(false);
         yield return new WaitForSeconds(1.2f);
         SceneManager.LoadScene("BaseScene", LoadSceneMode.Single);
@@ -39,11 +49,12 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnClickSetting()
     {
-        
+        PlaySFX();
     }
 
     public void OnClickQuit()
     {
+        PlaySFX();
         Application.Quit();
 
         #if UNITY_EDITOR
@@ -51,4 +62,7 @@ public class MainMenuManager : MonoBehaviour
         #endif
     }
 
+    public void PlaySFX() {
+        audioManager.PlayUISFX(clickSFX);
+    }
 }

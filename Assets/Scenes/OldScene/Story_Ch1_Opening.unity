@@ -1363,8 +1363,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interaction
   detectionRange: 3
-  InteractionKey: {fileID: 233646557}
-  canInteract: 0
+  interactionKeyUI: {fileID: 0}
+  keyAnimator: {fileID: 0}
+  targetDialogueId: 
+  targetTimeline: {fileID: 0}
+  otherInteract:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &431468422
 Transform:
   m_ObjectHideFlags: 0
@@ -11956,8 +11961,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interaction
   detectionRange: 2
-  InteractionKey: {fileID: 158675153}
-  canInteract: 0
+  interactionKeyUI: {fileID: 0}
+  keyAnimator: {fileID: 0}
+  targetDialogueId: 
+  targetTimeline: {fileID: 0}
+  otherInteract:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &718956727
 Transform:
   m_ObjectHideFlags: 0
@@ -12463,8 +12473,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interaction
   detectionRange: 1
-  InteractionKey: {fileID: 1204541053}
-  canInteract: 0
+  interactionKeyUI: {fileID: 0}
+  keyAnimator: {fileID: 0}
+  targetDialogueId: 
+  targetTimeline: {fileID: 0}
+  otherInteract:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &931070802
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20118,8 +20133,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interaction
   detectionRange: 2
-  InteractionKey: {fileID: 1415066365}
-  canInteract: 0
+  interactionKeyUI: {fileID: 0}
+  keyAnimator: {fileID: 0}
+  targetDialogueId: 
+  targetTimeline: {fileID: 0}
+  otherInteract:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1946908439
 Transform:
   m_ObjectHideFlags: 0
