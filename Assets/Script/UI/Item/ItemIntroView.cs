@@ -11,6 +11,6 @@ public class ItemIntroView : BasePanel
     {
         itemName.text = itemData.stageNames[itemData.currentStage];
         this.decs.text = itemData.stageDescs[itemData.currentStage];
-        this.subDecs.text = itemData.stageSubDescs[itemData.currentStage];
+        if(subDecs != null) this.subDecs.text = itemData.stageSubDescs[itemData.currentStage];
     }
 }

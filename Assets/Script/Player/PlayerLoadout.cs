@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerLoadout : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class PlayerLoadout : MonoBehaviour
 
     public bool CombatEnabled { get; private set; }
 
-    private void Awake()
+    public void Initialize()
     {
         CombatEnabled = isCombatEnabled;
         SetWeaponVisible(isWeaponVisible);
@@ -51,6 +52,8 @@ public class PlayerLoadout : MonoBehaviour
         {
             particle.SetActive(true);
         }
+
+        playerController.canJump = true;
     }
 
     private void SetWeaponVisible(bool visible)
@@ -70,6 +73,5 @@ public class PlayerLoadout : MonoBehaviour
         if (fader == null) fader = weaponVisual.AddComponent<FadeableObject>();
         fader.FadeIn(duration);
         EnterArmedMode();
-        playerController.canJump = true;
     }
 }
