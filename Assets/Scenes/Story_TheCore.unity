@@ -11765,6 +11765,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPointInfo
   spawnPointID: TheCore_1
+--- !u!1 &794514052
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 794514053}
+  - component: {fileID: 794514054}
+  m_Layer: 0
+  m_Name: Collider2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &794514053
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794514052}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -15.592, y: -2.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266116675}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &794514054
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794514052}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.7322245, y: 16.08227, z: 1}
+  m_Center: {x: 1.8661122, y: 7.541135, z: 0}
 --- !u!1 &795082092 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6274130429807207018, guid: 8814cb7b958231d4ba073482f7c2b006, type: 3}
@@ -12551,7 +12604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b6b92ba6f0cf490f9f68af54432e831, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneController
-  sceneName: "\u6838\u5FC3"
+  sceneName: "\u6839\u6E90"
   spawnPointInfos:
   - {fileID: 773426362}
 --- !u!4 &923746567
@@ -13693,6 +13746,7 @@ Transform:
   - {fileID: 1701214184}
   - {fileID: 765668518}
   - {fileID: 910358401}
+  - {fileID: 794514053}
   m_Father: {fileID: 1850622195}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1285171068
@@ -14107,7 +14161,7 @@ MonoBehaviour:
           m_CallState: 2
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 214647141}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: IntroCameraFocus, Assembly-CSharp
           m_MethodName: Deactivate
           m_Mode: 1

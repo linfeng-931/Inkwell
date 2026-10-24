@@ -43,6 +43,9 @@ public class HookShootState : PlayerState
         manager.hookLineRenderer.enabled = true;
         manager.hookLineRenderer.positionCount = Mathf.Max(2, manager.ropeResolution);
 
+        // ani
+        manager.animator.Play(PlayerAnimateHash.HoldingPen);
+        
         // Play SFX
         if (manager.hookClip != null)
         {
