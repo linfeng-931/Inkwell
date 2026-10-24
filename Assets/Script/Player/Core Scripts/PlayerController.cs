@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -58,12 +59,18 @@ public class PlayerController : MonoBehaviour
     public float dashEndCut = 0.1f;
     public bool canAirDash = true;
     public float dashLookAhead = 0.5f;
-    public float cornerCorrectionRange = 0.4f;
-    public float correctionStep = 0.1f;
+    //public float correctionStep = 0.1f;
 
     public float lastDashTime { get; set; } = -100f;
 
     private ParticleSystem[] dashParticleSystems;
+
+    [Header("Roll Setting (LedgeSnap)")]
+    public float cornerCorrectionRange = 0.4f; // ledgeSnap range
+    public float rollDuration = 0.1f;
+    public float rollSpeed = 1f;
+    public float rollEndDuration = 0.2f;
+    public ParticleSystem rollParticle;
 
     [Header("Attack Setting")]
     public AttackData[] groundCombo;
@@ -267,6 +274,23 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
+    /// turn player face
+    /// </summary>
+    public void HandleTurning(bool faceRight)
+    {
+        if (faceRight && !isFacingRight)
+        {
+            isFacingRight = true;
+            Flip();
+        }
+        else if (!faceRight && isFacingRight)
+        {
+            isFacingRight = false;
+            Flip();
+        }
+    }
+
+    /// <summary>
     /// force to face target position
     /// </summary>
     /// <param name="targetPos"></param>
@@ -288,6 +312,10 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 playerScale = transform.localScale;
         playerScale.x *= -1;
+
+        Vector3 faceSize = playerFace.transform.localScale;
+        playerFace.transform.localScale = new Vector3(faceSize.x * -1f, faceSize.y, faceSize.z);
+
         transform.localScale = playerScale;
     }
 

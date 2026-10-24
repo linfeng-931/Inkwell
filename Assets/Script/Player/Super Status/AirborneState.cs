@@ -115,7 +115,6 @@ public class AirborneState : PlayerState
         manager.rig.linearVelocity = new Vector3(newSpeedX, manager.rig.linearVelocity.y, 0f);
     }
 
-    /// <returns>true ���ܤw�������A,�I�s�����ߨ褤�����B�z</returns>
     private bool HandleLedgeSnap()
     {
         // must have horizontal input to trigger ledge snap
@@ -133,34 +132,44 @@ public class AirborneState : PlayerState
         Vector3 p1 = new Vector3(bounds.center.x, bounds.max.y - inset, bounds.center.z);
         Vector3 p2 = new Vector3(bounds.center.x, bounds.min.y + inset, bounds.center.z);
 
+        Debug.DrawRay(p1, moveDir * dashLookAhead, Color.blue);
+        Debug.DrawRay(p2, moveDir * dashLookAhead, Color.blue);
+
         // detect front
         if (!Physics.CapsuleCast(p1, p2, radius, moveDir, out RaycastHit wallHit, dashLookAhead, mask))
             return false;
 
         Vector3 playerTop = new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
 
+        Debug.DrawRay(playerTop, Vector3.up * range, Color.red);
+
         // detect top
         if (Physics.Raycast(playerTop, Vector3.up, range, mask))
             return false; // blocked by ceiling
 
-        Vector3 probeOrigin = (playerTop + Vector3.up * range) + (moveDir * (wallHit.distance + 0.05f));
+        Vector3 probeOrigin = (playerTop + Vector3.up * range) + (moveDir * (wallHit.distance + 0.25f));
         float probeDistance = range * 2f;
+
+        Debug.DrawRay(probeOrigin, Vector3.down * probeDistance, Color.green);
 
         if (Physics.Raycast(probeOrigin, Vector3.down, out RaycastHit surfaceHit, probeDistance, mask))
         {
             if (surfaceHit.normal.y > 0.7f)
             {
                 float heightDiff = surfaceHit.point.y - bounds.min.y;
-                if (heightDiff > bounds.extents.y * 0.5f)
+                if (heightDiff > 0f && heightDiff < bounds.extents.y)
                 {
+                    Debug.DrawLine(surfaceHit.point, surfaceHit.point + Vector3.up * 0.2f, Color.yellow, 1f);
+                    
                     Vector3 targetPos = manager.rig.position;
                     targetPos.y = surfaceHit.point.y + bounds.extents.y;
 
+                    // up to ledge
                     manager.rig.MovePosition(targetPos);
                     manager.rig.linearVelocity = new Vector3(manager.rig.linearVelocity.x, 0f, 0f);
 
-                    if (Mathf.Abs(manager.currentMoveX) > 0.01f) manager.TransitionToState<RunState>();
-                    else manager.TransitionToState<IdleState>();
+                    // into roll state
+                    manager.TransitionToState<RollState>();
                     return true;
                 }
             }

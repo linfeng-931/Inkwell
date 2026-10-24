@@ -111,19 +111,21 @@ public class MapManager : MonoBehaviour
         }
 
         player.transform.position = finalSpawnPos.position;
+
         PlayerController playerController = player.transform.GetComponent<PlayerController>();
-        if(finalSpawnPos.localScale.x < 0 && !playerController.isFacingRight)
+
+        if(finalSpawnPos.localScale.x < 0)
         {
-            player.transform.GetComponent<PlayerController>().HandleTurning();
+            playerController.HandleTurning(false);
         }
-        else if(finalSpawnPos.localScale.x > 0 && playerController.isFacingRight)
+        else if(finalSpawnPos.localScale.x > 0)
         {
-            player.transform.GetComponent<PlayerController>().HandleTurning();
+            playerController.HandleTurning(true);
         }
-        player.SetActive(true);
 
         OnMapSetupComplete.Invoke();
-        
+        player.SetActive(true);
+
         GameEvent.OnToggleFade(true);
         playerController.UpdateCheckpoint(finalSpawnPos.position);
     }
@@ -176,17 +178,20 @@ public class MapManager : MonoBehaviour
         }
 
         player.transform.position = finalSpawnPos.position;
+        
         PlayerController playerController = player.transform.GetComponent<PlayerController>();
-        if(finalSpawnPos.localScale.x < 0 && !playerController.isFacingRight)
+
+        if(finalSpawnPos.localScale.x < 0)
         {
-            player.transform.GetComponent<PlayerController>().HandleTurning();
+            playerController.HandleTurning(false);
         }
-        else if(finalSpawnPos.localScale.x > 0 && playerController.isFacingRight)
+        else if(finalSpawnPos.localScale.x > 0)
         {
-            player.transform.GetComponent<PlayerController>().HandleTurning();
+            playerController.HandleTurning(true);
         }
-        player.SetActive(true);
+
         OnMapSetupComplete.Invoke();
+        player.SetActive(true);
 
         yield return new WaitForSeconds(0.5f);
 

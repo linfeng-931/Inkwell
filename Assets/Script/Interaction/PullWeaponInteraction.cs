@@ -71,6 +71,11 @@ public class PullWeaponInteraction : MonoBehaviour
         if (inRange) GameEvent.OnWorldInteractPressed += HandleInteractPressed;
     }
 
+    private void OnDestroy()
+    {
+        GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
+    }
+
     private void HandleInteractPressed()
     {
         if (!isPhaseActive || !isPlayerInRange || isBusy || isCompleted) return;
