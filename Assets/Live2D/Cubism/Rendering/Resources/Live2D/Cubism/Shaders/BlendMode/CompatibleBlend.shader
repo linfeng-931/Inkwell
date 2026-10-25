@@ -53,7 +53,7 @@ Shader "Unlit/BlendMode/CompatibleBlend"
 
         Cull     [_Cull]
         Lighting Off
-        ZWrite   Off
+        ZWrite   On
         ZTest LEqual
 
         Pass
@@ -161,6 +161,8 @@ Shader "Unlit/BlendMode/CompatibleBlend"
 
                 // Apply Cubism mask and alpha.
                 CUBISM_APPLY_ALPHA(IN, OUT);
+
+                clip(OUT.a - 0.01);
 
                 return OUT;
             }
