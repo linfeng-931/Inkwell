@@ -26,7 +26,9 @@ public class AttackState : PlayerState
         inputRegistered = false;
 
         // animate
-        manager.animator.Play(currentAttack.animationName, 0, 0f);
+        manager.playerFace3.SetActive(true);
+        manager.playerFace.SetActive(false);
+        manager.animator3.Play(currentAttack.animationName, 0, 0f);
 
         // close gravity
         if (!manager.isGrounded)
@@ -109,6 +111,8 @@ public class AttackState : PlayerState
     {
         base.Exit();
         manager.rig.useGravity = true;
+        manager.playerFace3.SetActive(false);
+        manager.playerFace.SetActive(true);
     }
 
     private void ReturnToNormalState()

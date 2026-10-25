@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Component References")]
     public Animator animator { get; private set; }
+    public Animator animator2 { get; private set; }
+    public Animator animator3 { get; private set; } //wait for live2d
     public Rigidbody rig { get; private set; }
     public InputBufferManager inputBufferManager { get; private set; }
     public CapsuleCollider col { get; private set; }
@@ -151,6 +153,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Art Setting")]
     public GameObject playerFace;
+    public GameObject playerFace2; // ani not in live2d
+    public GameObject playerFace3; // wait live2d
 
     [Header("SFX Setting")]
     public AudioManager audioManager;
@@ -179,6 +183,11 @@ public class PlayerController : MonoBehaviour
     {
         //init components
         animator = playerFace.GetComponent<Animator>();
+        animator2 = playerFace2.GetComponent<Animator>();
+        animator3 = playerFace3.GetComponent<Animator>();
+        playerFace2.SetActive(false);
+        playerFace3.SetActive(false);
+
         rig = GetComponent<Rigidbody>();
         inputBufferManager = GetComponent<InputBufferManager>();
         col = GetComponent<CapsuleCollider>();
