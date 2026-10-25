@@ -33,6 +33,8 @@ public class PlayerStateFactory
         states[typeof(ShootState)] = new ShootState(context);
         states[typeof(DeathState)] = new DeathState(context);
         states[typeof(RollState)] = new RollState(context);
+        states[typeof(SaveState)] = new SaveState(context);
+        states[typeof(RebornState)] = new RebornState(context);
     }
 
     /// <summary>

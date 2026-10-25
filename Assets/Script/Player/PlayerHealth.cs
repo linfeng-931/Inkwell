@@ -26,12 +26,14 @@ public class PlayerHealth : MonoBehaviour
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
         GameEvent.OnGameLoaded += Load;
         GameEvent.OnGameSaved += Save;
+        GameEvent.OnPlayerSave += HandlePlayerSave;
     }
 
     void OnDestroy()
     {
         GameEvent.OnGameLoaded -= Load;
         GameEvent.OnGameSaved -= Save;
+        GameEvent.OnPlayerSave -= HandlePlayerSave;
     }
 
     void Update()
@@ -138,5 +140,10 @@ public class PlayerHealth : MonoBehaviour
 
         data.player.health = this.currentHealth;
         data.player.maxHealth = this.maxHealth;
+    }
+
+    private void HandlePlayerSave(Transform trans)
+    {
+        GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
@@ -23,12 +22,14 @@ public class PlayerEnergy : MonoBehaviour
         GameEvent.OnEnergyChanged.Invoke(currentEnergy, maxEnergy);
         GameEvent.OnGameLoaded += Load;
         GameEvent.OnGameSaved += Save;
+        GameEvent.OnPlayerSave += HandlePlayerSave;
     }
 
     void OnDestroy()
     {
         GameEvent.OnGameLoaded -= Load;
         GameEvent.OnGameSaved -= Save;
+        GameEvent.OnPlayerSave -= HandlePlayerSave;
     }
 
     void Update()
@@ -81,5 +82,10 @@ public class PlayerEnergy : MonoBehaviour
 
         data.player.energy = this.currentEnergy;
         data.player.maxEnergy = this.maxEnergy;
+    }
+
+    private void HandlePlayerSave(Transform trans)
+    {
+        GameEvent.OnEnergyChanged.Invoke(currentEnergy, maxEnergy);
     }
 }

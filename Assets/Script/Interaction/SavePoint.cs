@@ -1,54 +1,58 @@
+using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(SpawnPointInfo))]
 public class SavePoint : MonoBehaviour
 {
-    public Interaction interaction;
-    public Transform point;
     public Animator inkAni;
-    
-    private PlayerController playerController;
-    private bool isSaved;
-    private bool saving;
-    private bool ready;
-    private float timer;
+
+    private string spawnPointID;
     
     void Start()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        isSaved = false;
-        ready = false;
-        saving = false;
-        timer = 0f;
+        spawnPointID = GetComponent<SpawnPointInfo>().spawnPointID;
+        GameEvent.OnGameLoaded += Load;
+        GameEvent.OnGameSaved += Save;
     }
 
-    void Update()
+    void OnDestroy()
     {
-        // if (interaction.canInteract)
-        // {
-        //     if (!saving)
-        //     {
-        //         if(!ready){
-        //             playerController.SetUpForInteraction(point.position, 0);
-        //             ready = true;
-        //         }
-        //         if(!playerController.isGoTarget){
-        //             saving = true;
-        //             playerController.Saving();
-        //             inkAni.SetTrigger("inkUp");
-        //         }
-        //         return;
-        //     }
+        GameEvent.OnGameLoaded -= Load;
+        GameEvent.OnGameSaved -= Save;
+    }
 
-        //     timer += Time.deltaTime;
-        //     if(timer > 1f)
-        //     {
-        //         playerController.OtherAni.SetInteger("action", 0);
-        //     }
-        //     if(timer > 1.11f)
-        //     {
-        //         playerController.DeSaving();
-        //         interaction.canInteract = false;
-        //     }
-        // }
+    public void Trigger(Transform startPoint)
+    {
+        SaveManager.Instance.currentSave.player.spawnPoint = this.spawnPointID;
+        GameEvent.OnPlayerSave.Invoke(startPoint);
+        StartCoroutine(HandleAni());
+    }
+
+    private IEnumerator HandleAni()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        inkAni.ResetTrigger("inkDown"); 
+        inkAni.SetTrigger("inkUp");
+    }
+
+    private void Load()
+    {
+        var data = SaveManager.Instance.currentSave.player;
+        if(this.spawnPointID == data.spawnPoint)
+        {
+            inkAni.ResetTrigger("inkDown");
+            inkAni.SetTrigger("inkUp");
+        }
+    }
+
+    private void Save()
+    {
+        var data = SaveManager.Instance.currentSave.player;
+        if(this.spawnPointID != data.spawnPoint)
+        {
+            inkAni.ResetTrigger("inkUp");
+            inkAni.SetTrigger("inkDown");
+        }
     }
 }

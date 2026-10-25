@@ -334,7 +334,7 @@ public class PlayerController : MonoBehaviour
     private void CheckGlobalAbilities()
     {
         // Disabled player skill
-        if (!CanFight) {return; }
+        if (!CanFight) { return; }
 
         // dash
         if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Dash))
@@ -361,7 +361,8 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
             }
-            else {
+            else
+            {
                 audioManager.PlaySFX(outOffEnergy);
                 inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
             }
@@ -522,11 +523,15 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         GameEvent.OnInteractStateChanged += HandleInteractState;
+        GameEvent.OnPlayerReborn += HandleReborn;
+        GameEvent.OnPlayerSave += HandleSave;
     }
 
     private void OnDisable()
     {
         GameEvent.OnInteractStateChanged -= HandleInteractState;
+        GameEvent.OnPlayerReborn -= HandleReborn;
+        GameEvent.OnPlayerSave -= HandleSave;
     }
 
     private void HandleInteractState(bool isInteract) // use game event to enter interact
@@ -541,6 +546,29 @@ public class PlayerController : MonoBehaviour
             else TransitionToState<FallState>();
         }
     }
+
+    private void HandleReborn()
+    {
+        TransitionToState<RebornState>();
+    }
+
+    private void HandleSave(Transform startPosition)
+    {
+        EnterSave(startPosition);
+    }
+    
+    /// <summary>
+    /// setup target pos and enter cutscene state
+    /// </summary>
+    /// <param name="startPosition"></param>
+    /// <param name="requireGrounded"></param>
+    public void EnterSave(Transform startPosition = null, bool requireGrounded = false)
+    {
+        cutscenePosition = startPosition;
+        requireGroundedForCutscene = requireGrounded;
+        TransitionToState<SaveState>();
+    }
+
     #endregion
 
     # region Gizmos

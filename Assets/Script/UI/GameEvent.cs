@@ -10,6 +10,8 @@ public static class GameEvent
     
     // player action
     public static Action<bool> OnInteractStateChanged;
+    public static Action OnPlayerReborn;
+    public static Action<Transform> OnPlayerSave;
 
     // Action<current, max>
     public static Action<int, int> OnHealthChanged;

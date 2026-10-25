@@ -51,7 +51,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(FirstLoad(startingMap, startingSpawnID));
+            StartCoroutine(FirstLoad(startingMap));
         }
     }
 
@@ -134,9 +134,8 @@ public class MapManager : MonoBehaviour
     /// main menu to map
     /// </summary>
     /// <param name="newMapName"></param>
-    /// <param name="targetSpawnID"></param>
     /// <returns></returns>
-    private IEnumerator FirstLoad(string newMapName, string targetSpawnID)
+    private IEnumerator FirstLoad(string newMapName)
     {
         fadeAni.speed = 0f;
         player.SetActive(false); // diactivate all player action
@@ -167,6 +166,7 @@ public class MapManager : MonoBehaviour
         Transform finalSpawnPos = null;
         SceneController sceneController = FindAnyObjectByType<SceneController>();
         SpawnPointInfo[] allSpawnPoints = sceneController.spawnPointInfos;
+        string targetSpawnID = SaveManager.Instance.currentSave.player.spawnPoint;
 
         foreach(var spawnPoint in allSpawnPoints)
         {

@@ -13,6 +13,8 @@ public class PlayerAnimateHash
     public static readonly int HoldingPen = Animator.StringToHash("HoldingPen");
     public static readonly int Roll = Animator.StringToHash("Roll");
     public static readonly int RollEnd = Animator.StringToHash("RollEnd");
+    public static readonly int Saving = Animator.StringToHash("Saving");
+    public static readonly int Reborn = Animator.StringToHash("Reborn");
 
     // dash
     public static readonly int Dash = Animator.StringToHash("Dash");

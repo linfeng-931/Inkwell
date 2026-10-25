@@ -27,6 +27,7 @@ public class Interaction : MonoBehaviour
     public float detectionRange;
     public GameObject interactionKeyUI;
     public Animator keyAnimator;
+    public bool interactOnce = true;
 
     [Header("After Interact")]
     public List<InteractAction> interactionSequence = new List<InteractAction>();
@@ -43,7 +44,7 @@ public class Interaction : MonoBehaviour
 
     void Update()
     {
-        if (puzzleComplete || hasInteracted) return;
+        if (puzzleComplete || (interactOnce && hasInteracted)) return;
 
         // detect player position
         float distance = Vector3.Distance(playerTrans.position, transform.position);
@@ -85,11 +86,14 @@ public class Interaction : MonoBehaviour
 
     private void HandleInteractPressed()
     {
-        if (!isPlayerInRange || hasInteracted) return;
+        if (!isPlayerInRange || puzzleComplete || (interactOnce && hasInteracted)) return;
 
-        hasInteracted = true;
-        UpdateUIState(false);
-        GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
+        if (interactOnce)
+        {
+            hasInteracted = true;
+            UpdateUIState(false);
+            GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
+        }
 
         foreach (var action in interactionSequence)
         {
@@ -114,6 +118,12 @@ public class Interaction : MonoBehaviour
     {
         puzzleComplete = true;
         UpdateUIState(false);
+
+        if (isPlayerInRange)
+        {
+            GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
+            isPlayerInRange = false;
+        }
     }
 
     private void OnDrawGizmos()
