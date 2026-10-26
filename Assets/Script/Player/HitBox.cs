@@ -27,7 +27,7 @@ public class HitBox : MonoBehaviour
         Vector3 actualCenter = hitBoxCenter.position + hitBoxCenter.TransformDirection(currentOffset);
 
         // find all collider in hit box
-        Collider[] hitColliders = Physics.OverlapBox(hitBoxCenter.position, hitBoxSize / 2f, hitBoxCenter.rotation, enemyLayer);
+        Collider[] hitColliders = Physics.OverlapBox(actualCenter, currentSize / 2f, hitBoxCenter.rotation, enemyLayer);
 
         foreach (Collider col in hitColliders)
         {
@@ -44,20 +44,13 @@ public class HitBox : MonoBehaviour
         }
 
         // find all hook objects which was hitted
-        Collider[] hookObjectColliders = Physics.OverlapBox(hitBoxCenter.position, hitBoxSize / 2f, hitBoxCenter.rotation, hookObjectLayer);
+        Collider[] hookObjectColliders = Physics.OverlapBox(actualCenter, currentSize / 2f, hitBoxCenter.rotation, hookObjectLayer);
         foreach (Collider col in hookObjectColliders)
         {
-            //Debug.Log(col.gameObject.name);
-            // Play hook object animation
             GameObject hookGameObject = col.gameObject;
-
             HookTarget hookTarget = hookGameObject.GetComponentInParent<HookTarget>();
 
-            if (hookTarget == null)
-            {
-                return;
-            }
-
+            if (hookTarget == null) return;
             hookTarget.TriggerHitAnimation();
         }
     }
@@ -78,8 +71,14 @@ public class HitBox : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        if (hitBoxCenter == null) return;
+
         Gizmos.color = isHitBoxActive ? Color.red : new Color(1, 0, 0, 0.3f);
-        Gizmos.matrix = Matrix4x4.TRS(hitBoxCenter.position, hitBoxCenter.rotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, hitBoxSize);
+
+        Vector3 drawCenter = isHitBoxActive ? hitBoxCenter.position + hitBoxCenter.TransformDirection(currentOffset) : hitBoxCenter.position;
+        Vector3 drawSize = isHitBoxActive ? currentSize : hitBoxSize;
+
+        Gizmos.matrix = Matrix4x4.TRS(drawCenter, hitBoxCenter.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, drawSize);
     }
 }

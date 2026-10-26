@@ -16046,7 +16046,6 @@ GameObject:
   - component: {fileID: 29141156847761799}
   - component: {fileID: 2695460089783884585}
   - component: {fileID: 3494497917321997079}
-  - component: {fileID: 5312323520329000917}
   m_Layer: 18
   m_Name: Player
   m_TagString: Player
@@ -16503,6 +16502,7 @@ MonoBehaviour:
   cutscenePosition: {fileID: 0}
   requireGroundedForCutscene: 0
   isCutsceneReady: 0
+  sceneScaleFacesRight: 0
   canTurn: 1
   isFacingRight: 0
   playerFace: {fileID: 4950413031872058600}
@@ -16518,6 +16518,7 @@ MonoBehaviour:
   outOffEnergy: {fileID: 8300000, guid: e73b6d8a5e0ab5949b7665d78388e027, type: 3}
   fullOffEnergy: {fileID: 8300000, guid: 26910f1e046491d44b3a6ebd4b080ddd, type: 3}
   canJump: 0
+  jumpGraceAfterUnlock: 0.25
 --- !u!114 &7925442759219868613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16586,10 +16587,6 @@ MonoBehaviour:
   gamePlayHUD: {fileID: 3186345693731426043}
   playerEnergy: {fileID: 5742222069716928868}
   playerHealth: {fileID: 5927650553674234230}
-  weaponParticle:
-  - {fileID: 1434973456707531819}
-  - {fileID: 8763100316559197551}
-  - {fileID: 9007322179116089169}
   isCombatEnabled: 0
   isWeaponVisible: 0
   playerController: {fileID: 1572666921265124869}
@@ -16652,56 +16649,9 @@ MonoBehaviour:
   gamePlayHUD: {fileID: 3186345693731426043}
   playerEnergy: {fileID: 5742222069716928868}
   playerHealth: {fileID: 5927650553674234230}
-  weaponParticle:
-  - {fileID: 1434973456707531819}
-  - {fileID: 8763100316559197551}
-  - {fileID: 9007322179116089169}
   isCombatEnabled: 0
   isWeaponVisible: 0
   playerController: {fileID: 1572666921265124869}
---- !u!114 &5312323520329000917
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1467389584813583188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efc194345f2ce4a239aa4140175e2b8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlagListener
-  flagID: player_start
-  onUnlocked:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3494497917321997079}
-        m_TargetAssemblyTypeName: PlayerLoadout, Assembly-CSharp
-        m_MethodName: EnterArmedMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0.2
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onLocked:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3494497917321997079}
-        m_TargetAssemblyTypeName: PlayerLoadout, Assembly-CSharp
-        m_MethodName: Initialize
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!1 &1509110524091860682
 GameObject:
   m_ObjectHideFlags: 0
@@ -16755,6 +16705,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueView
   dialogueText: {fileID: 4179535347526776420}
+  audioManager: {fileID: 0}
+  typeClip: {fileID: 0}
 --- !u!114 &4734194795111275127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16768,6 +16720,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialoguePresenter
   view: {fileID: 2070807268999906230}
+  gamePlayHUD: {fileID: 0}
+  playerEnergy: {fileID: 0}
+  playerHealth: {fileID: 0}
 --- !u!225 &3403060906319936383
 CanvasGroup:
   m_ObjectHideFlags: 0

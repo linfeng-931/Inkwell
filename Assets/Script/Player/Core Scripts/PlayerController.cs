@@ -148,6 +148,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     [Header("Turn Setting")]
+    [SerializeField] private bool sceneScaleFacesRight = false;
     public bool canTurn = true;
     public bool isFacingRight = true; //should check your player image direction
 
@@ -178,6 +179,8 @@ public class PlayerController : MonoBehaviour
     public bool CanFight => (loadout == null || loadout.CombatEnabled)
                             && !PlayerLock.IsLocked(PlayerLockType.Combat);
     public bool canJump = false;
+    private bool wasCanMove = true;
+    [SerializeField] private float jumpGraceAfterUnlock = 0.25f;
 
     private void Awake()
     {
@@ -196,6 +199,11 @@ public class PlayerController : MonoBehaviour
 
         dashParticleSystems = dashParticle.GetComponentsInChildren<ParticleSystem>();
         loadout = GetComponent<PlayerLoadout>();
+
+        if (isFacingRight != sceneScaleFacesRight)
+        {
+            Flip();
+        }
     }
 
     void Start()
@@ -210,6 +218,19 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+
+        bool canMoveNow = CanMove;
+        if (canMoveNow && !wasCanMove)
+        {
+            inputBufferManager.BlockInput(InputBufferManager.InputActionType.Jump, jumpGraceAfterUnlock);
+        }
+        wasCanMove = canMoveNow;
+
+        if (isPlayerInputEnabled)
+        {
+            currentMoveX = CanMove ? inputBufferManager.moveInputX : 0f;
+            CheckGlobalAbilities();
+        }
 
 
         if (isPlayerInputEnabled)
@@ -542,6 +563,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            inputBufferManager.BlockInput(InputBufferManager.InputActionType.Jump, jumpGraceAfterUnlock);
             if (isGrounded) TransitionToState<IdleState>();
             else TransitionToState<FallState>();
         }

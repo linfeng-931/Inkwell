@@ -74,4 +74,9 @@ public class TextEffect : MonoBehaviour
         textCanvasGroup.alpha = targetAlpha;
         onComplete?.Invoke();
     }
+
+    public void SetText(string text = "- «ö¤U F ©Þ°_¿ûµ§ -")
+    {
+        tmpComponent.text = text;
+    }
 }

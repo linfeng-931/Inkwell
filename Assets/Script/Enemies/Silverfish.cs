@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using MonsterLove.StateMachine;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Silverfish : MonoBehaviour, IEnemy
@@ -58,7 +59,7 @@ public class Silverfish : MonoBehaviour, IEnemy
     public AudioClip atkSfx;
 
     private Rigidbody rig;
-    private bool facingRight = false;
+    public bool facingRight = false;
     private SpriteRenderer spriteRenderer;
     private PlayerHealth playerHealth;
 
@@ -74,6 +75,7 @@ public class Silverfish : MonoBehaviour, IEnemy
         rig.constraints = RigidbodyConstraints.FreezeRotation;
 
         fsm = StateMachine<States>.Initialize(this, States.Idle);
+        if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
     }
 
     void Start()
@@ -201,7 +203,7 @@ public class Silverfish : MonoBehaviour, IEnemy
         StopMovement();
 
         yield return new WaitForSeconds(
-            Random.Range(2f, 3f)
+            UnityEngine.Random.Range(2f, 3f)
         );
 
         if (fsm.State == States.Idle)
@@ -364,24 +366,30 @@ public class Silverfish : MonoBehaviour, IEnemy
     // Death
     void Death_Enter()
     {
-        StopAllCoroutines();
+        OnDied?.Invoke(this);
 
+        StopAllCoroutines();
         StopMovement();
         rig.isKinematic = true;
 
-        // disable all colliders
-        Collider[] colliders = GetComponentsInChildren<Collider>();
-
-        foreach (Collider col in colliders)
+        foreach (Collider col in GetComponentsInChildren<Collider>())
         {
             col.enabled = false;
         }
 
-        deadParticle.transform.SetParent(null); 
-        deadParticle.Play();
-        Destroy(deadParticle.gameObject, 2f); 
+        deadParticle.transform.SetParent(null, true);
+        deadParticle.Play(true);
 
-        Destroy(gameObject, 2f);
+        var main = deadParticle.main;
+        float lifeTime = main.duration + main.startLifetime.constantMax;
+        Destroy(deadParticle.gameObject, lifeTime);
+
+        foreach (Renderer r in GetComponentsInChildren<Renderer>(true))
+        {
+            r.enabled = false;
+        }
+
+        Destroy(gameObject);
     }
 
     #endregion
@@ -416,4 +424,6 @@ public class Silverfish : MonoBehaviour, IEnemy
         // Keep Y velocity for gravity
         rig.linearVelocity = new Vector3(0f, rig.linearVelocity.y, 0f);
     }
+
+    public event Action<Silverfish> OnDied;
 }

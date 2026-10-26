@@ -62,8 +62,8 @@ public class CutsceneState : PlayerState
         manager.rig.useGravity = true;
         manager.cutscenePosition = null;
 
-        bool currentVisualDir = manager.transform.localScale.x >= 0 ? true : false;
-        manager.isFacingRight = currentVisualDir;
+        //bool currentVisualDir = manager.transform.localScale.x >= 0 ? true : false;
+        //manager.isFacingRight = currentVisualDir;
     }
 
     /// <summary>

@@ -24,6 +24,7 @@ public class WeaponSwapFade : MonoBehaviour
     private IEnumerator SwapRoutine()
     {
         Debug.Log("[WeaponSwapFade] stone weapon fade out");
+        if (textEffect != null) textEffect.StopBlinking();
         if (stoneWeapon != null) stoneWeapon.FadeOut(stoneFadeOutDuration);
 
         if (playerFadesInAfterStone)
@@ -35,10 +36,9 @@ public class WeaponSwapFade : MonoBehaviour
         PlayerLoadout loadout = MapManager.Instance.player.GetComponent<PlayerLoadout>();
         if (loadout != null) loadout.FadeInWeapon(playerFadeInDuration);
 
-        // 等身上的筆完全淡入才算結束（原本是淡入一開始就視為完成）
         yield return new WaitForSeconds(playerFadeInDuration);
 
-        if (textEffect != null) textEffect.StopBlinking();
+        
     }
 
     public bool HasFadePlayed() {

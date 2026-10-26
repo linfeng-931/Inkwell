@@ -4,6 +4,12 @@ public class DialoguePresenter : MonoBehaviour
 {
     [SerializeField] private DialogueView view;
 
+    [Header("Game Object Visual")]
+    [SerializeField] private GamePlayHUD gamePlayHUD; // Player UI
+    [SerializeField] private PlayerEnergy playerEnergy;
+    [SerializeField] private PlayerHealth playerHealth;
+
+
     void Start()
     {
         view.OnExit();
@@ -25,6 +31,7 @@ public class DialoguePresenter : MonoBehaviour
 
     private void HandleDialogueOpened()
     {
+        HidePlayerUI();
         UIManager.Instance.OpenPanel(view);
     }
     
@@ -43,5 +50,23 @@ public class DialoguePresenter : MonoBehaviour
     private void HandleDialogueClosed()
     {
         UIManager.Instance.CloseTopPanel();
+        ShowPlayerUI();
+    }
+
+    private void HidePlayerUI()
+    {
+        gamePlayHUD.enabled = false;
+        playerEnergy.enabled = false;
+        playerHealth.enabled = false;
+        gamePlayHUD.gameObject.SetActive(false);
+    }
+
+    private void ShowPlayerUI()
+    {
+        // Show Player UI
+        gamePlayHUD.gameObject.SetActive(true);
+        gamePlayHUD.enabled = true;
+        playerEnergy.enabled = true;
+        playerHealth.enabled = true;
     }
 }

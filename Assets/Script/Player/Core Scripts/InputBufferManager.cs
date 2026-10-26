@@ -37,6 +37,14 @@ public class InputBufferManager : MonoBehaviour
     public InputActionReference hookAction;
     public InputActionReference shootAction;
 
+    private readonly Dictionary<InputActionType, float> blockedUntil = new Dictionary<InputActionType, float>();
+
+    public void BlockInput(InputActionType type, float duration)
+    {
+        blockedUntil[type] = Time.time + duration;
+        ConsumeInput(type);
+    }
+
     private void Update()
     {
         //continuous type
@@ -61,6 +69,7 @@ public class InputBufferManager : MonoBehaviour
 
     private void BufferInput(InputActionType type)
     {
+        if (blockedUntil.TryGetValue(type, out float until) && Time.time < until) return;
         //timestamp: now + 0.2f
         inputTimers[type] = Time.time + defaultBufferTimer; 
     }

@@ -8,7 +8,7 @@ public class PlayerLoadout : MonoBehaviour
     [SerializeField] private GamePlayHUD gamePlayHUD; // Player UI
     [SerializeField] private PlayerEnergy playerEnergy;
     [SerializeField] private PlayerHealth playerHealth;
-    [SerializeField] private GameObject[] weaponParticle;
+    // [SerializeField] private GameObject[] weaponParticle;
 
     [Header("Player State")]
     [SerializeField] private bool isCombatEnabled = false;
@@ -30,9 +30,9 @@ public class PlayerLoadout : MonoBehaviour
         gamePlayHUD.gameObject.SetActive(false);
 
         // Hide Weapon Particle
-        foreach (GameObject particle in weaponParticle) {
-            particle.SetActive(false);
-        }
+        //foreach (GameObject particle in weaponParticle) {
+        //    particle.SetActive(false);
+        //}
     }
 
     // Show Weapon and Start Combat System
@@ -42,16 +42,16 @@ public class PlayerLoadout : MonoBehaviour
         CombatEnabled = true;
 
         // Show Player UI
+        gamePlayHUD.gameObject.SetActive(true);
         gamePlayHUD.enabled = true;
         playerEnergy.enabled = true;
         playerHealth.enabled = true;
-        gamePlayHUD.gameObject.SetActive(true);
 
         // Show Weapon Particle
-        foreach (GameObject particle in weaponParticle)
-        {
-            particle.SetActive(true);
-        }
+        //foreach (GameObject particle in weaponParticle)
+        //{
+        //    particle.SetActive(true);
+        //}
 
         playerController.canJump = true;
     }

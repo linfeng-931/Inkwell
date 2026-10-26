@@ -7,12 +7,17 @@ public class PullWeaponInteraction : MonoBehaviour
     [Header("Detection")]
     [SerializeField] private float detectionRange = 2f;
 
-    [Header("Pull Sequences")]
     [SerializeField] private TimelineSequenceController[] pullSequences;
 
     [Header("Feedback")]
     [SerializeField] private WeaponPullFeedback feedback;
     [SerializeField] private WeaponSwapFade swapFade;
+
+    [Header("Particle System")]
+    [SerializeField] private ParticleSystem sparkParticle;
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private AudioClip flameClip;
+    [SerializeField] private float pressFeedbackCooldown = 0.12f;
 
     private Transform playerTrans;
     private PlayerController player;
@@ -24,11 +29,25 @@ public class PullWeaponInteraction : MonoBehaviour
     private int pullIndex;
     private bool unlockMovement = false;
 
+    private int busyStartFrame = -1;
+    private float lastFeedbackTime = -100f;
+
+    private void Awake()
+    {
+        if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
+    }
+
     private void Start()
     {
         GameObject playerObj = MapManager.Instance.player.gameObject;
         playerTrans = playerObj.transform;
         player = playerObj.GetComponent<PlayerController>();
+    }
+
+    private void OnDisable()
+    {
+        GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
+        PlayerLock.UnlockAll(this);
     }
 
     // Player start pick up weapon
@@ -44,22 +63,53 @@ public class PullWeaponInteraction : MonoBehaviour
 
     private void Update()
     {
-        if (unlockMovement) return;
+        TryReleaseMovementLock();
+        HandleBusyPressFeedback();
+        UpdateRangeDetection();
+    }
 
-        if (swapFade.HasFadePlayed())
+    private void TryReleaseMovementLock()
+    {
+        if (unlockMovement || swapFade == null) return;
+        if (swapFade.HasFadePlayed()) ReleaseMovementLock();
+    }
+
+    private void ReleaseMovementLock()
+    {
+        if (unlockMovement) return;
+        unlockMovement = true;
+        PlayerLock.Unlock(this);
+    }
+
+    private void HandleBusyPressFeedback()
+    {
+        if (!isBusy || pullIndex == 2) return;
+        if (Time.frameCount <= busyStartFrame) return;
+        if (!Input.GetKeyDown(KeyCode.F)) return;
+        if (Time.time - lastFeedbackTime < pressFeedbackCooldown) return;
+
+        lastFeedbackTime = Time.time;
+
+        if (sparkParticle != null)
         {
-            PlayerLock.Unlock(this);
-            unlockMovement = true;
+            sparkParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            sparkParticle.Play(true);
         }
 
+        if (audioManager != null && flameClip != null)
+        {
+            audioManager.PlayUISFX(flameClip);
+        }
+    }
+
+    private void UpdateRangeDetection()
+    {
         if (!isPhaseActive || isCompleted || isBusy) return;
 
         bool inRange = Vector3.Distance(playerTrans.position, transform.position) < detectionRange;
         if (inRange == isPlayerInRange) return;
 
         SetInRange(inRange);
-
-
     }
 
     // Player in pick up weapon range
@@ -82,6 +132,7 @@ public class PullWeaponInteraction : MonoBehaviour
         if (pullIndex >= pullSequences.Length) return;
 
         isBusy = true;
+        busyStartFrame = Time.frameCount;
         SetInRange(false);
 
         TimelineSequenceController sequence = pullSequences[pullIndex];
@@ -110,6 +161,11 @@ public class PullWeaponInteraction : MonoBehaviour
         {
             isCompleted = true;
             isPhaseActive = false;
+
+            if (swapFade == null || !swapFade.HasFadePlayed())
+            {
+                ReleaseMovementLock();
+            }
         }
     }
 }
