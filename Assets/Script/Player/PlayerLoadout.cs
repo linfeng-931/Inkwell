@@ -13,10 +13,16 @@ public class PlayerLoadout : MonoBehaviour
     [Header("Player State")]
     [SerializeField] private bool isCombatEnabled = false;
     [SerializeField] private bool isWeaponVisible = false;
+    [SerializeField] private bool canJump = false;
 
     [SerializeField] private PlayerController playerController;
 
     public bool CombatEnabled { get; private set; }
+
+    private void Start() // for test
+    {
+        EnterArmedMode();
+    }
 
     public void Initialize()
     {
@@ -33,6 +39,7 @@ public class PlayerLoadout : MonoBehaviour
         //foreach (GameObject particle in weaponParticle) {
         //    particle.SetActive(false);
         //}
+        playerController.canJump = canJump;
     }
 
     // Show Weapon and Start Combat System

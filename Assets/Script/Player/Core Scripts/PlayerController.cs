@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour
     public AttackData[] groundCombo;
     public AttackData[] airCombo;
     public bool canAirAttack = true;
+    public HitBox hitBox;
     public int damage = 1;
 
     public int currentComboIndex { get; set; } = 0;

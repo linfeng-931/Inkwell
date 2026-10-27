@@ -15,6 +15,4 @@ public class AttackData
     [Header("HitBox")]
     public float activeHitBoxStartTime = 0.005f;
     public float activeHitBoxEndTime = 0.04f;
-    public Vector3 hitboxSize = new Vector3(1.5f, 1.5f, 1f);
-    public Vector3 hitboxOffset = new Vector3(1f, 0f, 0f);
 }
