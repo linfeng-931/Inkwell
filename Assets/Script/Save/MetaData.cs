@@ -27,7 +27,10 @@ public class PlayerStateData
 [Serializable]
 public class NoteData
 {
-    public Dictionary<string, int> items = new Dictionary<string, int>(); // id, amount
+    // id, amount
+    public Dictionary<string, int> items = new Dictionary<string, int>(){
+            {"inspiration", 0}
+        };
 }
 
 /// <summary>
@@ -38,8 +41,8 @@ public class GameSaveData
 {
     public SaveMetaData meta = new SaveMetaData();
     public PlayerStateData player = null;
-    public NoteData note = null;
-    
+    public NoteData note = new NoteData();
+
     // story flag
     public Dictionary<string, bool> flags = new Dictionary<string, bool>();
 }

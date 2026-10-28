@@ -6187,6 +6187,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5903982827091228695}
+  - component: {fileID: 1748542184517115357}
+  - component: {fileID: 4496104102310613082}
+  - component: {fileID: 3140303258765880055}
   m_Layer: 5
   m_Name: Inspiration
   m_TagString: Untagged
@@ -6216,6 +6219,46 @@ RectTransform:
   m_AnchoredPosition: {x: 781, y: 446.75}
   m_SizeDelta: {x: 278, y: 54.5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1748542184517115357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256409808515027560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aa4d259410c3462e8b7b56ba45c51d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InspirationPresenter
+  view: {fileID: 3140303258765880055}
+--- !u!225 &4496104102310613082
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256409808515027560}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &3140303258765880055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256409808515027560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e4b9354332d94926bd563eb6a2aaced, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InspirationView
+  amountText: {fileID: 1402704403979339440}
+  countSpeed: 10
+  closeDelay: 3
 --- !u!1 &1305326424479297395
 GameObject:
   m_ObjectHideFlags: 0
@@ -16475,7 +16518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLoadout
   weaponVisual: {fileID: 5746955576046348824}
-  gamePlayHUD: {fileID: 3186345693731426043}
+  gamePlayHUD: {fileID: 67276813081218989}
   playerEnergy: {fileID: 5742222069716928868}
   playerHealth: {fileID: 5927650553674234230}
   isCombatEnabled: 0
@@ -16538,7 +16581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLoadout
   weaponVisual: {fileID: 4261727103292986664}
-  gamePlayHUD: {fileID: 3186345693731426043}
+  gamePlayHUD: {fileID: 67276813081218989}
   playerEnergy: {fileID: 5742222069716928868}
   playerHealth: {fileID: 5927650553674234230}
   isCombatEnabled: 0
@@ -16613,7 +16656,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialoguePresenter
   view: {fileID: 2070807268999906230}
-  gamePlayHUD: {fileID: 3186345693731426043}
+  gamePlayHUD: {fileID: 0}
   playerEnergy: {fileID: 5742222069716928868}
   playerHealth: {fileID: 5927650553674234230}
 --- !u!225 &3403060906319936383
@@ -16846,7 +16889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49214493f42064f219c6f2c8d98a3095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemIntroView
-  cover: {fileID: 0}
+  cover: {fileID: 4570081411059375527}
   itemName: {fileID: 6876873627644555662}
   decs: {fileID: 6910741386362334323}
   subDecs: {fileID: 0}
@@ -45138,8 +45181,6 @@ GameObject:
   - component: {fileID: 71498689983475607}
   - component: {fileID: 7343604781117909989}
   - component: {fileID: 2159236965191401706}
-  - component: {fileID: 4624291835636840591}
-  - component: {fileID: 3186345693731426043}
   m_Layer: 5
   m_Name: Canvas_HUD
   m_TagString: Untagged
@@ -45231,32 +45272,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!225 &4624291835636840591
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5837016660863950584}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
---- !u!114 &3186345693731426043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5837016660863950584}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70d79382a0448448b9394966be368eca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GamePlayHUD
-  healthUI: {fileID: 1713895084543086257}
-  energyUI: {fileID: 6423574052309916816}
 --- !u!1 &5883842494148809595
 GameObject:
   m_ObjectHideFlags: 0
@@ -56149,6 +56164,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9106700700079705064}
+  - component: {fileID: 4813624986746273911}
+  - component: {fileID: 67276813081218989}
   m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Untagged
@@ -56182,6 +56199,32 @@ RectTransform:
   m_AnchoredPosition: {x: 180, y: -56}
   m_SizeDelta: {x: 426.46265, y: 131.82}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &4813624986746273911
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6933526310116446969}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &67276813081218989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6933526310116446969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70d79382a0448448b9394966be368eca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GamePlayHUD
+  healthUI: {fileID: 1713895084543086257}
+  energyUI: {fileID: 6423574052309916816}
 --- !u!1 &6968757809358618165
 GameObject:
   m_ObjectHideFlags: 0

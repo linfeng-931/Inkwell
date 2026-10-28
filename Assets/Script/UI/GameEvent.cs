@@ -24,6 +24,7 @@ public static class GameEvent
     public static Action<bool> OnNoteStateChanged;
     public static Action<bool> OnToggleFade;
     public static Action OnWorldInteractPressed;
+    public static Action<int> OnInspirationCollected;
 
     // cutscene (true = enter, false = exist)
     public static Action<bool> OnCutsceneStateChanged;

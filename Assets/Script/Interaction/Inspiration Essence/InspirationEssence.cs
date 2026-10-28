@@ -94,7 +94,7 @@ public class InspirationEssence : MonoBehaviour
 
                 if (dist < 0.5f) 
                 {
-                    // GameEventManager.TriggerInspirationCollected(num);
+                    GameEvent.OnInspirationCollected(num);
                     Destroy(gameObject);
                 }
             }
