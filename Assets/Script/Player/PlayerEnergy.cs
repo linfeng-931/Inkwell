@@ -52,6 +52,12 @@ public class PlayerEnergy : MonoBehaviour
         }
     }
 
+    public void RefillEnergy()
+    {
+        currentEnergy = maxEnergy;
+        GameEvent.OnEnergyChanged.Invoke(currentEnergy, maxEnergy);
+    }
+
     public void ConsumeEnergy(float consumeEnergy)
     {
         if (currentEnergy < consumeEnergy) return;
@@ -87,5 +93,10 @@ public class PlayerEnergy : MonoBehaviour
     private void HandlePlayerSave(Transform trans)
     {
         GameEvent.OnEnergyChanged.Invoke(currentEnergy, maxEnergy);
+    }
+
+    public float GetCurrentEnergy()
+    {
+        return currentEnergy;
     }
 }

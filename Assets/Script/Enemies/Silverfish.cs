@@ -60,6 +60,7 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     private Rigidbody rig;
     public bool facingRight = false;
+    public bool startFacingRight = false;
     private SpriteRenderer spriteRenderer;
     private PlayerHealth playerHealth;
 
@@ -73,6 +74,18 @@ public class Silverfish : MonoBehaviour, IEnemy
 
         // Prevent unwanted rotation
         rig.constraints = RigidbodyConstraints.FreezeRotation;
+
+        facingRight = startFacingRight;
+        Vector3 currentScale = transform.localScale;
+        if (facingRight)
+        {
+            currentScale.x = -Mathf.Abs(currentScale.x);
+        }
+        else
+        {
+            currentScale.x = Mathf.Abs(currentScale.x);
+        }
+        transform.localScale = currentScale;
 
         fsm = StateMachine<States>.Initialize(this, States.Idle);
         if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();

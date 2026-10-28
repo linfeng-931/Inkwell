@@ -528,16 +528,17 @@ public class PlayerController : MonoBehaviour
     // 3. Spawn in specific location when player totally died
     public void TeleportTo(Vector3 targetPosition, bool resetVelocity = true)
     {
-        if (resetVelocity && rig != null)
-        {
-            rig.linearVelocity = Vector3.zero;
-            rig.angularVelocity = Vector3.zero;
-        }
-        transform.position = targetPosition;
         if (rig != null)
         {
+            if (resetVelocity)
+            {
+                rig.linearVelocity = Vector3.zero;
+                rig.angularVelocity = Vector3.zero;
+            }
             rig.position = targetPosition;
         }
+        transform.position = targetPosition;
+        Physics.SyncTransforms();
     }
 
     #region GameEvent
@@ -566,6 +567,15 @@ public class PlayerController : MonoBehaviour
             inputBufferManager.BlockInput(InputBufferManager.InputActionType.Jump, jumpGraceAfterUnlock);
             if (isGrounded) TransitionToState<IdleState>();
             else TransitionToState<FallState>();
+        }
+    }
+
+    public void StopMovement()
+    {
+        if (rig != null)
+        {
+            rig.linearVelocity = Vector3.zero;
+            rig.angularVelocity = Vector3.zero;
         }
     }
 

@@ -92,6 +92,7 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator ResetHealth(float waitTime) {
         yield return new WaitForSeconds(waitTime);
         currentHealth = maxHealth;
+        playerController.playerEnergy.RefillEnergy();
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
     }
 
@@ -100,26 +101,23 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     /// <param name="hazardRespawnPos"></param>
     /// <param name="hazardDamage"></param>
-    public void RespawnFromHazard(Vector3 hazardRespawnPos, int hazardDamage = 1) {
-        // Update player info
+    public bool RespawnFromHazard(Vector3 hazardRespawnPos, int hazardDamage = 1)
+    {
         currentHealth = Mathf.Clamp(currentHealth - hazardDamage, 0, maxHealth);
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
 
-        // Is player die or not
-        if (currentHealth <= 0) {
+        if (currentHealth <= 0)
+        {
             Die();
-            return;
+            return false;
         }
 
-        // Start invincibility frames
         isInvincible = true;
         invincibilityTimer = invincibilityDuration;
-
-        // Respawn
         playerController.hazardRespawnPosition = hazardRespawnPos;
         playerController.isHazardHurt = true;
-
         playerController.TransitionToState<HurtState>();
+        return true;
     }
 
     private void Load()

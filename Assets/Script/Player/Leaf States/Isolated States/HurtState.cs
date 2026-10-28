@@ -24,7 +24,6 @@ public class HurtState : PlayerState
         }
         else
         {
-            manager.rig.linearVelocity = Vector3.zero;
             hasTriggeredFadeOut = true;
             GameEvent.OnToggleFade(false);
         }
@@ -56,8 +55,7 @@ public class HurtState : PlayerState
                 {
                     hasRelocated = true;
 
-                    manager.rig.position = manager.hazardRespawnPosition;
-                    manager.transform.position = manager.hazardRespawnPosition;
+                    manager.TeleportTo(manager.hazardRespawnPosition, true);
 
                     // move camera
                     if (manager.mainCam.GetComponent<CinemachineBrain>().ActiveVirtualCamera is CinemachineVirtualCameraBase vcam)

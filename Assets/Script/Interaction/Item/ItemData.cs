@@ -11,6 +11,7 @@ public class ItemData
     public string[] stageSubDescs; // story
     public int currentStage = 0;
     public bool isUniqueItem;
+    public UnityEngine.UI.Image[] itemImage;
 }
 
 public class ItemDatabase

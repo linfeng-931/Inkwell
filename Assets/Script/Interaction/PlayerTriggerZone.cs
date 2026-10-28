@@ -7,16 +7,19 @@ public class PlayerTriggerZone : MonoBehaviour
     public UnityEvent onPlayerEnter;
 
     public bool triggerOnlyOnce = true;
+    private bool hasTriggered = false;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Player"))
+        if (hasTriggered) return;
+
+        if (collision.collider.CompareTag("Player"))
         {
             onPlayerEnter?.Invoke();
 
             if (triggerOnlyOnce)
             {
-                other.isTrigger = false;
+                hasTriggered = true;
             }
         }
     }
