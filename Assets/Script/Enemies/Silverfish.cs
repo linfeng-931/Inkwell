@@ -10,6 +10,10 @@ public class Silverfish : MonoBehaviour, IEnemy
     public enum States { Idle, Patrol, Chase, Attack, Hurt, Death }
     private StateMachine<States> fsm;
 
+    #if UNITY_EDITOR
+    [SerializeField] private bool forceDead = false;
+    #endif
+
     [Header("Attribute Setting")]
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4f;
@@ -105,6 +109,7 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     void Update()
     {
+        if(forceDead) TakeDamage(maxHealth);
         if (fsm.State == States.Death) return;
     }
 

@@ -47,7 +47,7 @@ public class MapManager : MonoBehaviour
                 player.SetActive(true);
             }
 
-            OnMapSetupComplete.Invoke();
+            OnMapSetupComplete?.Invoke();
         }
         else
         {
@@ -123,7 +123,7 @@ public class MapManager : MonoBehaviour
             playerController.HandleTurning(true);
         }
 
-        OnMapSetupComplete.Invoke();
+        OnMapSetupComplete?.Invoke();
         player.SetActive(true);
 
         GameEvent.OnToggleFade(true);
@@ -166,7 +166,8 @@ public class MapManager : MonoBehaviour
         Transform finalSpawnPos = null;
         SceneController sceneController = FindAnyObjectByType<SceneController>();
         SpawnPointInfo[] allSpawnPoints = sceneController.spawnPointInfos;
-        string targetSpawnID = SaveManager.Instance.currentSave.player.spawnPoint;
+        string targetSpawnID = SaveManager.Instance.currentSave.player?.spawnPoint;
+        if(targetSpawnID == null) targetSpawnID = startingSpawnID;
 
         foreach(var spawnPoint in allSpawnPoints)
         {
@@ -190,7 +191,7 @@ public class MapManager : MonoBehaviour
             playerController.HandleTurning(true);
         }
 
-        OnMapSetupComplete.Invoke();
+        OnMapSetupComplete?.Invoke();
         player.SetActive(true);
 
         yield return new WaitForSeconds(0.5f);
