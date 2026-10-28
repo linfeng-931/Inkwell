@@ -5,8 +5,8 @@ public class AttackState : PlayerState
     private AttackData currentAttack;
     private float stateStartTime;
     private bool inputRegistered;
-    private bool hasEnabledHitBox;
-    private HitBox hitBox;
+    private bool hitboxOpened;
+    private bool hitboxClosed;
 
     public AttackState(PlayerController manager) : base(manager) { }
 
@@ -38,9 +38,10 @@ public class AttackState : PlayerState
         }
 
         // hit box setting
-        hasEnabledHitBox = false;
-        hitBox = manager.GetComponentInChildren<HitBox>();
-        hitBox.DisableHitBox();
+        hitboxOpened = false;
+        hitboxClosed = false;
+        manager.hitBox = manager.GetComponentInChildren<HitBox>();
+        manager.hitBox.DisableHitBox();
     }
 
     public override void Update()
@@ -50,18 +51,16 @@ public class AttackState : PlayerState
         float elapsedTime = Time.time - stateStartTime;
 
         // hit box and damage setting
-        if(elapsedTime >= currentAttack.activeHitBoxStartTime && elapsedTime <= currentAttack.activeHitBoxEndTime)
+        if (elapsedTime >= currentAttack.activeHitBoxStartTime && !hitboxOpened)
         {
-            if (!hasEnabledHitBox)
-            {
-                hitBox.EnableHitBox(manager.damage, currentAttack.hitboxSize, currentAttack.hitboxOffset);
-                hasEnabledHitBox = true;
-            }
+            manager.hitBox.EnableHitBox(manager.damage);
+            hitboxOpened = true;
         }
-        else if (elapsedTime > currentAttack.activeHitBoxEndTime && hasEnabledHitBox)
+
+        if (elapsedTime > currentAttack.activeHitBoxEndTime && hitboxOpened && !hitboxClosed)
         {
-            hitBox.DisableHitBox();
-            hasEnabledHitBox = false;
+            manager.hitBox.DisableHitBox();
+            hitboxClosed = true;
         }
 
         // move and combo setting
@@ -83,10 +82,11 @@ public class AttackState : PlayerState
         {
             if (manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Attack))
             {
+                manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
+
                 // enter next attack step
                 if(manager.currentComboIndex < manager.currentComboList.Length - 1)
                 {
-                    manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
                     inputRegistered = true;
                 }
             }
@@ -113,6 +113,11 @@ public class AttackState : PlayerState
         manager.rig.useGravity = true;
         manager.playerFace3.SetActive(false);
         manager.playerFace.SetActive(true);
+
+        if (manager.hitBox != null)
+        {
+            manager.hitBox.DisableHitBox();
+        }
     }
 
     private void ReturnToNormalState()

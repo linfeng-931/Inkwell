@@ -8,7 +8,7 @@ public class HitBox : MonoBehaviour
     public LayerMask enemyLayer;
     public LayerMask hookObjectLayer;
 
-    private HashSet<Collider> alreadyHitEnemies = new HashSet<Collider>(); // avoid hit same enemy twice
+    private HashSet<IEnemy> alreadyHitEnemies = new HashSet<IEnemy>(); // avoid hit same enemy twice
     private bool isHitBoxActive = false;
     private int currentDamage = 1;
     private Vector3 currentSize;
@@ -31,15 +31,15 @@ public class HitBox : MonoBehaviour
 
         foreach (Collider col in hitColliders)
         {
-            if (!alreadyHitEnemies.Contains(col))
+            IEnemy enemy = col.GetComponent<IEnemy>();
+            if (enemy == null) enemy = col.GetComponentInParent<IEnemy>(); 
+
+            if (enemy != null && !alreadyHitEnemies.Contains(enemy))
             {
-                alreadyHitEnemies.Add(col);
+                alreadyHitEnemies.Add(enemy);
 
-                // camera shake
                 CombatFeedbackManager.Instance.TriggerHitFeedback(0.08f, 1.5f);
-                col.GetComponent<IEnemy>().TakeDamage(currentDamage);
-
-                // later add voice
+                enemy.TakeDamage(currentDamage);
             }
         }
 
@@ -55,12 +55,10 @@ public class HitBox : MonoBehaviour
         }
     }
 
-    public void EnableHitBox(int damage, Vector3 size, Vector3 offset)
+    public void EnableHitBox(int damage)
     {
         isHitBoxActive = true;
         currentDamage = damage;
-        currentSize = size;
-        currentOffset = offset;
         alreadyHitEnemies.Clear();
     }
 

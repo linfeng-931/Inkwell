@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using MonsterLove.StateMachine;
 using System;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Silverfish : MonoBehaviour, IEnemy
@@ -57,6 +58,9 @@ public class Silverfish : MonoBehaviour, IEnemy
     [Header("SFX")]
     public AudioManager audioManager;
     public AudioClip atkSfx;
+
+    [Header("Event")]
+    public UnityEvent afterDead;
 
     private Rigidbody rig;
     public bool facingRight = false;
@@ -402,6 +406,7 @@ public class Silverfish : MonoBehaviour, IEnemy
             r.enabled = false;
         }
 
+        afterDead?.Invoke();
         Destroy(gameObject);
     }
 

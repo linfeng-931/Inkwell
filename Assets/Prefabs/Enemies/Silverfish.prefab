@@ -9893,13 +9893,14 @@ GameObject:
   - component: {fileID: 2980973970034205491}
   - component: {fileID: 8783375241451120210}
   - component: {fileID: 3946360408629014194}
+  - component: {fileID: 627482036724420319}
   m_Layer: 8
   m_Name: Silverfish
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2629518011321342451
 Transform:
   m_ObjectHideFlags: 0
@@ -10053,7 +10054,7 @@ MonoBehaviour:
   attackInterval: 1
   hurtForceH: 1
   hurtForceV: 1
-  hurtStunTime: 0.3
+  hurtStunTime: 0.05
   animator: {fileID: 2980973970034205491}
   idleAni: Silverfish_Idle
   walkAni: Silverfish_Walk
@@ -10065,6 +10066,21 @@ MonoBehaviour:
   hurtMaterial: {fileID: 2100000, guid: 28e0dea49106d41fe827aa68e09a1804, type: 2}
   audioManager: {fileID: 0}
   atkSfx: {fileID: 8300000, guid: 51d06565a16ff4640993f306b4229bbf, type: 3}
+  afterDead:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 627482036724420319}
+        m_TargetAssemblyTypeName: InspirationSpawn, Assembly-CSharp
+        m_MethodName: Spawn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   facingRight: 0
 --- !u!54 &3946360408629014194
 Rigidbody:
@@ -10093,3 +10109,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
+--- !u!114 &627482036724420319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8779754119436521314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8ccf11c474746958c7b25a2ba0540d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InspirationSpawn
+  amount: 57
+  speed: 10
+  startPower: 6
+  inspirationPrefab: {fileID: 2232084760398190379, guid: ac1e1f80319604cb7992d507cf00cfad, type: 3}

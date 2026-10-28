@@ -514,6 +514,7 @@ MonoBehaviour:
   detectionRange: 1
   interactionKeyUI: {fileID: 7059365}
   keyAnimator: {fileID: 7059367}
+  interactOnce: 1
   interactionSequence: []
 --- !u!212 &140502005
 SpriteRenderer:
@@ -3001,6 +3002,7 @@ MonoBehaviour:
   detectionRange: 0
   interactionKeyUI: {fileID: 7059365}
   keyAnimator: {fileID: 0}
+  interactOnce: 1
   interactionSequence: []
 --- !u!1 &1622299692
 GameObject:
@@ -3288,7 +3290,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 348232489}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!199 &1722189552
 ParticleSystemRenderer:
@@ -9036,3 +9038,4 @@ SceneRoots:
   - {fileID: 140502006}
   - {fileID: 1602558045}
   - {fileID: 1721578340}
+  - {fileID: 1722189551}
