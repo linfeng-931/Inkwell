@@ -118,12 +118,15 @@ public class PlayerController : MonoBehaviour
     public Vector3 currentHookTarget { get; set; }
     public float lastHookTime { get; set; } = -100f;
 
+    public CursorManager cursorManager; 
+
     [Header("Hook Rope")]
     public int ropeResolution = 10; // line effect
     public LineRenderer hookLineRenderer;
 
     public float bounceAmplitude = 1.2f;
     public float bounceFrequency = 45f;
+     public Vector3 currentRopeVisualPos;
 
     [Header("Rope Retract Shape")]
     public float ropeSAmount = 2f; // width

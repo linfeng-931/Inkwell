@@ -24,6 +24,10 @@ public class HookState : PlayerState
         if (manager.hookLineRenderer != null)
         {
             manager.hookLineRenderer.enabled = true;
+            manager.hookLineRenderer.positionCount = 2;
+            manager.hookLineRenderer.SetPosition(0, manager.transform.position);
+
+            manager.hookLineRenderer.SetPosition(1, manager.currentRopeVisualPos);
         }
 
         // reset attribute
@@ -58,7 +62,7 @@ public class HookState : PlayerState
         if (manager.hookLineRenderer != null)
         {
             manager.hookLineRenderer.SetPosition(0, manager.transform.position);
-            manager.hookLineRenderer.SetPosition(1, manager.currentHookTarget);
+            manager.hookLineRenderer.SetPosition(1, manager.currentRopeVisualPos);
         }
     }
 

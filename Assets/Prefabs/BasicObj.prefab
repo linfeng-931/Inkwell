@@ -16397,10 +16397,12 @@ MonoBehaviour:
   hookTipRadius: 0.3
   hookMissPauseTime: 0.15
   hookHangTime: 0.2
+  cursorManager: {fileID: 0}
   ropeResolution: 14
   hookLineRenderer: {fileID: 7130446756128466405}
   bounceAmplitude: 0.5
   bounceFrequency: 5
+  currentRopeVisualPos: {x: 0, y: 0, z: 0}
   ropeSAmount: 1.5
   ropeSFrequency: 1
   ropeSOffset: 0.35

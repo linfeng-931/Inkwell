@@ -17,6 +17,8 @@ public class HookTarget : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private Collider targetCollider;
 
+    public int priority = 0;
+
     // Hook Target Animation
     public void TriggerHitAnimation()
     {

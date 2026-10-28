@@ -23,7 +23,19 @@ public class HookShootState : PlayerState
 
         manager.canTurn = false;
 
-        shootDir = manager.GetMouseDirection();
+        if (manager.cursorManager != null && manager.cursorManager.CurrentTarget != null)
+        {
+            // 系統有鎖定目標，強制射向目標！
+            Vector3 targetPos = manager.cursorManager.CurrentTarget.transform.position;
+            shootDir = (targetPos - manager.transform.position).normalized;
+            shootDir.z = 0f;
+            shootDir.Normalize();
+        }
+        else
+        {
+            shootDir = manager.GetMouseDirection();
+        }
+
         manager.currentHookTipPos = manager.transform.position;
 
         isRetracting = false;
@@ -45,7 +57,7 @@ public class HookShootState : PlayerState
 
         // ani
         manager.animator.Play(PlayerAnimateHash.HoldingPen);
-        
+
         // Play SFX
         if (manager.hookClip != null)
         {
@@ -94,16 +106,20 @@ public class HookShootState : PlayerState
                 HookTarget targetInfo = hit.collider.GetComponent<HookTarget>();
                 HookTargetType type = targetInfo != null ? targetInfo.targetType : HookTargetType.HookPoint;
 
-                if (targetInfo == null || !targetInfo.canBeHooked) { 
+                if (targetInfo == null || !targetInfo.canBeHooked)
+                {
                     return;
                 }
 
                 // Play Hook Animation
-                if (targetInfo != null) {
+                if (targetInfo != null)
+                {
                     targetInfo.TriggerHitAnimation();
                 }
 
                 manager.currentHookTarget = manager.CalculateHookDestination(hit.collider.transform.position, type);
+                manager.currentRopeVisualPos = hit.collider.bounds.center;
+                manager.currentHookTipPos = manager.currentRopeVisualPos;
 
                 IEnemy enemy = hit.collider.GetComponentInParent<IEnemy>();
                 if (enemy != null)
@@ -292,6 +308,9 @@ public class HookShootState : PlayerState
                 HookTargetType type = targetInfo != null ? targetInfo.targetType : HookTargetType.HookPoint;
 
                 manager.currentHookTarget = manager.CalculateHookDestination(hit.transform.position, type);
+                manager.currentRopeVisualPos = hit.bounds.center;
+                manager.currentHookTipPos = manager.currentRopeVisualPos;
+
                 manager.TransitionToState<HookState>();
                 return true;
             }
