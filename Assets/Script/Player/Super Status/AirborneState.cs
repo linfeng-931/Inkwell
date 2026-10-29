@@ -14,10 +14,7 @@ public class AirborneState : PlayerState
 
         if (manager.isGrounded && isFalling)
         {
-            if (Mathf.Abs(manager.currentMoveX) > 0.01f)
-                manager.TransitionToState<RunState>();
-            else
-                manager.TransitionToState<IdleState>();
+            manager.TransitionToState<LandingState>();
             return;
         }
 
