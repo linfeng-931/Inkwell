@@ -44,12 +44,15 @@ public class VineAttack : MonoBehaviour
     {
         isTriggered = true;
 
+        playerController.isHazardHurt = true;
+
         PlayerLock.Lock(this);
         PlayerLock.Lock(this, PlayerLockType.Combat);
         vineCollider.enabled = false;
 
         yield return new WaitForFixedUpdate();
         playerController.TransitionToState<FallState>();
+
         float t = 0f;
         while (t < fallDelayTime && !playerController.isGrounded)
         {
