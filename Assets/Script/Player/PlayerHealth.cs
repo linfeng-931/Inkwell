@@ -93,6 +93,11 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(ResetHealth(1.5f));
     }
 
+    public void ResetPlayerHealth()
+    {
+        StartCoroutine(ResetHealth(1f));
+    }
+
     /// <summary>
     /// reset player health
     /// </summary>

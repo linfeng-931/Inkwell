@@ -121,13 +121,18 @@ public class StartTutorial : MonoBehaviour
 
         yield return new WaitUntil(() => aliveEnemies.Count == 0);
         onAllEnemiesDefeated?.Invoke();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
+
+        if(playerController.playerHealth != null)
+        {
+            playerController.playerHealth.ResetPlayerHealth();
+        }
 
         yield return StartCoroutine(TransitionSequence(hookSpawnPos.position));
         DisplayHint("按下右鍵發射勾索, 此技能會消耗墨水", 4f);
 
-        yield return new WaitForSeconds(2f);
-        SpawnHookTutorial();
+        yield return new WaitForSeconds(1f);
+        StartCoroutine( SpawnHookTutorial());
         yield return new WaitUntil(() => hasReachedDestination);
 
         // branchAni.SetBool("open", true);
@@ -204,13 +209,14 @@ public class StartTutorial : MonoBehaviour
         aliveEnemies.Remove(fish);
     }
 
-    private void SpawnHookTutorial()
+    private IEnumerator SpawnHookTutorial()
     {
         if (lightParticle != null) lightParticle.SetActive(true);
-
+        ShowObject(vines);
+        yield return new WaitForSeconds(1.0f);
         ShowObjectsWithTween(platforms);
         ShowObjectsWithTween(hookTarget);
-        ShowObjectsWithTween(vines);
+        
     }
 
     public void HideAllHookObject()
@@ -218,6 +224,17 @@ public class StartTutorial : MonoBehaviour
         HideObjectsWithTween(platforms);
         HideObjectsWithTween(hookTarget);
         HideObjectsWithTween(vines);
+    }
+
+    private void ShowObject(GameObject[] objects)
+    {
+        foreach (var obj in objects)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(true);
+            }
+        }
     }
 
     private void ShowObjectsWithTween(GameObject[] objects)
@@ -230,18 +247,10 @@ public class StartTutorial : MonoBehaviour
 
                 Vector3 targetScale = obj.transform.localScale;
                 if (targetScale == Vector3.zero) targetScale = Vector3.one;
+
                 obj.transform.localScale = Vector3.zero;
-                obj.transform.DOScale(targetScale, tweenDuration).SetEase(Ease.OutBack);
 
-                SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
-                if (sr != null)
-                {
-                    Color startColor = sr.color;
-                    startColor.a = 0f;
-                    sr.color = startColor;
-
-                    sr.DOFade(1f, tweenDuration);
-                }
+                obj.transform.DOScale(targetScale, 2f).SetEase(Ease.OutBack);
             }
         }
     }

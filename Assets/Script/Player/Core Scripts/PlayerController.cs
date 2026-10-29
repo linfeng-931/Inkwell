@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public InputBufferManager inputBufferManager { get; private set; }
     public CapsuleCollider col { get; private set; }
     public PlayerEnergy playerEnergy { get; set; }
+    public PlayerHealth playerHealth { get; set; }
 
     [Header("Player Control Toggle")]
     public bool isPlayerInputEnabled = true;
@@ -211,6 +212,7 @@ public class PlayerController : MonoBehaviour
         inputBufferManager = GetComponent<InputBufferManager>();
         col = GetComponent<CapsuleCollider>();
         playerEnergy = GetComponent<PlayerEnergy>();
+        playerHealth = GetComponent<PlayerHealth>();
         mainCam = Camera.main;
 
         dashParticleSystems = dashParticle.GetComponentsInChildren<ParticleSystem>();
@@ -602,6 +604,11 @@ public class PlayerController : MonoBehaviour
         {
             rig.linearVelocity = Vector3.zero;
             rig.angularVelocity = Vector3.zero;
+        }
+
+        if (!(currentState is IdleState))
+        {
+            TransitionToState<IdleState>();
         }
     }
 
