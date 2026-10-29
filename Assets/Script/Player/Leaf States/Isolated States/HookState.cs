@@ -8,6 +8,9 @@ public class HookState : PlayerState
 
     private Quaternion penOriginalAngle;
 
+    private Vector3 lastPos;
+    private float stuckTimer;
+
     public HookState(PlayerController manager) : base(manager) {}
 
     public override void Enter()
@@ -28,7 +31,6 @@ public class HookState : PlayerState
             manager.hookLineRenderer.enabled = true;
             manager.hookLineRenderer.positionCount = 2;
             manager.hookLineRenderer.SetPosition(0, manager.hookLineStartPoint.position);
-
             manager.hookLineRenderer.SetPosition(1, manager.currentRopeVisualPos);
         }
 
@@ -39,6 +41,10 @@ public class HookState : PlayerState
         // handle pen
         penOriginalAngle = manager.hookPenRoot.localRotation;
         manager.hookPenObject.SetActive(true);
+
+        // prevent stuck
+        lastPos = manager.transform.position;
+        stuckTimer = 0f;    
     }
 
     public override void Update()
@@ -65,26 +71,34 @@ public class HookState : PlayerState
         }
 
         // handle pen
-        Vector3 dirToTarget = (manager.currentRopeVisualPos - manager.transform.position).normalized;
-        float targetAngle = Mathf.Atan2(dirToTarget.y, dirToTarget.x) * Mathf.Rad2Deg;
-        
-        bool isFacingRight = manager.transform.localScale.x > 0; 
-        float baseAngle = isFacingRight ? 0f : 180f;
-        float relativeAngle = Mathf.DeltaAngle(baseAngle, targetAngle);
-        float clampedRelativeAngle = Mathf.Clamp(relativeAngle, manager.maxArmAngleDown, manager.maxArmAngleUp);
-        
-        float finalArmAngle = baseAngle + clampedRelativeAngle;
-        manager.hookPenRoot.rotation = Quaternion.Euler(0, 0, finalArmAngle);
+        Vector3 targetDir = (manager.currentRopeVisualPos - manager.hookPenRoot.position).normalized;
+        Vector3 localDir = manager.hookPenRoot.parent.InverseTransformDirection(targetDir);
+        localDir.x = Mathf.Abs(localDir.x);
+
+        float localAngle = Mathf.Atan2(localDir.y, localDir.x) * Mathf.Rad2Deg;
+        float clampedAngle = Mathf.Clamp(localAngle, manager.maxArmAngleDown, manager.maxArmAngleUp);
+        manager.hookPenRoot.localRotation = Quaternion.Euler(0, 0, -clampedAngle);
 
         // pen tip stop on target pos
         manager.hookPenTip.position = manager.currentRopeVisualPos;
-        float tipAngle = Mathf.Atan2(dirToTarget.y, dirToTarget.x) * Mathf.Rad2Deg;
-        manager.hookPenTip.rotation = Quaternion.Euler(0, 0, tipAngle);
 
-        // update the start and end point of line
-        if (manager.hookLineRenderer != null)
+        // pen tip angle
+        if (manager.hookLineRenderer != null && manager.hookLineRenderer.positionCount >= 2)
         {
-            manager.hookLineRenderer.SetPosition(0, manager.transform.position);
+            Vector3 startPos = manager.hookLineStartPoint.position;
+            Vector3 endPos = manager.currentRopeVisualPos;
+            Vector3 tipDir = (endPos - startPos).normalized;
+            
+            if (tipDir != Vector3.zero)
+            {
+                Vector3 localTipDir = manager.hookPenTip.parent.InverseTransformDirection(tipDir);
+                float localTipAngle = Mathf.Atan2(localTipDir.y, localTipDir.x) * Mathf.Rad2Deg;
+                
+                float tipOffset = 140f; 
+                manager.hookPenTip.localRotation = Quaternion.Euler(0, 0, localTipAngle + tipOffset);
+            }
+            
+            manager.hookLineRenderer.SetPosition(0, manager.hookLineStartPoint.position);
             manager.hookLineRenderer.SetPosition(1, manager.currentRopeVisualPos);
         }
     }
@@ -92,10 +106,32 @@ public class HookState : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (isHanging) return;
         
         // current distance and moving distance in this frame
         float distance = Vector3.Distance(manager.transform.position, manager.currentHookTarget);
         float moveStep = manager.hookSpeed * Time.fixedDeltaTime;
+
+        // handle stuck
+        float actualMoveDist = Vector3.Distance(manager.transform.position, lastPos);
+
+        if (actualMoveDist < (moveStep * 0.1f))
+        {
+            stuckTimer += Time.fixedDeltaTime;
+            if (stuckTimer >= 0.1f) // time buff
+            {
+                manager.rig.linearVelocity = Vector3.zero;
+                manager.TransitionToState<FallState>();
+                return;
+            }
+        }
+        else
+        {
+            stuckTimer = 0f; // if normal move, reset
+        }
+        
+        lastPos = manager.transform.position;
 
         // check if player arrived
         if (distance <= manager.hookStopDistance || distance <= moveStep)

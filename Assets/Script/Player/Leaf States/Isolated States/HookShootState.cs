@@ -28,18 +28,25 @@ public class HookShootState : PlayerState
         if (manager.cursorManager != null && manager.cursorManager.CurrentTarget != null)
         {
             Vector3 targetPos = manager.cursorManager.CurrentTarget.transform.position;
-            shootDir = (targetPos - manager.transform.position).normalized;
+
+
+            // face the shooting direction
+            Vector3 centerDir = (targetPos - manager.transform.position).normalized;
+            manager.FaceTowards(manager.transform.position + centerDir * 10f);
+
+            shootDir = (targetPos - manager.hookLineStartPoint.position).normalized;
             shootDir.z = 0f;
             shootDir.Normalize();
         }
         else
         {
             shootDir = manager.GetMouseDirection();
+
+            manager.FaceTowards(manager.transform.position + shootDir * 10f);
+            
+            shootDir = manager.GetMouseDirection();
         }
 
-        // face the shooting direction
-        manager.FaceTowards(manager.transform.position + shootDir * 10f);
-        
         manager.currentHookTipPos = manager.hookLineStartPoint.position;
 
         isRetracting = false;
@@ -369,7 +376,6 @@ public class HookShootState : PlayerState
         // handle pen tip
         manager.hookPenTip.position = manager.currentHookTipPos;
 
-        // pen tip rotation
         // pen tip rotation
         if (manager.hookLineRenderer.positionCount >= 2)
         {

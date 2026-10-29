@@ -41,21 +41,23 @@ public class CursorManager : MonoBehaviour
     
     private HookTarget previousTarget;
     private float hookCost;
+    private PlayerController playerController;
+    private bool isUIShowing = false;
 
     private void Start()
     {
-        // 改用 Unity 內建滑鼠，確保滑鼠顯示並解除鎖定
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         
-        // hidden cursor (已註解)
+        // hidden cursor 
         // Cursor.visible = false;
         // Cursor.lockState = CursorLockMode.Confined;
 
-        detectionRadius = player.GetComponent<PlayerController>().hookRange;
-        hookCost = player.GetComponent<PlayerController>().hookCost;
+        playerController = player.GetComponent<PlayerController>();
+        detectionRadius = playerController.hookRange;
+        hookCost = playerController.hookCost;
         
-        // ApplyCursorStyle(normalStyle); (已註解)
+        // ApplyCursorStyle(normalStyle); 
     }
 
     // private void ApplyCursorStyle(CursorStyle style)
@@ -85,7 +87,7 @@ public class CursorManager : MonoBehaviour
 
     private void Update()
     {
-        // cursorUI.position = Input.mousePosition; (已註解)
+        // cursorUI.position = Input.mousePosition;
 
         CheckForGrappleTargets();
 
@@ -137,31 +139,36 @@ public class CursorManager : MonoBehaviour
 
     private void UpdateLockOnUI()
     {
-        if (CurrentTarget != null && (playerEnergy.currentEnergy >= hookCost) )
+        bool isGrappling = playerController.currentState is HookShootState || playerController.currentState is HookState;
+        bool shouldShow = CurrentTarget != null && playerEnergy.currentEnergy >= hookCost && !isGrappling;
+
+        if (shouldShow)
         {
             Vector2 targetScreenPos = mainCamera.WorldToScreenPoint(CurrentTarget.transform.position);
             lockOnUI.position = targetScreenPos;
 
             // find new obj -> Trigger open
-            if (CurrentTarget != previousTarget)
+            if (!isUIShowing || CurrentTarget != previousTarget)
             {
                 if (lockOnAnimator != null)
                 {
                     lockOnAnimator.ResetTrigger("close");
                     lockOnAnimator.SetTrigger("open");
                 }
+                isUIShowing = true;
             }
         }
         else
         {
             // lost obj -> Trigger close
-            if (previousTarget != null)
+            if (isUIShowing)
             {
                 if (lockOnAnimator != null)
                 {
                     lockOnAnimator.ResetTrigger("open");
                     lockOnAnimator.SetTrigger("close");
                 }
+                isUIShowing = false;
             }
         }
 
