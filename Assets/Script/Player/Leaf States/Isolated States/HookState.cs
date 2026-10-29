@@ -6,6 +6,8 @@ public class HookState : PlayerState
     private bool isHanging;
     private float hangTimer;
 
+    private Quaternion penOriginalAngle;
+
     public HookState(PlayerController manager) : base(manager) {}
 
     public override void Enter()
@@ -25,7 +27,7 @@ public class HookState : PlayerState
         {
             manager.hookLineRenderer.enabled = true;
             manager.hookLineRenderer.positionCount = 2;
-            manager.hookLineRenderer.SetPosition(0, manager.transform.position);
+            manager.hookLineRenderer.SetPosition(0, manager.hookLineStartPoint.position);
 
             manager.hookLineRenderer.SetPosition(1, manager.currentRopeVisualPos);
         }
@@ -33,6 +35,10 @@ public class HookState : PlayerState
         // reset attribute
         manager.canAirDash = true;
         manager.currentAirJumps = 1; 
+
+        // handle pen
+        penOriginalAngle = manager.hookPenRoot.localRotation;
+        manager.hookPenObject.SetActive(true);
     }
 
     public override void Update()
@@ -57,6 +63,23 @@ public class HookState : PlayerState
             }
             return;
         }
+
+        // handle pen
+        Vector3 dirToTarget = (manager.currentRopeVisualPos - manager.transform.position).normalized;
+        float targetAngle = Mathf.Atan2(dirToTarget.y, dirToTarget.x) * Mathf.Rad2Deg;
+        
+        bool isFacingRight = manager.transform.localScale.x > 0; 
+        float baseAngle = isFacingRight ? 0f : 180f;
+        float relativeAngle = Mathf.DeltaAngle(baseAngle, targetAngle);
+        float clampedRelativeAngle = Mathf.Clamp(relativeAngle, manager.maxArmAngleDown, manager.maxArmAngleUp);
+        
+        float finalArmAngle = baseAngle + clampedRelativeAngle;
+        manager.hookPenRoot.rotation = Quaternion.Euler(0, 0, finalArmAngle);
+
+        // pen tip stop on target pos
+        manager.hookPenTip.position = manager.currentRopeVisualPos;
+        float tipAngle = Mathf.Atan2(dirToTarget.y, dirToTarget.x) * Mathf.Rad2Deg;
+        manager.hookPenTip.rotation = Quaternion.Euler(0, 0, tipAngle);
 
         // update the start and end point of line
         if (manager.hookLineRenderer != null)
@@ -96,10 +119,15 @@ public class HookState : PlayerState
     public override void Exit()
     {
         base.Exit();
+        manager.hookPenObject.SetActive(false);
 
         if (manager.hookLineRenderer != null)
         {
             manager.hookLineRenderer.enabled = false;
         }
+
+        manager.hookPenTip.position = manager.hookStartPoint.position;
+        manager.hookPenTip.localRotation = penOriginalAngle;
+        manager.hookPenRoot.localRotation = penOriginalAngle;
     }
 }

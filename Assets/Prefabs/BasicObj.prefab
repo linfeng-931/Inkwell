@@ -16398,6 +16398,13 @@ MonoBehaviour:
   hookMissPauseTime: 0.15
   hookHangTime: 0.2
   cursorManager: {fileID: 0}
+  hookLineStartPoint: {fileID: 0}
+  hookPenObject: {fileID: 0}
+  hookPenRoot: {fileID: 0}
+  hookPenTip: {fileID: 0}
+  hookStartPoint: {fileID: 0}
+  maxArmAngleUp: 60
+  maxArmAngleDown: -45
   ropeResolution: 14
   hookLineRenderer: {fileID: 7130446756128466405}
   bounceAmplitude: 0.5
@@ -80363,6 +80370,7 @@ MonoBehaviour:
   angleX: {fileID: 1955171882011472850}
   angleY: {fileID: 3788194369830818880}
   factor: 50
+  playerController: {fileID: 0}
 --- !u!114 &5164172144165463345 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2604077034562298465, guid: a1d045df7bcc2e4478dc59f41bd02980, type: 3}
