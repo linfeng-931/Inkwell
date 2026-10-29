@@ -13,19 +13,22 @@ public class PlayerLoadout : MonoBehaviour
     [Header("Player State")]
     [SerializeField] private bool isCombatEnabled = false;
     [SerializeField] private bool isWeaponVisible = false;
+    [SerializeField] private bool isRunEnabled = false;
     [SerializeField] private bool canJump = false;
 
     [SerializeField] private PlayerController playerController;
 
     public bool CombatEnabled { get; private set; }
+    public bool RunEnabled { get; private set; }
 
-    private void Start() // for test
-    {
-        EnterArmedMode();
-    }
+    //private void Start() // for test
+    //{
+    //    EnterArmedMode();
+    //}
 
     public void Initialize()
     {
+        RunEnabled = isRunEnabled;
         CombatEnabled = isCombatEnabled;
         SetWeaponVisible(isWeaponVisible);
 
@@ -61,6 +64,11 @@ public class PlayerLoadout : MonoBehaviour
         //}
 
         playerController.canJump = true;
+    }
+
+    public void EnterRunMode()
+    {
+        RunEnabled = true;
     }
 
     private void SetWeaponVisible(bool visible)

@@ -15988,7 +15988,6 @@ GameObject:
   - component: {fileID: 5742222069716928868}
   - component: {fileID: 29141156847761799}
   - component: {fileID: 2695460089783884585}
-  - component: {fileID: 3494497917321997079}
   m_Layer: 18
   m_Name: Player
   m_TagString: Player
@@ -16532,6 +16531,7 @@ MonoBehaviour:
   playerHealth: {fileID: 5927650553674234230}
   isCombatEnabled: 0
   isWeaponVisible: 0
+  isRunEnabled: 0
   canJump: 0
   playerController: {fileID: 1572666921265124869}
 --- !u!114 &2695460089783884585
@@ -16577,26 +16577,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
---- !u!114 &3494497917321997079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1467389584813583188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a223a952761cc942991f32e594b3936, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerLoadout
-  weaponVisual: {fileID: 4261727103292986664}
-  gamePlayHUD: {fileID: 67276813081218989}
-  playerEnergy: {fileID: 5742222069716928868}
-  playerHealth: {fileID: 5927650553674234230}
-  isCombatEnabled: 0
-  isWeaponVisible: 0
-  canJump: 0
-  playerController: {fileID: 1572666921265124869}
 --- !u!1 &1509110524091860682
 GameObject:
   m_ObjectHideFlags: 0
@@ -81359,11 +81339,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!1 &4261727103292986664 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4832743196247158789, guid: 17c50ff6269644245b51c3b5fa42710e, type: 3}
-  m_PrefabInstance: {fileID: 8662085010877162797}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4417427621559668327 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5005807508053404490, guid: 17c50ff6269644245b51c3b5fa42710e, type: 3}

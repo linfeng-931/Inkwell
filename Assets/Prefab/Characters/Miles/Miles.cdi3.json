@@ -37,6 +37,21 @@
 			"Name": "腰旋轉Z"
 		},
 		{
+			"Id": "ParamBodyX",
+			"GroupId": "ParamGroup2",
+			"Name": "全身X"
+		},
+		{
+			"Id": "ParamBodyY",
+			"GroupId": "ParamGroup2",
+			"Name": "全身Y"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "ParamGroup2",
+			"Name": "全身旋轉Z"
+		},
+		{
 			"Id": "ParamEyeOpen",
 			"GroupId": "ParamGroup3",
 			"Name": "眼 开闭"
@@ -105,6 +120,16 @@
 			"Id": "ParamRightThumb",
 			"GroupId": "ParamGroup8",
 			"Name": "右握拳"
+		},
+		{
+			"Id": "ParamLeftHandOpacity",
+			"GroupId": "ParamGroup8",
+			"Name": "左手不透明度"
+		},
+		{
+			"Id": "ParamRightHandOpacity",
+			"GroupId": "ParamGroup8",
+			"Name": "右手不透明度"
 		},
 		{
 			"Id": "ParamPelvisX",
@@ -408,6 +433,10 @@
 		[
 			"ParamAngleX",
 			"ParamAngleY"
+		],
+		[
+			"ParamBodyX",
+			"ParamBodyY"
 		],
 		[
 			"ParamLeftArmX",
