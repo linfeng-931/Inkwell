@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     #region Action Setting
     [Header("Move Setting")]
     public float runSpeed = 8f;
-    public float walkSpeed = 3f;
+    public float walkSpeed = 5f;
     public float acceleration = 50f;
     public float deceleration = 50f;
 
@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviour
     public bool CanMove => !PlayerLock.IsLocked(PlayerLockType.Movement);
     public bool CanFight => (loadout == null || loadout.CombatEnabled)
                             && !PlayerLock.IsLocked(PlayerLockType.Combat);
+    public bool CanRun => loadout == null || loadout.RunEnabled;
     public bool canJump = false;
     private bool wasCanMove = true;
     [SerializeField] private float jumpGraceAfterUnlock = 0.25f;
@@ -248,6 +249,8 @@ public class PlayerController : MonoBehaviour
             HandleTurning();
         }
 
+        if (!CanRun && currentState is RunState) TransitionToState<WalkState>();
+
         currentState.Update();
     }
 
@@ -262,6 +265,14 @@ public class PlayerController : MonoBehaviour
     /// <typeparam name="T"></typeparam>
     public void TransitionToState<T>() where T : PlayerState
     {
+        // Lock Player Run
+        if (typeof(T) == typeof(RunState) && !CanRun)
+        {
+            if (currentState is WalkState) return;
+            TransitionToState<WalkState>();
+            return;
+        }
+
         // Lock Player Attack or Jump
         if (IsJumpState(typeof(T)) && (!canJump || !CanMove)) { return; }
         if (!CanFight && IsCombatState(typeof(T))) { return; }
