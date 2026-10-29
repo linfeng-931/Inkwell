@@ -27,6 +27,8 @@ MonoBehaviour:
   - ParamChestAngleZ
   - ParamWaistY
   - ParamWaistAngleZ
+  - ParamBodyX
+  - ParamBodyY
   - ParamEyeOpen
   - ParamDamagedEyes
   - ParamLeftArmX
@@ -66,14 +68,14 @@ MonoBehaviour:
   - ParamHair
   - ParamEars
   - ParamTail
-  - Param_Angle_Rotation30
-  - Param_Angle_Rotation31
-  - Param_Angle_Rotation32
-  - Param_Angle_Rotation33
   - Param_Angle_Rotation34
   - Param_Angle_Rotation35
   - Param_Angle_Rotation36
   - Param_Angle_Rotation37
+  - Param_Angle_Rotation30
+  - Param_Angle_Rotation31
+  - Param_Angle_Rotation32
+  - Param_Angle_Rotation33
   - 
   - 
   - 
@@ -440,6 +442,106 @@ MonoBehaviour:
       value: -4
       inSlope: 30.390032
       outSlope: 30.390026
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.4
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2
+      value: -4
+      inSlope: -47.68505
+      outSlope: -47.68505
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.4
+      value: -10
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: -8
+      inSlope: 60.000065
+      outSlope: 60.570053
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -2086,6 +2188,8 @@ MonoBehaviour:
   - -1
   - -1
   - -1
+  - -1
+  - -1
   - 0
   - 0
   - 0
@@ -2099,6 +2203,8 @@ MonoBehaviour:
   - 0
   - 0
   ParameterFadeOutTimes:
+  - -1
+  - -1
   - -1
   - -1
   - -1
