@@ -109,7 +109,9 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     void Update()
     {
+        #if UNITY_EDITOR
         if(forceDead) TakeDamage(maxHealth);
+        #endif
         if (fsm.State == States.Death) return;
     }
 

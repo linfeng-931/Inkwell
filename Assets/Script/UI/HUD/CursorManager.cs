@@ -1,33 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// [System.Serializable]
-// public class CursorStyle
-// {
-//     [Header("Visuals")]
-//     public Sprite sprite;
-//     public Color color = Color.white;
-//
-//     [Header("Animator")]
-//     public RuntimeAnimatorController animator;
-// }
-
 public class CursorManager : MonoBehaviour
 {
     [Header("References")]
     public Transform player;
     public PlayerEnergy playerEnergy;
     public Camera mainCamera;
-    
-    // [Header("Cursor UI")]
-    // public RectTransform cursorUI;
-    // public Image cursorImage;
-    // public Animator cursorAnimator;
-    // public CursorStyle normalStyle;
 
-    [Header("Lock-On UI")]
-    public RectTransform lockOnUI;
-    public Animator lockOnAnimator;
+    [Header("Lock-On UI - Hook Point")]
+    public RectTransform lockOnUIHookPoint;
+    public Animator lockOnAnimatorHookPoint;
+
+    [Header("Lock-On UI - Enemy")]
+    public RectTransform lockOnUIEnemy;
+    public Animator lockOnAnimatorEnemy;
 
     [Header("Settings")]
     public float detectionRadius = 10f; 
@@ -42,55 +29,22 @@ public class CursorManager : MonoBehaviour
     private HookTarget previousTarget;
     private float hookCost;
     private PlayerController playerController;
-    private bool isUIShowing = false;
+    private bool isUIShowingHookPoint = false;
+    private bool isUIShowingEnemy = false;
 
     private void Start()
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         
-        // hidden cursor 
-        // Cursor.visible = false;
-        // Cursor.lockState = CursorLockMode.Confined;
-
         playerController = player.GetComponent<PlayerController>();
         detectionRadius = playerController.hookRange;
         hookCost = playerController.hookCost;
-        
-        // ApplyCursorStyle(normalStyle); 
     }
-
-    // private void ApplyCursorStyle(CursorStyle style)
-    // {
-    //     if (style == null) return;
-    //
-    //     // activite animator
-    //     if (style.animator != null && cursorAnimator != null)
-    //     {
-    //         cursorAnimator.enabled = true;
-    //         cursorAnimator.runtimeAnimatorController = style.animator;
-    //         cursorAnimator.Play(0, -1, 0f); 
-    //     }
-    //     else
-    //     {
-    //         // close animator
-    //         if (cursorAnimator != null)
-    //         {
-    //             cursorAnimator.enabled = false;
-    //             cursorAnimator.runtimeAnimatorController = null;
-    //         }
-    //
-    //         if (style.sprite != null) cursorImage.sprite = style.sprite;
-    //         cursorImage.color = style.color;
-    //     }
-    // }
 
     private void Update()
     {
-        // cursorUI.position = Input.mousePosition;
-
         CheckForGrappleTargets();
-
         UpdateLockOnUI();
     }
 
@@ -113,7 +67,6 @@ public class CursorManager : MonoBehaviour
 
             if (distanceToPlayer <= detectionRadius)
             {
-                // detect hook obj
                 if (!HasLineOfSight(target.transform.position)) continue;
 
                 Vector2 targetScreenPos = mainCamera.WorldToScreenPoint(target.transform.position);
@@ -142,37 +95,78 @@ public class CursorManager : MonoBehaviour
         bool isGrappling = playerController.currentState is HookShootState || playerController.currentState is HookState;
         bool shouldShow = CurrentTarget != null && playerEnergy.currentEnergy >= hookCost && !isGrappling;
 
+        bool showHookPoint = false;
+        bool showEnemy = false;
+
         if (shouldShow)
         {
             Vector2 targetScreenPos = mainCamera.WorldToScreenPoint(CurrentTarget.transform.position);
-            lockOnUI.position = targetScreenPos;
 
-            // find new obj -> Trigger open
-            if (!isUIShowing || CurrentTarget != previousTarget)
+            if (CurrentTarget.targetType == HookTargetType.HookPoint)
             {
-                if (lockOnAnimator != null)
+                showHookPoint = true;
+                lockOnUIHookPoint.position = targetScreenPos;
+            }
+            else if (CurrentTarget.targetType == HookTargetType.AirEnemy || CurrentTarget.targetType == HookTargetType.GroundEnemy)
+            {
+                showEnemy = true;
+                lockOnUIEnemy.position = targetScreenPos;
+            }
+
+            if (CurrentTarget != previousTarget && previousTarget != null)
+            {
+                if (previousTarget.targetType == HookTargetType.HookPoint && isUIShowingHookPoint)
                 {
-                    lockOnAnimator.ResetTrigger("close");
-                    lockOnAnimator.SetTrigger("open");
+                    CloseUI(lockOnAnimatorHookPoint, ref isUIShowingHookPoint);
                 }
-                isUIShowing = true;
+                else if ((previousTarget.targetType == HookTargetType.AirEnemy || previousTarget.targetType == HookTargetType.GroundEnemy) && isUIShowingEnemy)
+                {
+                    CloseUI(lockOnAnimatorEnemy, ref isUIShowingEnemy);
+                }
             }
         }
-        else
+
+        if (showHookPoint)
         {
-            // lost obj -> Trigger close
-            if (isUIShowing)
-            {
-                if (lockOnAnimator != null)
-                {
-                    lockOnAnimator.ResetTrigger("open");
-                    lockOnAnimator.SetTrigger("close");
-                }
-                isUIShowing = false;
-            }
+            if (!isUIShowingHookPoint || CurrentTarget != previousTarget)
+                OpenUI(lockOnAnimatorHookPoint, ref isUIShowingHookPoint);
+        }
+        else if (isUIShowingHookPoint)
+        {
+            CloseUI(lockOnAnimatorHookPoint, ref isUIShowingHookPoint);
+        }
+
+        if (showEnemy)
+        {
+            if (!isUIShowingEnemy || CurrentTarget != previousTarget)
+                OpenUI(lockOnAnimatorEnemy, ref isUIShowingEnemy);
+        }
+        else if (isUIShowingEnemy)
+        {
+            CloseUI(lockOnAnimatorEnemy, ref isUIShowingEnemy);
         }
 
         previousTarget = CurrentTarget;
+    }
+
+    private void OpenUI(Animator animator, ref bool isShowingFlag)
+    {
+        if (animator != null)
+        {
+            animator.ResetTrigger("close");
+            animator.SetTrigger("open");
+        }
+        isShowingFlag = true;
+    }
+
+    private void CloseUI(Animator animator, ref bool isShowingFlag)
+    {
+        if (animator != null)
+        {
+            animator.ResetTrigger("open");
+            animator.SetTrigger("close");
+        }
+        isShowingFlag = false;
     }
 
     private bool HasLineOfSight(Vector3 targetWorldPos)

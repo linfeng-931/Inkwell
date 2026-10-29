@@ -1,4 +1,3 @@
-using Unity.Microsoft.GDK;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
