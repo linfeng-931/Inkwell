@@ -44878,8 +44878,10 @@ MonoBehaviour:
   player: {fileID: 8755052815159415778}
   playerEnergy: {fileID: 5742222069716928868}
   mainCamera: {fileID: 4139050360496694100}
-  lockOnUI: {fileID: 4963808653134943268}
-  lockOnAnimator: {fileID: 6282567336981302656}
+  lockOnUIHookPoint: {fileID: 0}
+  lockOnAnimatorHookPoint: {fileID: 0}
+  lockOnUIEnemy: {fileID: 0}
+  lockOnAnimatorEnemy: {fileID: 0}
   detectionRadius: 10
   snapAngleThreshold: 0.9
   obstacleLayer:
