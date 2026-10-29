@@ -16,6 +16,9 @@ public class HurtState : PlayerState
         hasRelocated = false;
         hasTriggeredFadeOut = false;
 
+        // animate
+        manager.playerFace3.SetActive(true);
+        manager.playerFace.SetActive(false);
         manager.animator.Play(PlayerAnimateHash.Hurt, 0, 0f);
 
         if(!manager.isHazardHurt) {
@@ -93,5 +96,7 @@ public class HurtState : PlayerState
         manager.canTurn = true;
         manager.isPlayerInputEnabled = true;
         manager.isHazardHurt = false;
+        manager.playerFace3.SetActive(false);
+        manager.playerFace.SetActive(true);
     }
 }

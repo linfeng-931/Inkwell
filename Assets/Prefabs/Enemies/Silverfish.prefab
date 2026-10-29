@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9169938583637883805}
   - component: {fileID: 3618681248320384411}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: attack
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2275216602922227441}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: edgeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5235240613084934457}
   - component: {fileID: 5804656948739895168}
   - component: {fileID: 7101509804782615835}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: hurtParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5586622030797676395}
   serializedVersion: 8
-  lengthInSec: 2
+  lengthInSec: 0.8
   simulationSpeed: 10
   stopAction: 0
   cullingMode: 0
@@ -200,7 +200,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 0.8
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -253,7 +253,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.9
+      scalar: 3
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -371,8 +371,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.1
-      minScalar: 0.2
+      scalar: 0.5
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -695,7 +695,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.05
+      scalar: 0.01
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -4866,7 +4866,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 877607d3cc7b7494c8406402beaefab3, type: 2}
+  - {fileID: 2100000, guid: 4d2c25eacbb2e424faf152c17d60ecac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4900,7 +4900,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 0
+  m_RenderAlignment: 4
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_EnableGPUInstancing: 1
@@ -5043,6 +5043,7 @@ MonoBehaviour:
   canBeHooked: 1
   animator: {fileID: 0}
   targetCollider: {fileID: 9018897189586320628}
+  priority: 0
 --- !u!1 &7056030548883612980
 GameObject:
   m_ObjectHideFlags: 0
@@ -5054,7 +5055,7 @@ GameObject:
   - component: {fileID: 6416890183547362304}
   - component: {fileID: 3465145501634233034}
   - component: {fileID: 5490410268500960918}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: deadParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10036,6 +10037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 141fc69ef406b4faf96b8b6a72d2be1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Silverfish
+  forceDead: 0
   patrolSpeed: 2
   chaseSpeed: 2.5
   maxHealth: 3
@@ -10082,6 +10084,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   facingRight: 0
+  startFacingRight: 0
 --- !u!54 &3946360408629014194
 Rigidbody:
   m_ObjectHideFlags: 0
