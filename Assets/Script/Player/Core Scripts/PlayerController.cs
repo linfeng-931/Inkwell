@@ -119,6 +119,16 @@ public class PlayerController : MonoBehaviour
     public float lastHookTime { get; set; } = -100f;
 
     public CursorManager cursorManager; 
+    public Transform hookLineStartPoint;
+
+    //hook Visuals
+    public GameObject hookPenObject;
+    public Transform hookPenRoot;
+    public Transform hookPenTip;
+    public Transform hookStartPoint;
+
+    public float maxArmAngleUp = 60f;
+    public float maxArmAngleDown = -45f;
 
     [Header("Hook Rope")]
     public int ropeResolution = 10; // line effect
@@ -195,6 +205,7 @@ public class PlayerController : MonoBehaviour
         animator3 = playerFace3.GetComponent<Animator>();
         playerFace2.SetActive(false);
         playerFace3.SetActive(false);
+        hookPenObject.SetActive(false);
 
         rig = GetComponent<Rigidbody>();
         inputBufferManager = GetComponent<InputBufferManager>();

@@ -15,6 +15,8 @@ public class HookShootState : PlayerState
     private float retractElapsedTime;
     private float retractTotalTime;
 
+    private Quaternion penOriginalAngle;
+
     public HookShootState(PlayerController manager) : base(manager) { }
 
     public override void Enter()
@@ -25,18 +27,27 @@ public class HookShootState : PlayerState
 
         if (manager.cursorManager != null && manager.cursorManager.CurrentTarget != null)
         {
-            // 系統有鎖定目標，強制射向目標！
             Vector3 targetPos = manager.cursorManager.CurrentTarget.transform.position;
-            shootDir = (targetPos - manager.transform.position).normalized;
+
+
+            // face the shooting direction
+            Vector3 centerDir = (targetPos - manager.transform.position).normalized;
+            manager.FaceTowards(manager.transform.position + centerDir * 10f);
+
+            shootDir = (targetPos - manager.hookLineStartPoint.position).normalized;
             shootDir.z = 0f;
             shootDir.Normalize();
         }
         else
         {
             shootDir = manager.GetMouseDirection();
+
+            manager.FaceTowards(manager.transform.position + shootDir * 10f);
+            
+            shootDir = manager.GetMouseDirection();
         }
 
-        manager.currentHookTipPos = manager.transform.position;
+        manager.currentHookTipPos = manager.hookLineStartPoint.position;
 
         isRetracting = false;
         isPaused = false;
@@ -48,15 +59,14 @@ public class HookShootState : PlayerState
         // stop the player while shooting the hook
         manager.rig.linearVelocity = Vector3.zero;
 
-        // face the shooting direction
-        manager.FaceTowards(manager.transform.position + shootDir * 10f);
-
         // show rope
         manager.hookLineRenderer.enabled = true;
         manager.hookLineRenderer.positionCount = Mathf.Max(2, manager.ropeResolution);
 
         // ani
         manager.animator.Play(PlayerAnimateHash.HoldingPen);
+        penOriginalAngle = manager.hookPenRoot.localRotation;
+        manager.hookPenObject.SetActive(true);
 
         // Play SFX
         if (manager.hookClip != null)
@@ -68,6 +78,7 @@ public class HookShootState : PlayerState
     public override void Update()
     {
         base.Update();
+        UpdateVisualTransforms();
         DrawRope();
     }
 
@@ -214,7 +225,7 @@ public class HookShootState : PlayerState
 
     private void DrawRope()
     {
-        Vector3 start = manager.transform.position;
+        Vector3 start = manager.hookLineStartPoint.position;
         Vector3 end = manager.currentHookTipPos;
 
         // prevent math errors if too close
@@ -338,5 +349,48 @@ public class HookShootState : PlayerState
         manager.canTurn = true;
         manager.hookLineRenderer.enabled = false;
         manager.hookLineRenderer.positionCount = 2;
+
+        manager.hookPenTip.position = manager.hookStartPoint.position;
+        manager.hookPenTip.localRotation = penOriginalAngle;
+        manager.hookPenRoot.localRotation = penOriginalAngle;
+        
+        if(manager.currentState is not HookState) manager.hookPenObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// handle pen and arm visual
+    /// </summary>
+    private void UpdateVisualTransforms()
+    {
+        Vector3 targetDir = (manager.currentHookTipPos - manager.hookPenRoot.position).normalized;
+        
+        Vector3 localDir = manager.hookPenRoot.parent.InverseTransformDirection(targetDir);
+        localDir.x = Mathf.Abs(localDir.x);
+
+        float localAngle = Mathf.Atan2(localDir.y, localDir.x) * Mathf.Rad2Deg;
+        
+        float clampedAngle = Mathf.Clamp(localAngle, manager.maxArmAngleDown, manager.maxArmAngleUp);
+        
+        manager.hookPenRoot.localRotation = Quaternion.Euler(0, 0, -clampedAngle);
+        
+        // handle pen tip
+        manager.hookPenTip.position = manager.currentHookTipPos;
+
+        // pen tip rotation
+        if (manager.hookLineRenderer.positionCount >= 2)
+        {
+            int lastIndex = manager.hookLineRenderer.positionCount - 1;
+            Vector3 p1 = manager.hookLineRenderer.GetPosition(lastIndex - 1);
+            Vector3 p2 = manager.hookLineRenderer.GetPosition(lastIndex);
+            
+            Vector3 tipDir = (p2 - p1).normalized;
+            if (tipDir != Vector3.zero)
+            {
+                Vector3 localTipDir = manager.hookPenTip.parent.InverseTransformDirection(tipDir);
+                float localTipAngle = Mathf.Atan2(localTipDir.y, localTipDir.x) * Mathf.Rad2Deg;
+                float tipOffset = 140f;
+                manager.hookPenTip.localRotation = Quaternion.Euler(0, 0, localTipAngle + tipOffset);
+            }
+        }
     }
 }
