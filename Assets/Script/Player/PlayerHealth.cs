@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerHealth : MonoBehaviour
@@ -16,6 +16,11 @@ public class PlayerHealth : MonoBehaviour
 
     private PlayerController playerController;
     public event Action OnDeath;
+
+    [Header("Visual Effects")]
+    public DamageGlitchEffect damageGlitchEffect;
+    public Animator hurtEffectAnimator;
+    public ParticleSystem hurtParticleEffect;
 
     void Start()
     {
@@ -64,6 +69,9 @@ public class PlayerHealth : MonoBehaviour
 
         CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
 
+        hurtEffectAnimator.Play("PlayerHurtEffect", -1, 0f);
+        hurtParticleEffect.Play();
+
         if(currentHealth <= 0)
         {
             Die();
@@ -74,6 +82,7 @@ public class PlayerHealth : MonoBehaviour
             playerController.TransitionToState<HurtState>();
             isInvincible = true;
             invincibilityTimer = invincibilityDuration;
+            damageGlitchEffect.TakeDamage();
         }
     }
 
@@ -105,6 +114,9 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = Mathf.Clamp(currentHealth - hazardDamage, 0, maxHealth);
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
+
+        hurtParticleEffect.Play();
+        damageGlitchEffect.TakeDamage();
 
         if (currentHealth <= 0)
         {
