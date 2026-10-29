@@ -47,10 +47,19 @@ public class StartTutorial : MonoBehaviour
     [Header("DoTween Setting")]
     [SerializeField] private float tweenDuration = 0.4f;
 
+    [Header("SFX")]
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private AudioClip branchOpenClip;
+
     private Coroutine currentCanvasCoroutine;
 
     private readonly HashSet<Silverfish> aliveEnemies = new HashSet<Silverfish>();
     private bool hasReachedDestination = false;
+
+    public void Awake()
+    {
+        if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
+    }
 
     public void Tutorial()
     {
@@ -293,5 +302,10 @@ public class StartTutorial : MonoBehaviour
             StopCoroutine(currentCanvasCoroutine);
         }
         currentCanvasCoroutine = StartCoroutine(ShowCanvas(text, duration));
+    }
+
+    public void PlayBranchSFX()
+    {
+        audioManager.PlaySFX(branchOpenClip);
     }
 }

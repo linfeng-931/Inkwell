@@ -7,8 +7,6 @@ public class IntroCameraFocus : MonoBehaviour
     [SerializeField] private int focusPriority = 30;
     [SerializeField] private int idlePriority = 0;
 
-    private bool isFinished;
-
     private void Awake()
     {
         if (focusCamera != null) focusCamera.Priority = idlePriority;
@@ -16,7 +14,7 @@ public class IntroCameraFocus : MonoBehaviour
 
     public void Activate()
     {
-        if (isFinished || focusCamera == null) return;
+        if (focusCamera == null) return;
 
         if (focusCamera.Follow == null)
         {
@@ -29,7 +27,6 @@ public class IntroCameraFocus : MonoBehaviour
 
     public void Deactivate()
     {
-        isFinished = true;
         if (focusCamera == null) return;
 
         focusCamera.Priority = idlePriority;
