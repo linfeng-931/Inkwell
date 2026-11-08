@@ -6320,6 +6320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e4b9354332d94926bd563eb6a2aaced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InspirationView
+  defaultSelectedObj: {fileID: 0}
   amountText: {fileID: 1402704403979339440}
   countSpeed: 10
   closeDelay: 3
@@ -16702,6 +16703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293180983413646eeada16a48cc04f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueView
+  defaultSelectedObj: {fileID: 0}
   dialogueText: {fileID: 4179535347526776420}
   audioManager: {fileID: 519834762200090711}
   typeClip: {fileID: 8300000, guid: bc34c4cd02ebe7e428e7b0b8dcb7363b, type: 3}
@@ -16951,6 +16953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49214493f42064f219c6f2c8d98a3095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemIntroView
+  defaultSelectedObj: {fileID: 0}
   cover: {fileID: 4570081411059375527}
   itemName: {fileID: 6876873627644555662}
   decs: {fileID: 6910741386362334323}
@@ -61352,6 +61355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70d79382a0448448b9394966be368eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GamePlayHUD
+  defaultSelectedObj: {fileID: 0}
   healthUI: {fileID: 1713895084543086257}
   energyUI: {fileID: 6423574052309916816}
 --- !u!1 &6968757809358618165
@@ -67255,6 +67259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f8a386c753b549b880b2e8f4edb08b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteView
+  defaultSelectedObj: {fileID: 0}
   marks:
   - {fileID: 4504519806872388784}
   - {fileID: 6387717337917831009}
@@ -85424,6 +85429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49bfb354e10fc4c38bc92c46be44b426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FadeView
+  defaultSelectedObj: {fileID: 0}
 --- !u!95 &7310742654634182124 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 8246119602468340047, guid: 354c19f5fa44f4e08b3911839736f9c6, type: 3}
