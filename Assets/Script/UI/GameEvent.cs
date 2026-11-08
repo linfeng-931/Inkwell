@@ -28,6 +28,8 @@ public static class GameEvent
     public static Action OnWorldInteractPressed;
     public static Action<int> OnInspirationCollected;
     public static Action<CursorMode> OnCursorModeChanged;
+    public static Action<string> OnRefreshItemPage;
+    public static Action<RectTransform> OnUpdateSelectionFrame;
 
     // cutscene (true = enter, false = exist)
     public static Action<bool> OnCutsceneStateChanged;

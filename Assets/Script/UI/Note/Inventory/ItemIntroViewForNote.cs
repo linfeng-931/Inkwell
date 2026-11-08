@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class ItemIntroViewForNote : MonoBehaviour
 {
@@ -11,11 +12,13 @@ public class ItemIntroViewForNote : MonoBehaviour
     private void OnEnable()
     {
         GameEvent.OnItemIntroChange += UpdateItemIntroText;
+        GameEvent.OnRefreshItemPage += RefreshItemData;
     }
 
     private void OnDisable()
     {
         GameEvent.OnItemIntroChange -= UpdateItemIntroText;
+        GameEvent.OnRefreshItemPage -= RefreshItemData;
     }
 
     public void RefreshItemData(string id)

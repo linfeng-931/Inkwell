@@ -1,11 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class BasePanel : MonoBehaviour
 {
     protected float duration = 0.3f;
     protected CanvasGroup canvasGroup;
+
+    public GameObject defaultSelectedObj;
 
     void Awake()
     {
@@ -32,6 +35,8 @@ public class BasePanel : MonoBehaviour
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+
+        SetFocusToDefault();
     }
 
     public virtual void OnExit()
@@ -72,5 +77,16 @@ public class BasePanel : MonoBehaviour
     {
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+
+        SetFocusToDefault();
+    }
+
+    protected virtual void SetFocusToDefault()
+    {
+        if (defaultSelectedObj != null && EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(defaultSelectedObj);
+        }
     }
 }

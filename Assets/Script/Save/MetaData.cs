@@ -27,10 +27,16 @@ public class PlayerStateData
 [Serializable]
 public class NoteData
 {
-    // id, amount
-    public Dictionary<string, int> items = new Dictionary<string, int>(){
-            {"inspiration", 0}
-        };
+    // inventory
+    public int penLevel = 0;
+    public int heartLevel = 0;
+    public int healthLevel = 0; 
+    public bool[] diaries;
+    public Dictionary<string, int> items = new Dictionary<string, int>()
+    {
+        // id, amount
+        {"inspiration", 0}
+    };
 }
 
 /// <summary>
