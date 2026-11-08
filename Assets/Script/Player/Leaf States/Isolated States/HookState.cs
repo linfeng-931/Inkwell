@@ -107,7 +107,11 @@ public class HookState : PlayerState
     {
         base.FixedUpdate();
 
-        if (isHanging) return;
+        if (isHanging){
+            manager.rig.linearVelocity = Vector3.zero;
+            manager.transform.position = manager.currentHookTarget;
+            return;
+        }
         
         // current distance and moving distance in this frame
         float distance = Vector3.Distance(manager.transform.position, manager.currentHookTarget);

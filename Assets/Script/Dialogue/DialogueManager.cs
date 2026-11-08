@@ -19,16 +19,6 @@ public class DialogueManager : MonoBehaviour
         Instance = this;
     }
 
-    private void OnEnable()
-    {
-        GameEvent.OnDialogueNextPressed += NextLine;
-    }
-
-    private void OnDisable()
-    {
-        GameEvent.OnDialogueNextPressed -= NextLine;
-    }
-
     public void TryPlayDialogue(string targetId, bool fromTimeline = false)
     {
         isFromTimeline = fromTimeline;

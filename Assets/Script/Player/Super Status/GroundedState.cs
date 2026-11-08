@@ -25,18 +25,18 @@ public class GroundedState : PlayerState
         // handle jump state and coyote time
         manager.coyoteTimer = manager.coyoteTime;
         
-        if (manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Jump))
+        if (manager.inputBufferManager.HasBufferedInput(PlayerActionType.Jump))
         {
-            manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Jump);
+            manager.inputBufferManager.ConsumeInput(PlayerActionType.Jump);
             manager.coyoteTimer = 0f;
             manager.TransitionToState<JumpState>();
             return;
         }
 
         // handle attack state
-        if (manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Attack))
+        if (manager.inputBufferManager.HasBufferedInput(PlayerActionType.Attack))
         {
-            manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
+            manager.inputBufferManager.ConsumeInput(PlayerActionType.Attack);
             
             // ground attack
             if(manager.canAttack){

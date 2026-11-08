@@ -40,11 +40,11 @@ public class HookShootState : PlayerState
         }
         else
         {
-            shootDir = manager.GetMouseDirection();
+            shootDir = manager.GetAimDirection();
 
             manager.FaceTowards(manager.transform.position + shootDir * 10f);
             
-            shootDir = manager.GetMouseDirection();
+            shootDir = manager.GetAimDirection();
         }
 
         manager.currentHookTipPos = manager.hookLineStartPoint.position;

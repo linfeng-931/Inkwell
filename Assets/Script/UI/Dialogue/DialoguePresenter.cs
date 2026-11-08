@@ -20,6 +20,7 @@ public class DialoguePresenter : MonoBehaviour
         GameEvent.OnDialogueOpened += HandleDialogueOpened;
         GameEvent.OnDialogueLineUpdated += HandleLineUpdated;
         GameEvent.OnDialogueClosed += HandleDialogueClosed;
+        GameEvent.OnDialogueNextPressed += HandleNextPressed;
     }
 
     private void OnDisable()
@@ -27,6 +28,7 @@ public class DialoguePresenter : MonoBehaviour
         GameEvent.OnDialogueOpened -= HandleDialogueOpened;
         GameEvent.OnDialogueLineUpdated -= HandleLineUpdated;
         GameEvent.OnDialogueClosed -= HandleDialogueClosed;
+        GameEvent.OnDialogueNextPressed -= HandleNextPressed;
     }
 
     private void HandleDialogueOpened()
@@ -37,13 +39,22 @@ public class DialoguePresenter : MonoBehaviour
     
     private void HandleLineUpdated(string text)
     {
+        view.UpdateDialogueText(text);
+    }
+
+    private void HandleNextPressed()
+    {
         if (view.IsTyping)
         {
-            view.CompleteText();
+            if (Time.time - view.startTypingTime >= 0.15f){
+                view.CompleteText();
+            }
         }
         else
         {
-            view.UpdateDialogueText(text);
+            if (Time.time - view.startTypingTime >= 0.15f){
+                DialogueManager.Instance.NextLine();
+            }
         }
     }
 

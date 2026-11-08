@@ -11,6 +11,7 @@ public class DialogueView : BasePanel
     private float typingSpeed = 0.05f;
     private Coroutine typingCoroutine;
     public bool IsTyping { get; private set; }
+    public float startTypingTime {get; private set;}
 
     public void UpdateDialogueText(string text)
     {
@@ -28,6 +29,7 @@ public class DialogueView : BasePanel
 
     private IEnumerator TypeTextRoutine()
     {
+        startTypingTime = Time.time;
         IsTyping = true;
 
         dialogueText.ForceMeshUpdate();
@@ -61,6 +63,7 @@ public class DialogueView : BasePanel
             audioManager.StopSFX();
         }
         
+        startTypingTime = Time.time;
         dialogueText.ForceMeshUpdate();
         dialogueText.maxVisibleCharacters = dialogueText.textInfo.characterCount;
         IsTyping = false;

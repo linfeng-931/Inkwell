@@ -16540,14 +16540,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputBufferManager
   defaultBufferTimer: 0.2
-  moveAction: {fileID: 2421331471641613905, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  walkAction: {fileID: 2421331471641613905, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  jumpAction: {fileID: -7185054445928532268, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  dashAction: {fileID: -6803948765895620614, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  attackAction: {fileID: -5969628810709159763, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  interactAction: {fileID: -4701643691418671430, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  hookAction: {fileID: -21522207210629572, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  shootAction: {fileID: -7253274237393013048, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
 --- !u!114 &5927650553674234230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44775,10 +44767,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e0dc6364f734d22b67abbbc06842be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIInputController
-  cancelAction: {fileID: -4236408572533717402, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  toggleNoteAction: {fileID: 2653218994807323902, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  dialogueAction: {fileID: 8474111422219075563, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
-  interactAction: {fileID: -4701643691418671430, guid: afbf2bf1d8db842859ca4a7275f159a8, type: 3}
   notePresenter: {fileID: 7342989743697189994}
 --- !u!114 &5755733014511459047
 MonoBehaviour:
@@ -44884,6 +44872,7 @@ MonoBehaviour:
   lockOnAnimatorEnemy: {fileID: 0}
   detectionRadius: 10
   snapAngleThreshold: 0.9
+  controllerDeadzone: 0.2
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8

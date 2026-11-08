@@ -240,7 +240,7 @@ public class PlayerController : MonoBehaviour
         bool canMoveNow = CanMove;
         if (canMoveNow && !wasCanMove)
         {
-            inputBufferManager.BlockInput(InputBufferManager.InputActionType.Jump, jumpGraceAfterUnlock);
+            inputBufferManager.BlockInput(PlayerActionType.Jump, jumpGraceAfterUnlock);
         }
         wasCanMove = canMoveNow;
 
@@ -386,7 +386,7 @@ public class PlayerController : MonoBehaviour
         if (!CanFight) { return; }
 
         // dash
-        if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Dash))
+        if (inputBufferManager.HasBufferedInput(PlayerActionType.Dash))
         {
             bool hasEnergy = playerEnergy.currentEnergy >= dashCost;
             if (hasEnergy)
@@ -404,7 +404,7 @@ public class PlayerController : MonoBehaviour
                         canAirDash = false;
                     }
 
-                    inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
+                    inputBufferManager.ConsumeInput(PlayerActionType.Dash);
                     TransitionToState<DashState>();
 
                     return;
@@ -413,12 +413,12 @@ public class PlayerController : MonoBehaviour
             else
             {
                 audioManager.PlaySFX(outOffEnergy);
-                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Dash);
+                inputBufferManager.ConsumeInput(PlayerActionType.Dash);
             }
         }
 
         // hook
-        if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Hook))
+        if (inputBufferManager.HasBufferedInput(PlayerActionType.Hook))
         {
             bool hasEnergy = playerEnergy.currentEnergy >= hookCost;
             if (hasEnergy)
@@ -430,7 +430,7 @@ public class PlayerController : MonoBehaviour
                     playerEnergy.ConsumeEnergy(hookCost);
                     lastHookTime = Time.time;
 
-                    inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
+                    inputBufferManager.ConsumeInput(PlayerActionType.Hook);
                     TransitionToState<HookShootState>();
 
                     return;
@@ -439,12 +439,12 @@ public class PlayerController : MonoBehaviour
             else
             {
                 audioManager.PlaySFX(outOffEnergy);
-                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Hook);
+                inputBufferManager.ConsumeInput(PlayerActionType.Hook);
             }
         }
 
         // shoot
-        if (inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Shoot))
+        if (inputBufferManager.HasBufferedInput(PlayerActionType.Shoot))
         {
             bool hasEnergy = playerEnergy.currentEnergy >= shootCost;
             if (hasEnergy)
@@ -456,7 +456,7 @@ public class PlayerController : MonoBehaviour
                     playerEnergy.ConsumeEnergy(shootCost);
                     lastShootTime = Time.time;
 
-                    inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Shoot);
+                    inputBufferManager.ConsumeInput(PlayerActionType.Shoot);
                     TransitionToState<ShootState>();
 
                     return;
@@ -465,7 +465,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 audioManager.PlaySFX(outOffEnergy);
-                inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Shoot);
+                inputBufferManager.ConsumeInput(PlayerActionType.Shoot);
             }
         }
     }
@@ -490,22 +490,37 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// get mouse direction according to player center
+    /// get aim direction according to player center (controller and mouse)
     /// </summary>
-    public Vector3 GetMouseDirection()
+    public Vector3 GetAimDirection()
     {
-        Vector2 mouseScreenPos = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-
-        // get x, y plane
-        Plane playerPlane = new Plane(Vector3.forward, transform.position);
-        Ray ray = mainCam.ScreenPointToRay(mouseScreenPos);
-
-        if (playerPlane.Raycast(ray, out float distance))
+        if (GameInputManager.Instance != null)
         {
-            Vector3 worldMousePos = ray.GetPoint(distance);
-            return (worldMousePos - transform.position).normalized;
+            // controller
+            Vector2 stickInput = GameInputManager.Instance.MoveInput;
+            bool isGamepad = GameInputManager.Instance.IsMoveInputFromGamepad;
+
+            if (isGamepad && stickInput.sqrMagnitude > 0.05f) 
+            {
+                return new Vector3(stickInput.x, stickInput.y, 0f).normalized;
+            }
         }
 
+        // mouse and keyboard
+        if (UnityEngine.InputSystem.Mouse.current != null)
+        {
+            Vector2 mouseScreenPos = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
+            Plane playerPlane = new Plane(Vector3.forward, transform.position);
+            Ray ray = mainCam.ScreenPointToRay(mouseScreenPos);
+
+            if (playerPlane.Raycast(ray, out float distance))
+            {
+                Vector3 worldMousePos = ray.GetPoint(distance);
+                return (worldMousePos - transform.position).normalized;
+            }
+        }
+
+        // default => player direction
         return isFacingRight ? Vector3.right : Vector3.left;
     }
 
@@ -592,7 +607,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            inputBufferManager.BlockInput(InputBufferManager.InputActionType.Jump, jumpGraceAfterUnlock);
+            inputBufferManager.BlockInput(PlayerActionType.Jump, jumpGraceAfterUnlock);
             if (isGrounded) TransitionToState<IdleState>();
             else TransitionToState<FallState>();
         }

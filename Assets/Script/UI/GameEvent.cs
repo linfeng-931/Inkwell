@@ -9,6 +9,7 @@ public static class GameEvent
     public static Action<string> OnFlagUpdated; // for story
     
     // player action
+    public static Action<PlayerActionType> OnActionTriggered;
     public static Action<bool> OnInteractStateChanged;
     public static Action OnPlayerReborn;
     public static Action<Transform> OnPlayerSave;
@@ -18,6 +19,7 @@ public static class GameEvent
     public static Action<float, float> OnEnergyChanged;
 
     // other ui event
+    public static Action<UIActionType> OnUIActionTriggered;
     public static Action OnEscapePressed;
     public static Action currentCloseCallback;
     public static Action OnToggleNote;

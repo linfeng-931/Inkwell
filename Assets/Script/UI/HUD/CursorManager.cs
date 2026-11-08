@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class CursorManager : MonoBehaviour
 {
@@ -19,6 +19,7 @@ public class CursorManager : MonoBehaviour
     [Header("Settings")]
     public float detectionRadius = 10f; 
     public float snapAngleThreshold = 0.9f; 
+    public float controllerDeadzone = 0.2f;
     
     [Header("Physics")]
     public LayerMask obstacleLayer;
@@ -32,14 +33,15 @@ public class CursorManager : MonoBehaviour
     private bool isUIShowingHookPoint = false;
     private bool isUIShowingEnemy = false;
 
+    private bool isUsingController = false;
+
     private void Start()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        
         playerController = player.GetComponent<PlayerController>();
         detectionRadius = playerController.hookRange;
         hookCost = playerController.hookCost;
+
+        UpdateCursorVisibility();
     }
 
     private void Update()
@@ -48,15 +50,25 @@ public class CursorManager : MonoBehaviour
         UpdateLockOnUI();
     }
 
+    private void UpdateCursorVisibility()
+    {
+        Cursor.visible = !isUsingController;
+        Cursor.lockState = isUsingController ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
     private void CheckForGrappleTargets()
     {
         HookTarget bestTarget = null;
         float bestScore = -1f;
 
-        Vector2 playerScreenPos = mainCamera.WorldToScreenPoint(player.position);
-        Vector2 mouseScreenPos = Input.mousePosition;
-        Vector2 playerToMouseDir = (mouseScreenPos - playerScreenPos).normalized;
+        Vector2 aimDirection = GetAimDirection();
 
+        if (aimDirection.sqrMagnitude < 0.01f)
+        {
+            CurrentTarget = null;
+            return;
+        }
+        
         HookTarget[] targets = FindObjectsOfType<HookTarget>();
 
         foreach (var target in targets)
@@ -69,14 +81,13 @@ public class CursorManager : MonoBehaviour
             {
                 if (!HasLineOfSight(target.transform.position)) continue;
 
-                Vector2 targetScreenPos = mainCamera.WorldToScreenPoint(target.transform.position);
-                Vector2 playerToTargetDir = (targetScreenPos - playerScreenPos).normalized;
+                Vector2 playerToTargetDir = ((Vector2)target.transform.position - (Vector2)player.position).normalized;
 
-                float dotProduct = Vector2.Dot(playerToMouseDir, playerToTargetDir);
+                float dotProduct = Vector2.Dot(aimDirection, playerToTargetDir);
 
                 if (dotProduct >= snapAngleThreshold)
                 {
-                    float score = dotProduct * 10f - distanceToPlayer + (target.priority * 5f);
+                    float score = (dotProduct * 10f) - distanceToPlayer + (target.priority * 5f);
 
                     if (score > bestScore)
                     {
@@ -88,6 +99,55 @@ public class CursorManager : MonoBehaviour
         }
 
         CurrentTarget = bestTarget;
+    }
+    
+    /// <summary>
+    /// getting aim direction in world space according to input equipment
+    /// </summary>
+    /// <returns></returns>
+    private Vector2 GetAimDirection()
+    {
+        if (GameInputManager.Instance == null) return playerController.isFacingRight ? Vector2.right : Vector2.left;
+
+        Vector2 moveInput = GameInputManager.Instance.MoveInput;
+        // check input from
+        bool isGamepad = GameInputManager.Instance.IsMoveInputFromGamepad;
+
+        // controller
+        if (isGamepad && moveInput.sqrMagnitude > controllerDeadzone * controllerDeadzone)
+        {
+            if (!isUsingController)
+            {
+                isUsingController = true;
+                UpdateCursorVisibility();
+            }
+            return moveInput.normalized;
+        }
+
+        // mouse and keyboard
+        if (Mouse.current != null)
+        {
+            Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+            
+            if (mouseDelta.sqrMagnitude > 1.0f || (!isGamepad && moveInput.sqrMagnitude > 0f))
+            {
+                if (isUsingController)
+                {
+                    isUsingController = false;
+                    UpdateCursorVisibility();
+                }
+            }
+
+            if (!isUsingController && mainCamera != null && player != null)
+            {
+                Vector2 playerScreenPos = mainCamera.WorldToScreenPoint(player.position);
+                Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
+                return (mouseScreenPos - playerScreenPos).normalized;
+            }
+        }
+
+        // default => player direction
+        return playerController.isFacingRight ? Vector2.right : Vector2.left;
     }
 
     private void UpdateLockOnUI()

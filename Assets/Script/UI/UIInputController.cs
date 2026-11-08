@@ -1,89 +1,129 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class UIInputController : MonoBehaviour
 {
-    [Header("General Player Input")]
-    public InputActionReference cancelAction;
-
-    [Header("Player Input")]
-    public InputActionReference toggleNoteAction;
-    public InputActionReference dialogueAction;
-    public InputActionReference interactAction;
-
     [Header("Presenter")]
     public NotePresenter notePresenter;
 
     private bool isInCutscene = false;
     private bool canInteract = true;
     private bool isNoteOpen = false;
+    private bool isDialogue = false;
 
     private void OnEnable()
     {
-        toggleNoteAction.action.performed += OnToggleNoteInput;
-        dialogueAction.action.performed += OnDialogueInput;
-        interactAction.action.performed += OnInteractionInput;
-        cancelAction.action.performed += OnCancelInput;
+        // input event
+        GameEvent.OnUIActionTriggered += HandleUIInput;
+        GameEvent.OnActionTriggered += HandlePlayerInput; // for player interaction
 
+        // state change event
         GameEvent.OnCutsceneStateChanged += HandleCutsceneStateChanged;
         GameEvent.OnInteractStateChanged += HandleInteractStateChanged;
+        GameEvent.OnDialogueOpened += HandleDialogueOpened;
+        GameEvent.OnDialogueClosed += HandleDialogueClosed;
         GameEvent.OnNoteStateChanged += HandleNoteStateChanged;
     }
 
     private void OnDisable()
     {
-        toggleNoteAction.action.performed -= OnToggleNoteInput;
-        dialogueAction.action.performed -= OnDialogueInput;
-        interactAction.action.performed -= OnInteractionInput;
-        cancelAction.action.performed -= OnCancelInput;
+        GameEvent.OnUIActionTriggered -= HandleUIInput;
+        GameEvent.OnActionTriggered -= HandlePlayerInput;
 
         GameEvent.OnCutsceneStateChanged -= HandleCutsceneStateChanged;
         GameEvent.OnInteractStateChanged -= HandleInteractStateChanged;
+        GameEvent.OnDialogueOpened -= HandleDialogueOpened;
+        GameEvent.OnDialogueClosed -= HandleDialogueClosed;
         GameEvent.OnNoteStateChanged -= HandleNoteStateChanged;
     }
 
-    private void OnToggleNoteInput(InputAction.CallbackContext context)
+    private void HandleUIInput(UIActionType type)
     {
-        if (isInCutscene) return;
-        if(!canInteract && !isNoteOpen) return;
+        switch (type)
+        {
+            case UIActionType.ToggleNote:
+                if (isInCutscene) return;
+                if(!canInteract && !isNoteOpen) return;
+                GameEvent.OnToggleNote?.Invoke();
+                break;
 
-        GameEvent.OnToggleNote?.Invoke();
+            case UIActionType.DialogueNext:
+                if (isInCutscene)
+                {
+                    GameEvent.OnDialogueNextPressed?.Invoke();
+                }
+                break;
+
+            case UIActionType.Cancel:
+                if (isInCutscene) return; 
+                GameEvent.OnEscapePressed?.Invoke();
+                GameEvent.currentCloseCallback?.Invoke();
+                GameEvent.currentCloseCallback = null;
+
+                if(isNoteOpen){
+                    GameEvent.OnToggleNote?.Invoke();
+                }
+                break;
+        }
+    }
+
+    private void HandlePlayerInput(PlayerActionType type)
+    {
+        if(type == PlayerActionType.Interact)
+        {
+            if(isInCutscene || !canInteract) return;
+            GameEvent.OnWorldInteractPressed?.Invoke();
+        }
     }
 
     private void HandleNoteStateChanged(bool state)
     {
         isNoteOpen = state;
+        UpdateInputMode();
     }
 
-    private void OnDialogueInput(InputAction.CallbackContext context)
+    private void HandleDialogueOpened()
     {
-        if (isInCutscene)
-        {
-            GameEvent.OnDialogueNextPressed?.Invoke();
-        }
+        isDialogue = true;
+        UpdateInputMode();
     }
 
-    private void OnInteractionInput(InputAction.CallbackContext context)
+    private void HandleDialogueClosed()
     {
-        if(isInCutscene || !canInteract) return;
-        GameEvent.OnWorldInteractPressed?.Invoke();
-    }
-
-    private void OnCancelInput(InputAction.CallbackContext context)
-    {
-        if (isInCutscene) return; 
-        GameEvent.OnEscapePressed?.Invoke();
-        GameEvent.currentCloseCallback?.Invoke();
-        GameEvent.currentCloseCallback = null;
+        isDialogue = false;
+        UpdateInputMode();
     }
 
     private void HandleCutsceneStateChanged(bool state)
     {
         isInCutscene = state;
+        UpdateInputMode();
     }
 
     private void HandleInteractStateChanged(bool state)
     {
         canInteract = !state;
+    }
+
+    /// <summary>
+    /// change input mod
+    /// </summary>
+    private void UpdateInputMode()
+    {
+        if(GameInputManager.Instance == null) return;
+
+        if(isNoteOpen || isInCutscene || !canInteract || isDialogue) // all condition you want to change input mod
+        {
+            GameInputManager.Instance.EnableUIInput();
+
+            var bufferManager = FindFirstObjectByType<InputBufferManager>();
+            if (bufferManager != null)
+            {
+                bufferManager.ClearAllBuffers();
+            }
+        }
+        else
+        {
+            GameInputManager.Instance.EnablePlayerInput();
+        }
     }
 }

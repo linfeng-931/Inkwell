@@ -80,9 +80,9 @@ public class AttackState : PlayerState
         // check time
         if(elapsedTime >= currentAttack.comboStartTime && elapsedTime <= currentAttack.comboEndTime)
         {
-            if (manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Attack))
+            if (manager.inputBufferManager.HasBufferedInput(PlayerActionType.Attack))
             {
-                manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
+                manager.inputBufferManager.ConsumeInput(PlayerActionType.Attack);
 
                 // enter next attack step
                 if(manager.currentComboIndex < manager.currentComboList.Length - 1)

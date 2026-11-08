@@ -23,12 +23,12 @@ public class AirborneState : PlayerState
         // handle jump state
         manager.coyoteTimer -= Time.deltaTime;
 
-        if (manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Jump))
+        if (manager.inputBufferManager.HasBufferedInput(PlayerActionType.Jump))
         {
             // first jump
             if (manager.coyoteTimer > 0f)
             {
-                manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Jump);
+                manager.inputBufferManager.ConsumeInput(PlayerActionType.Jump);
                 manager.coyoteTimer = 0f;
                 manager.TransitionToState<JumpState>();
                 return;
@@ -47,7 +47,7 @@ public class AirborneState : PlayerState
             }
             if (!isAboutToLand && manager.currentAirJumps > 0)
             {
-                manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Jump);
+                manager.inputBufferManager.ConsumeInput(PlayerActionType.Jump);
                 manager.currentAirJumps--;
                 manager.coyoteTimer = 0f;
                 manager.TransitionToState<DoubleJumpState>();
@@ -56,9 +56,9 @@ public class AirborneState : PlayerState
         }
 
         // handle attack state
-        if (manager.inputBufferManager.HasBufferedInput(InputBufferManager.InputActionType.Attack))
+        if (manager.inputBufferManager.HasBufferedInput(PlayerActionType.Attack))
         {
-            manager.inputBufferManager.ConsumeInput(InputBufferManager.InputActionType.Attack);
+            manager.inputBufferManager.ConsumeInput(PlayerActionType.Attack);
 
             if (manager.canAirAttack && manager.canAttack)
             {

@@ -17,7 +17,7 @@ public class ShootState : PlayerState
         manager.canTurn = false;
         CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
 
-        Vector3 shootDirection = manager.GetMouseDirection();
+        Vector3 shootDirection = manager.GetAimDirection();
         manager.FaceTowards(manager.transform.position + shootDirection);
         Bullet bullet = Object.Instantiate(
                 manager.bulletPrefab, 
