@@ -27,9 +27,9 @@ public class ItemIntroViewForNote : MonoBehaviour
     }
 
 
-    public void RefreshItemPage()
+    public void RefreshItemPage(bool flag)
     {
-        container.SetActive(false);
+        container.SetActive(flag);
     }
 
     private void UpdateItemIntroText()

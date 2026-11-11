@@ -44,4 +44,7 @@ public static class GameEvent
     public static Action OnItemIntroOpened;
     public static Action OnItemIntroClosed;
     public static Action OnItemIntroChange; // for note
+
+    // note
+    public static Action<string, int> OnNormalItemChanged;
 }

@@ -27,6 +27,8 @@ public class InspirationPresenter : MonoBehaviour
     private void HandleTextOpened(int value)
     {
         currentValue += value;
+
+        // update data
         SaveManager.Instance.currentSave.note.items["inspiration"] = currentValue;
 
         if (!view.IsRunning)

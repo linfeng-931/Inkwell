@@ -12,11 +12,13 @@ public class InspirationView : BasePanel
     private int targetValue;
     private Coroutine countCoroutine;
     private float closeTimer;
+    private int originalValue = 0;
 
     public bool IsRunning => countCoroutine != null;
 
     public void Initialize(int value)
     {
+        originalValue = value;
         targetValue = value;
         displayValue = value;
         amountText.text = value.ToString();
@@ -63,6 +65,8 @@ public class InspirationView : BasePanel
 
             yield return null;
         }
+        GameEvent.OnNormalItemChanged.Invoke("inspiration", targetValue-originalValue);
+        originalValue = targetValue;
         countCoroutine = null;
         OnExit();
     }

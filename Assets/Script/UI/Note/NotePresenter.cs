@@ -42,8 +42,8 @@ public class NotePresenter : MonoBehaviour
         
         if (viewCanvasGroup.alpha > 0)
         {
+            itemIntroViewForNote.RefreshItemPage(false);
             UIManager.Instance.CloseTopPanel();
-            itemIntroViewForNote.RefreshItemPage();
             GameEvent.OnInteractStateChanged.Invoke(false);
             GameEvent.OnNoteStateChanged?.Invoke(false);
             EventSystem.current.SetSelectedGameObject(null);
@@ -51,6 +51,7 @@ public class NotePresenter : MonoBehaviour
         else
         {
             UIManager.Instance.OpenPanel(view);
+            itemIntroViewForNote.RefreshItemPage(true);
             GameEvent.OnInteractStateChanged.Invoke(true);
             GameEvent.OnNoteStateChanged?.Invoke(true);
         }

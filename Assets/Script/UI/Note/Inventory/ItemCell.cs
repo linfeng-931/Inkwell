@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class ItemCell : MonoBehaviour, IPointerEnterHandler, ISelectHandler
 {
-    [SerializeField] private string itemID;
+    public string itemID;
     [SerializeField] private RectTransform faceRectTransform;
     private RectTransform rectTransform;
 
