@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3257006806419451603
+--- !u!114 &-8577766217838516130
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Cube
+  m_Name: glory_page
   m_Shader: {fileID: -6465566751694194690, guid: 1cf8a8c42d8828241a78fbb3b846fd2b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -41,11 +41,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f37396d2a45e21d49bff3f3fc1d2a24e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Base_Texture:
-        m_Texture: {fileID: 2800000, guid: f3c2bd98a0b213a4a8c679022f229a11, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2f6293fd01a9652498ca57a0da44d8db, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -69,7 +69,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f37396d2a45e21d49bff3f3fc1d2a24e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -116,7 +116,7 @@ Material:
     m_Floats:
     - Vector1_28BC39B5: 0
     - Vector1_40385CE1: 5
-    - Vector1_48BDE471: 1
+    - Vector1_48BDE471: 0
     - Vector1_A0DB3845: 0
     - Vector1_A0DB3845_1: 0
     - _AddPrecomputedVelocity: 0
@@ -164,8 +164,8 @@ Material:
     m_Colors:
     - Color_9B881ED6: {r: 1, g: 1, b: 1, a: 1}
     - Color_CA4EAD0D: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 0.9063317, g: 0.9063317, b: 0.9063317, a: 1}
-    - _Color: {r: 0.9063317, g: 0.9063317, b: 0.9063317, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _stroke_size: {r: 1, g: 1, b: 0, a: 0}
