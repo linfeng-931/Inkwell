@@ -17,6 +17,7 @@ public class ItemTrigger : MonoBehaviour
     public void StartItem()
     {
         ItemManager.Instance.ExecuteItemIntro(targetItemId, false);
+        GameInputManager.Instance.EnableUIInput();
         GameEvent.currentCloseCallback += OnIntroClosed;
 
         LockPlayerMovement();

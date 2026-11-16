@@ -250,13 +250,6 @@ public class PlayerController : MonoBehaviour
             CheckGlobalAbilities();
         }
 
-
-        if (isPlayerInputEnabled)
-        {
-            currentMoveX = CanMove ? inputBufferManager.moveInputX : 0f;
-            CheckGlobalAbilities();
-        }
-
         if (canTurn)
         {
             HandleTurning();
