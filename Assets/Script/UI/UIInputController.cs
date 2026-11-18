@@ -102,6 +102,7 @@ public class UIInputController : MonoBehaviour
     private void HandleInteractStateChanged(bool state)
     {
         canInteract = !state;
+        UpdateInputMode();
     }
 
     /// <summary>

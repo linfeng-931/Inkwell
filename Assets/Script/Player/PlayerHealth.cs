@@ -120,6 +120,13 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - hazardDamage, 0, maxHealth);
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
 
+        CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
+
+        if (hurtEffectAnimator != null)
+        {
+            hurtEffectAnimator.Play("PlayerHurtEffect", -1, 0f);
+        }
+
         hurtParticleEffect.Play();
         damageGlitchEffect.TakeDamage();
 
