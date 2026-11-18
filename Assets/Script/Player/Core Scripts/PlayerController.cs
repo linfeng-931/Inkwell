@@ -537,7 +537,7 @@ public class PlayerController : MonoBehaviour
                 destination.y = targetPos.y + hookBodyOffsetY;
                 break;
         }
-        destination.z = targetPos.z;
+        destination.z = transform.position.z;
         return destination;
     }
 

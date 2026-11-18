@@ -8,11 +8,6 @@ public class WalkState : GroundedState
     {
         base.Enter();
 
-        if (manager.footstepClip != null)
-        {
-            manager.audioManager.PlaySFX(manager.footstepClip, 0);
-        }
-
         manager.animator.Play(PlayerAnimateHash.Walk, 0, 0f);
     }
 
@@ -52,10 +47,6 @@ public class WalkState : GroundedState
 
     public override void Exit()
     {
-        if (manager.audioManager != null)
-        {
-            manager.audioManager.StopSFX();
-        }
         base.Exit();
         manager.playerEnergy.canRecoverEnergy = false;
     }

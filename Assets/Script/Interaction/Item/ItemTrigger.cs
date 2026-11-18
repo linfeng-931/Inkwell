@@ -36,6 +36,8 @@ public class ItemTrigger : MonoBehaviour
         {
             UnlockPlayerMovement();
         }
+
+        GameEvent.currentCloseCallback -= OnIntroClosed;
     }
 
     public void LockPlayerMovement()

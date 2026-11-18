@@ -21,14 +21,25 @@ public class UIManager : MonoBehaviour
 
     public void OpenPanel(BasePanel panel)
     {
-        // has other panel, pause it (pause the last)
+        if (panelStack.Count > 0 && panelStack.Peek() == panel)
+        {
+            panel.OnEnter();
+            return;
+        }
+
+        Debug.Log($"開啟了: {panel.gameObject.name}, Stack 剩下 {panelStack.Count} 個");
+
+        foreach(BasePanel basePanel in panelStack)
+        {
+            Debug.Log(basePanel.gameObject.name);
+        }
+
         if (panelStack.Count > 0)
         {
             panelStack.Peek().OnPause();
         }
 
-
-        panelStack.Push(panel); // open new panel
+        panelStack.Push(panel);
         panel.OnEnter();
     }
 
@@ -39,14 +50,26 @@ public class UIManager : MonoBehaviour
         BasePanel topPanel = panelStack.Pop();
         topPanel.OnExit();
 
-        // resume the last panel
+        Debug.Log($"關閉了: {topPanel.gameObject.name}, Stack 剩下 {panelStack.Count} 個");
+
         if (panelStack.Count > 0)
         {
-            panelStack.Peek().OnResume();
+            BasePanel nextPanel = panelStack.Peek();
+            Debug.Log($"準備喚醒: {nextPanel.gameObject.name}");
+
+            if (topPanel == nextPanel)
+            {
+                Debug.LogError("警告：Stack 中存在兩個一模一樣的面板參考！");
+            }
+
+            nextPanel.OnResume();
         }
         else if(panelStack.Count == 0)
         {
             GameEvent.OnInteractStateChanged.Invoke(false);
+
+            GameEvent.currentCloseCallback?.Invoke();
+            GameEvent.currentCloseCallback = null;
         }
     }
 }

@@ -26,11 +26,11 @@ public static class PlayerLock
 
     public static void Lock(object owner, PlayerLockType type = PlayerLockType.Movement)
     {
-        Debug.Log(owner);
+        // Debug.Log(owner);
         if (owner == null) return;
         if (owners[type].Add(owner))
         {
-            Debug.Log($"[PlayerLock] {type} LOCK by {Name(owner)} (now {owners[type].Count})");
+            //Debug.Log($"[PlayerLock] {type} LOCK by {Name(owner)} (now {owners[type].Count})");
         }
     }
 
@@ -40,7 +40,7 @@ public static class PlayerLock
         if (owner == null) return;
         if (owners[type].Remove(owner))
         {
-            Debug.Log($"[PlayerLock] {type} UNLOCK by {Name(owner)} (now {owners[type].Count})");
+            //Debug.Log($"[PlayerLock] {type} UNLOCK by {Name(owner)} (now {owners[type].Count})");
         }
     }
 

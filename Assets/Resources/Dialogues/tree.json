@@ -32,6 +32,22 @@
             "value": "true"
           }
         ]
+      },
+      {
+        "id": "tree_hook_tutorial",
+        "texts": [
+          "看到那到光了嗎?",
+          "試著穿越藤蔓來碰觸到它, 只不過...",
+          "紅色的藤蔓充斥著危險\n小心不要碰觸到它持續前行吧"
+        ],
+        "playCondition": "",
+        "actions": [
+          {
+            "type": "set_flag",
+            "key": "checked_tree",
+            "value": "true"
+          }
+        ]
       }
     ]
 }
