@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Playables;
 using DG.Tweening;
+using Unity.Cinemachine;
 
 public class StartTutorial : MonoBehaviour
 {
@@ -32,6 +33,11 @@ public class StartTutorial : MonoBehaviour
     [SerializeField] private GameObject[] hookTarget;
     [SerializeField] private GameObject[] vines;
     [SerializeField] private GameObject lightParticle;
+
+    [SerializeField] private CinemachineCamera focusCamera;
+    [SerializeField] private PlayableDirector playableDirector;
+    [SerializeField] private int focusPriority = 30;
+    [SerializeField] private int idlePriority = 0;
 
     [SerializeField] private Animator branchAni;
 
@@ -68,6 +74,9 @@ public class StartTutorial : MonoBehaviour
 
     private IEnumerator TutorialFlowRoutine()
     {
+        PlayerLoadout loadout = MapManager.Instance.player.GetComponent<PlayerLoadout>();
+        loadout.EnterArmedMode();
+
         yield return StartCoroutine(TransitionSequence(playerSpawn.position));
         DisplayHint("A D鍵進行移動, 空白鍵進行跳躍", 4f);
 
@@ -123,16 +132,16 @@ public class StartTutorial : MonoBehaviour
         onAllEnemiesDefeated?.Invoke();
         yield return new WaitForSeconds(1.5f);
 
-        if(playerController.playerHealth != null)
+        if (playerController.playerHealth != null)
         {
             playerController.playerHealth.ResetPlayerHealth();
         }
 
-        yield return StartCoroutine(TransitionSequence(hookSpawnPos.position));
-        DisplayHint("按下右鍵發射勾索, 此技能會消耗墨水", 4f);
-
         yield return new WaitForSeconds(1f);
         StartCoroutine( SpawnHookTutorial());
+        // yield return StartCoroutine(TransitionSequence(hookSpawnPos.position));
+        // DisplayHint("按下右鍵發射勾索, 此技能會消耗墨水", 4f);
+
         yield return new WaitUntil(() => hasReachedDestination);
 
         // branchAni.SetBool("open", true);
@@ -146,34 +155,59 @@ public class StartTutorial : MonoBehaviour
 
     private IEnumerator DialogueTransitionRoutine()
     {
-        yield return StartCoroutine(TransitionSequence(dialouguePos.position));
+        yield return StartCoroutine(TransitionSequence(dialouguePos.position, keepLocked: true));
 
         HideAllHookObject();
         cameraFocus.Activate();
         dialogueTrigger.StartDialogue();
-    }
-
-    private IEnumerator TransitionSequence(Vector3 targetPosition)
-    {
-        GameEvent.OnToggleFade(false);
-        PlayerLock.Lock(this);
-        PlayerLock.Lock(this, PlayerLockType.Combat);
-
-        yield return new WaitForSeconds(1f);
-
-        Transform playerTransform = MapManager.Instance.player.transform;
-        PlayerController playerController = playerTransform.GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.TeleportTo(targetPosition);
-        }
-
-        GameEvent.OnToggleFade(true);
-
-        yield return new WaitForSeconds(0.5f);
 
         PlayerLock.Unlock(this);
         PlayerLock.Unlock(this, PlayerLockType.Combat);
+    }
+
+    private IEnumerator TransitionSequence(Vector3 targetPosition, bool keepLocked = false)
+    {
+        PlayerController player = MapManager.Instance.player.GetComponent<PlayerController>();
+
+        PlayerLock.Lock(this);
+        PlayerLock.Lock(this, PlayerLockType.Combat);
+
+        yield return WaitUntilPlayerSettled(player);
+
+        GameEvent.OnToggleFade(false);
+        yield return new WaitForSeconds(1f);
+
+        if (player != null) player.TeleportTo(targetPosition);
+
+        yield return WaitUntilPlayerSettled(player);
+
+        GameEvent.OnToggleFade(true);
+        yield return new WaitForSeconds(0.5f);
+
+        if (!keepLocked)
+        {
+            PlayerLock.Unlock(this);
+            PlayerLock.Unlock(this, PlayerLockType.Combat);
+        }
+    }
+
+    private IEnumerator WaitUntilPlayerSettled(PlayerController player, float timeout = 3f)
+    {
+        if (player == null) yield break;
+
+        float waited = 0f;
+        while (waited < timeout)
+        {
+            bool settled = player.isGrounded
+                           && player.currentState is IdleState
+                           && Mathf.Abs(player.rig.linearVelocity.y) < 0.1f;
+            if (settled) yield break;
+
+            waited += Time.deltaTime;
+            yield return null;
+        }
+
+        player.StopMovement();
     }
 
     private IEnumerator ShowCanvas(string text, float duration)
@@ -211,19 +245,67 @@ public class StartTutorial : MonoBehaviour
 
     private IEnumerator SpawnHookTutorial()
     {
-        if (lightParticle != null) lightParticle.SetActive(true);
+        PlayerLock.Lock(this);
+        PlayerLock.Lock(this, PlayerLockType.Combat);
+
+        // Show vines and focus camera for end point
         ShowObject(vines);
-        yield return new WaitForSeconds(1.0f);
-        ShowObjectsWithTween(platforms);
+        ShowObject(platforms);
+
+        CameraActivate();
+        yield return new WaitForSeconds(0.7f);
+
+        playableDirector.Play();
         ShowObjectsWithTween(hookTarget);
-        
+        if (lightParticle != null) lightParticle.SetActive(true);
+
+
+
+        //yield return new WaitForSeconds(1.0f);
+
+    }
+
+    public void HookTutorial()
+    {
+        StartCoroutine(StartHookTutorial());
+    }
+
+    private IEnumerator StartHookTutorial()
+    {
+        yield return StartCoroutine(TransitionSequence(hookSpawnPos.position));
+        DisplayHint("按下右鍵發射勾索, 此技能會消耗墨水", 4f);
+
+        PlayerLock.Unlock(this);
+        PlayerLock.Unlock(this, PlayerLockType.Combat);
+    }
+
+    public void CameraActivate()
+    {
+        if (focusCamera == null) return;
+
+        if (focusCamera.Follow == null)
+        {
+            focusCamera.Follow = MapManager.Instance.player.transform;
+        }
+
+        focusCamera.gameObject.SetActive(true);
+        focusCamera.Priority = focusPriority;
+    }
+
+    public void CameraDeactivate()
+    {
+        if (focusCamera == null) return;
+
+        focusCamera.Priority = idlePriority;
+        focusCamera.gameObject.SetActive(false);
     }
 
     public void HideAllHookObject()
     {
-        HideObjectsWithTween(platforms);
+        HideObject(platforms);
         HideObjectsWithTween(hookTarget);
-        HideObjectsWithTween(vines);
+        HideObject(vines);
+        // HideObjectsWithTween(vines);
     }
 
     private void ShowObject(GameObject[] objects)
@@ -234,6 +316,15 @@ public class StartTutorial : MonoBehaviour
             {
                 obj.SetActive(true);
             }
+        }
+    }
+
+    private void HideObject(GameObject[] objects)
+    {
+        foreach(var obj in objects)
+        {
+            Animator animator = obj.GetComponent<Animator>();
+            animator.SetTrigger("back");
         }
     }
 

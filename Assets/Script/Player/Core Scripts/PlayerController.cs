@@ -250,13 +250,6 @@ public class PlayerController : MonoBehaviour
             CheckGlobalAbilities();
         }
 
-
-        if (isPlayerInputEnabled)
-        {
-            currentMoveX = CanMove ? inputBufferManager.moveInputX : 0f;
-            CheckGlobalAbilities();
-        }
-
         if (canTurn)
         {
             HandleTurning();
@@ -544,7 +537,7 @@ public class PlayerController : MonoBehaviour
                 destination.y = targetPos.y + hookBodyOffsetY;
                 break;
         }
-        destination.z = targetPos.z;
+        destination.z = transform.position.z;
         return destination;
     }
 

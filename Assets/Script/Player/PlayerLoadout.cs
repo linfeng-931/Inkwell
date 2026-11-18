@@ -23,7 +23,7 @@ public class PlayerLoadout : MonoBehaviour
 
     private void Start() // for test
     {
-        EnterArmedMode();
+        // EnterArmedMode();
     }
 
     public void Initialize()
@@ -87,6 +87,6 @@ public class PlayerLoadout : MonoBehaviour
         FadeableObject fader = weaponVisual.GetComponent<FadeableObject>();
         if (fader == null) fader = weaponVisual.AddComponent<FadeableObject>();
         fader.FadeIn(duration);
-        EnterArmedMode();
+        // EnterArmedMode();
     }
 }

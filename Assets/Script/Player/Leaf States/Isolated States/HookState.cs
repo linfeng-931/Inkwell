@@ -18,6 +18,7 @@ public class HookState : PlayerState
         base.Enter();
 
         manager.rig.linearVelocity = Vector3.zero;
+        manager.rig.isKinematic = true;
         isHanging = false;
         hangTimer = 0f;
 
@@ -152,13 +153,14 @@ public class HookState : PlayerState
         }
         else
         {
-            manager.rig.linearVelocity = hookDir * manager.hookSpeed;
+            manager.rig.MovePosition(manager.transform.position + hookDir * moveStep);
         }
     }
 
     public override void Exit()
     {
         base.Exit();
+        manager.rig.isKinematic = false;
         manager.hookPenObject.SetActive(false);
 
         if (manager.hookLineRenderer != null)

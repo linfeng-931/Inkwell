@@ -1,5 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+
+public enum LoopType
+{
+    General,
+    Footstep,
+    Typing
+}
 
 public class AudioManager : MonoBehaviour
 {
@@ -15,6 +23,7 @@ public class AudioManager : MonoBehaviour
     private const string BGM_KEY = "BGM_Volume";
     private const string SFX_KEY = "SFX_Volume";
 
+    private readonly Dictionary<LoopType, AudioSource> loopSources = new Dictionary<LoopType, AudioSource>();
 
     private void Awake()
     {
@@ -70,30 +79,63 @@ public class AudioManager : MonoBehaviour
     // Play type 0 = play, 1 = play on shot
     public void PlaySFX(AudioClip clip, int playType = 1)
     {
-        if (clip != null)
-        {
-            if (playType == 0)
-            {
-                if (sfxSource.clip == clip && sfxSource.isPlaying) return;
+        if (clip == null) return;
 
-                sfxSource.clip = clip;
-                sfxSource.loop = true;
-                sfxSource.Play();
-            }
-            else {
-                sfxSource.PlayOneShot(clip);
-            }
-            
+        if (playType == 0)
+        {
+            PlayLoop(clip, LoopType.General);
+        }
+        else if (sfxSource != null)
+        {
+            sfxSource.PlayOneShot(clip);
         }
     }
 
     public void StopSFX()
     {
-        if (sfxSource != null)
+        StopLoop(LoopType.General);
+    }
+
+    public void PlayLoop(AudioClip clip, LoopType channel = LoopType.General)
+    {
+        if (clip == null) return;
+
+        AudioSource source = GetLoopSource(channel);
+        if (source.isPlaying && source.clip == clip) return;
+
+        source.clip = clip;
+        source.loop = true;
+        source.Play();
+    }
+
+    public void StopLoop(LoopType channel = LoopType.General)
+    {
+        if (loopSources.TryGetValue(channel, out AudioSource source) && source != null && source.isPlaying)
         {
-            sfxSource.Stop();
-            sfxSource.loop = false;
+            source.Stop();
         }
+    }
+
+    public bool IsLoopPlaying(LoopType channel)
+    {
+        return loopSources.TryGetValue(channel, out AudioSource source) && source != null && source.isPlaying;
+    }
+
+    private AudioSource GetLoopSource(LoopType channel)
+    {
+        if (loopSources.TryGetValue(channel, out AudioSource existing) && existing != null)
+        {
+            return existing;
+        }
+
+        AudioSource source = gameObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.loop = true;
+        source.spatialBlend = 0f;
+        if (sfxSource != null) source.outputAudioMixerGroup = sfxSource.outputAudioMixerGroup;
+
+        loopSources[channel] = source;
+        return source;
     }
 
     public void PlayUISFX(AudioClip clip, bool stopPrevious = true)
