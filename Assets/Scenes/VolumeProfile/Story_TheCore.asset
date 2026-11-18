@@ -1,5 +1,72 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-638747763899470327
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a074ec59f6e910b4e8c49f57e56cf95a, type: 3}
+  m_Name: VolumetricFogVolumeComponent
+  m_EditorClassIdentifier: com.cqf.urpvolumetricfog.runtime::VolumetricFogVolumeComponent
+  active: 0
+  distance:
+    m_OverrideState: 1
+    m_Value: 323
+  baseHeight:
+    m_OverrideState: 1
+    m_Value: 8.94
+  maximumHeight:
+    m_OverrideState: 1
+    m_Value: 60.95
+  enableGround:
+    m_OverrideState: 0
+    m_Value: 1
+  groundHeight:
+    m_OverrideState: 1
+    m_Value: 64
+  density:
+    m_OverrideState: 1
+    m_Value: 1
+  attenuationDistance:
+    m_OverrideState: 0
+    m_Value: 128
+  enableAPVContribution:
+    m_OverrideState: 1
+    m_Value: 0
+  APVContributionWeight:
+    m_OverrideState: 0
+    m_Value: 1
+  enableMainLightContribution:
+    m_OverrideState: 1
+    m_Value: 0
+  anisotropy:
+    m_OverrideState: 0
+    m_Value: 0.4
+  scattering:
+    m_OverrideState: 0
+    m_Value: 0.15
+  tint:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  enableAdditionalLightsContribution:
+    m_OverrideState: 1
+    m_Value: 0
+  maxSteps:
+    m_OverrideState: 0
+    m_Value: 128
+  blurIterations:
+    m_OverrideState: 1
+    m_Value: 2
+  enabled:
+    m_OverrideState: 1
+    m_Value: 1
+  renderPassEvent:
+    m_OverrideState: 0
+    m_Value: 550
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,7 +82,8 @@ MonoBehaviour:
   components:
   - {fileID: 8326166698094910917}
   - {fileID: 56154433235249297}
-  - {fileID: 3894966520498674893}
+  - {fileID: 7994871450504679252}
+  - {fileID: -638747763899470327}
 --- !u!114 &56154433235249297
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -56,7 +124,7 @@ MonoBehaviour:
   maxNits:
     m_OverrideState: 1
     m_Value: 1000
---- !u!114 &3894966520498674893
+--- !u!114 &7994871450504679252
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,64 +133,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a074ec59f6e910b4e8c49f57e56cf95a, type: 3}
-  m_Name: VolumetricFogVolumeComponent
-  m_EditorClassIdentifier: com.cqf.urpvolumetricfog.runtime::VolumetricFogVolumeComponent
+  m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
+  m_Name: Bloom
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.Bloom
   active: 1
-  distance:
-    m_OverrideState: 0
-    m_Value: 64
-  baseHeight:
-    m_OverrideState: 1
-    m_Value: 0
-  maximumHeight:
-    m_OverrideState: 1
-    m_Value: 50
-  enableGround:
-    m_OverrideState: 1
-    m_Value: 0
-  groundHeight:
-    m_OverrideState: 0
-    m_Value: 0
-  density:
-    m_OverrideState: 0
-    m_Value: 0.2
-  attenuationDistance:
-    m_OverrideState: 0
-    m_Value: 128
-  enableAPVContribution:
-    m_OverrideState: 1
-    m_Value: 0
-  APVContributionWeight:
-    m_OverrideState: 0
-    m_Value: 1
-  enableMainLightContribution:
+  skipIterations:
     m_OverrideState: 1
     m_Value: 1
-  anisotropy:
-    m_OverrideState: 0
-    m_Value: 0.4
-  scattering:
-    m_OverrideState: 0
-    m_Value: 0.15
+  threshold:
+    m_OverrideState: 1
+    m_Value: 0.6
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  scatter:
+    m_OverrideState: 1
+    m_Value: 0.7
+  clamp:
+    m_OverrideState: 1
+    m_Value: 65472
   tint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-  enableAdditionalLightsContribution:
     m_OverrideState: 1
-    m_Value: 1
-  maxSteps:
+    m_Value: {r: 0.98732626, g: 1, b: 0.9386792, a: 1}
+  highQualityFiltering:
     m_OverrideState: 0
-    m_Value: 128
-  blurIterations:
-    m_OverrideState: 0
+    m_Value: 0
+  filter:
+    m_OverrideState: 1
     m_Value: 2
-  enabled:
-    m_OverrideState: 1
-    m_Value: 1
-  renderPassEvent:
+  downscale:
     m_OverrideState: 0
-    m_Value: 550
+    m_Value: 0
+  maxIterations:
+    m_OverrideState: 0
+    m_Value: 6
+  dirtTexture:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+    dimension: 1
+  dirtIntensity:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &8326166698094910917
 MonoBehaviour:
   m_ObjectHideFlags: 3
