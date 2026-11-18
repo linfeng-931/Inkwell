@@ -7,6 +7,7 @@ public class AttackState : PlayerState
     private bool inputRegistered;
     private bool hitboxOpened;
     private bool hitboxClosed;
+    private bool isStopAni = false;
 
     public AttackState(PlayerController manager) : base(manager) { }
 
@@ -26,7 +27,7 @@ public class AttackState : PlayerState
         inputRegistered = false;
 
         // animate
-        manager.animator3.Play(currentAttack.animationName[0], 0, 0f);
+        manager.animator.Play(currentAttack.animationName[0], 0, 0f);
 
         // close gravity
         if (!manager.isGrounded)
@@ -40,8 +41,6 @@ public class AttackState : PlayerState
         hitboxClosed = false;
         manager.hitBox = manager.GetComponentInChildren<HitBox>();
         manager.hitBox.DisableHitBox();
-
-        Debug.Log("進入攻擊");
     }
 
     public override void Update()
@@ -92,6 +91,11 @@ public class AttackState : PlayerState
             }
         }
 
+        if(!isStopAni && elapsedTime >= currentAttack.duration - 0.1f)
+        {
+            isStopAni = true;
+            manager.animator.Play(currentAttack.animationName[1], 0, 0f);
+        }
         // end attack
         if(elapsedTime >= currentAttack.duration)
         {
@@ -113,6 +117,7 @@ public class AttackState : PlayerState
         manager.rig.useGravity = true;
         manager.playerFace3.SetActive(false);
         manager.playerFace.SetActive(true);
+        isStopAni = false;
 
         if (manager.hitBox != null)
         {
