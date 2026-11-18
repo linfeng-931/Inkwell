@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"¶}±Ò¤F: {panel.gameObject.name}, Stack ³Ñ¤U {panelStack.Count} ­Ó");
+        //Debug.Log($"ï¿½ï¿½Ò¤F: {panel.gameObject.name}, Stack ï¿½Ñ¤U {panelStack.Count} ï¿½ï¿½");
 
         foreach(BasePanel basePanel in panelStack)
         {
@@ -50,16 +50,16 @@ public class UIManager : MonoBehaviour
         BasePanel topPanel = panelStack.Pop();
         topPanel.OnExit();
 
-        Debug.Log($"Ãö³¬¤F: {topPanel.gameObject.name}, Stack ³Ñ¤U {panelStack.Count} ­Ó");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½F: {topPanel.gameObject.name}, Stack ï¿½Ñ¤U {panelStack.Count} ï¿½ï¿½");
 
         if (panelStack.Count > 0)
         {
             BasePanel nextPanel = panelStack.Peek();
-            Debug.Log($"·Ç³Æ³ê¿ô: {nextPanel.gameObject.name}");
+            Debug.Log($"ï¿½Ç³Æ³ï¿½ï¿½: {nextPanel.gameObject.name}");
 
             if (topPanel == nextPanel)
             {
-                Debug.LogError("Äµ§i¡GStack ¤¤¦s¦b¨â­Ó¤@¼Ò¤@¼Ëªº­±ªO°Ñ¦Ò¡I");
+                Debug.LogError("Äµï¿½iï¿½GStack ï¿½ï¿½ï¿½sï¿½bï¿½ï¿½Ó¤@ï¿½Ò¤@ï¿½Ëªï¿½ï¿½ï¿½ï¿½Oï¿½Ñ¦Ò¡I");
             }
 
             nextPanel.OnResume();
