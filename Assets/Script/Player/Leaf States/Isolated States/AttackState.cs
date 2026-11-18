@@ -42,6 +42,8 @@ public class AttackState : PlayerState
         hitboxClosed = false;
         manager.hitBox = manager.GetComponentInChildren<HitBox>();
         manager.hitBox.DisableHitBox();
+
+        Debug.Log("進入攻擊");
     }
 
     public override void Update()

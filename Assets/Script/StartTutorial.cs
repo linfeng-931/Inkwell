@@ -78,7 +78,7 @@ public class StartTutorial : MonoBehaviour
         loadout.EnterArmedMode();
 
         yield return StartCoroutine(TransitionSequence(playerSpawn.position));
-        DisplayHint("A DÁä¶i¦æ²¾°Ê, ªÅ¥ÕÁä¶i¦æ¸õÅD", 4f);
+        DisplayHint("A Déµé€²è¡Œç§»å‹•,ç©ºç™½éµé€²è¡Œè·³èº", 4f);
 
         bool pressedA = false;
         bool pressedD = false;
@@ -86,9 +86,12 @@ public class StartTutorial : MonoBehaviour
 
         while (!pressedA || !pressedD || !pressedSpace)
         {
-            if (Input.GetKeyDown(KeyCode.A)) pressedA = true;
-            if (Input.GetKeyDown(KeyCode.D)) pressedD = true;
-            if (Input.GetKeyDown(KeyCode.Space)) pressedSpace = true;
+            if (GameInputManager.Instance.moveAction.action.WasPressedThisFrame())
+            {
+                pressedA = true;
+                pressedD = true;
+            }
+            if (GameInputManager.Instance.jumpAction.action.WasPressedThisFrame()) pressedSpace = true;
             yield return null;
         }
         onAllMovementFinished?.Invoke();
@@ -96,20 +99,20 @@ public class StartTutorial : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
 
-        DisplayHint("«ö¤U Shift ¨Ó¤Æ§@¾¥¤ô¬ï±ô¦a§Î, ¦¹§Ş¯à·|®ø¯Ó¾¥¤ô", 4f);
+        DisplayHint("æŒ‰ä¸‹ Shift ä¾†åŒ–ä½œå¢¨æ°´ç©¿æ¢­åœ°å½¢,æ­¤æŠ€èƒ½æœƒæ¶ˆè€—å¢¨æ°´", 4f);
 
         bool pressedShift = false;
 
         while (!pressedShift)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift)) pressedShift = true;
+            if (GameInputManager.Instance.dashAction.action.WasPressedThisFrame()) pressedShift = true;
             yield return null;
         }
         onAllShiftFinished?.Invoke();
 
         yield return new WaitForSeconds(1f);
 
-        DisplayHint("®ø¯Óªº¾¥¤ô¥iÂÇ¥Ñ²¾°Ê¨Ó¦^´_, ¸ÕµÛ±N¾¥¤ô¸Éº¡§a", 4f);
+        DisplayHint("æ¶ˆè€—çš„å¢¨æ°´å¯è—‰ç”±ç§»å‹•ä¾†å›å¾©,è©¦è‘—å°‡å¢¨æ°´è£œæ»¿å§", 4f);
         PlayerController playerController = MapManager.Instance.player.GetComponent<PlayerController>();
         float maxEnergy = playerController.playerEnergy.maxEnergy;
 
@@ -123,7 +126,7 @@ public class StartTutorial : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         yield return StartCoroutine(TransitionSequence(playerSpawn.position));
-        DisplayHint("«ö¤U¥ªÁä¶i¦æ§ğÀ»", 4);
+        DisplayHint("æŒ‰ä¸‹å·¦éµé€²è¡Œæ”»æ“Š", 4);
 
         yield return new WaitForSeconds(1f);
         SpawnEnemies();
@@ -138,14 +141,11 @@ public class StartTutorial : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-        StartCoroutine( SpawnHookTutorial());
-        // yield return StartCoroutine(TransitionSequence(hookSpawnPos.position));
-        // DisplayHint("«ö¤U¥kÁäµo®g¤Ä¯Á, ¦¹§Ş¯à·|®ø¯Ó¾¥¤ô", 4f);
+        StartCoroutine(SpawnHookTutorial());
 
         yield return new WaitUntil(() => hasReachedDestination);
 
         // branchAni.SetBool("open", true);
-        Debug.Log("±Ğ¾Ç¥ş¼Æ§¹¦¨¡I");
     }
 
     public void TransformToDialouguePos()
@@ -273,7 +273,7 @@ public class StartTutorial : MonoBehaviour
     private IEnumerator StartHookTutorial()
     {
         yield return StartCoroutine(TransitionSequence(hookSpawnPos.position));
-        DisplayHint("«ö¤U¥kÁäµo®g¤Ä¯Á, ¦¹§Ş¯à·|®ø¯Ó¾¥¤ô", 4f);
+        DisplayHint("æŒ‰ä¸‹å³éµç™¼å°„å‹¾ç´¢, è«‹æ³¨æ„æ­¤æŠ€èƒ½æœƒæ¶ˆè€—å¢¨æ°´", 4f);
 
         PlayerLock.Unlock(this);
         PlayerLock.Unlock(this, PlayerLockType.Combat);
@@ -321,7 +321,7 @@ public class StartTutorial : MonoBehaviour
 
     private void HideObject(GameObject[] objects)
     {
-        foreach(var obj in objects)
+        foreach (var obj in objects)
         {
             Animator animator = obj.GetComponent<Animator>();
             animator.SetTrigger("back");
