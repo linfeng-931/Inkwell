@@ -33,7 +33,8 @@ public class InspirationPresenter : MonoBehaviour
 
         if (!view.IsRunning)
         {
-            UIManager.Instance.OpenPanel(view);
+            view.OnEnter();
+            //UIManager.Instance.OpenPanel(view);
         }
 
         view.UpdateAmountText(currentValue);

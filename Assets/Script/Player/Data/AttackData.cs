@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class AttackData
 {
-    public string animationName;
+    public string[] animationName;
     public float duration;
     public float comboStartTime;
     public float comboEndTime;

@@ -21,14 +21,25 @@ public class UIManager : MonoBehaviour
 
     public void OpenPanel(BasePanel panel)
     {
-        // has other panel, pause it (pause the last)
+        if (panelStack.Count > 0 && panelStack.Peek() == panel)
+        {
+            panel.OnEnter();
+            return;
+        }
+
+        //Debug.Log($"��ҤF: {panel.gameObject.name}, Stack �ѤU {panelStack.Count} ��");
+
+        foreach(BasePanel basePanel in panelStack)
+        {
+            Debug.Log(basePanel.gameObject.name);
+        }
+
         if (panelStack.Count > 0)
         {
             panelStack.Peek().OnPause();
         }
 
-
-        panelStack.Push(panel); // open new panel
+        panelStack.Push(panel);
         panel.OnEnter();
     }
 
@@ -39,14 +50,26 @@ public class UIManager : MonoBehaviour
         BasePanel topPanel = panelStack.Pop();
         topPanel.OnExit();
 
-        // resume the last panel
+        Debug.Log($"�����F: {topPanel.gameObject.name}, Stack �ѤU {panelStack.Count} ��");
+
         if (panelStack.Count > 0)
         {
-            panelStack.Peek().OnResume();
+            BasePanel nextPanel = panelStack.Peek();
+            Debug.Log($"�ǳƳ��: {nextPanel.gameObject.name}");
+
+            if (topPanel == nextPanel)
+            {
+                Debug.LogError("ĵ�i�GStack ���s�b��Ӥ@�Ҥ@�˪����O�ѦҡI");
+            }
+
+            nextPanel.OnResume();
         }
         else if(panelStack.Count == 0)
         {
             GameEvent.OnInteractStateChanged.Invoke(false);
+
+            GameEvent.currentCloseCallback?.Invoke();
+            GameEvent.currentCloseCallback = null;
         }
     }
 }

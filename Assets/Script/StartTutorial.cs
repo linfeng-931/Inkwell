@@ -153,34 +153,59 @@ public class StartTutorial : MonoBehaviour
 
     private IEnumerator DialogueTransitionRoutine()
     {
-        yield return StartCoroutine(TransitionSequence(dialouguePos.position));
+        yield return StartCoroutine(TransitionSequence(dialouguePos.position, keepLocked: true));
 
         HideAllHookObject();
         cameraFocus.Activate();
         dialogueTrigger.StartDialogue();
-    }
-
-    private IEnumerator TransitionSequence(Vector3 targetPosition)
-    {
-        GameEvent.OnToggleFade(false);
-        PlayerLock.Lock(this);
-        PlayerLock.Lock(this, PlayerLockType.Combat);
-
-        yield return new WaitForSeconds(1f);
-
-        Transform playerTransform = MapManager.Instance.player.transform;
-        PlayerController playerController = playerTransform.GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.TeleportTo(targetPosition);
-        }
-
-        GameEvent.OnToggleFade(true);
-
-        yield return new WaitForSeconds(0.5f);
 
         PlayerLock.Unlock(this);
         PlayerLock.Unlock(this, PlayerLockType.Combat);
+    }
+
+    private IEnumerator TransitionSequence(Vector3 targetPosition, bool keepLocked = false)
+    {
+        PlayerController player = MapManager.Instance.player.GetComponent<PlayerController>();
+
+        PlayerLock.Lock(this);
+        PlayerLock.Lock(this, PlayerLockType.Combat);
+
+        yield return WaitUntilPlayerSettled(player);
+
+        GameEvent.OnToggleFade(false);
+        yield return new WaitForSeconds(1f);
+
+        if (player != null) player.TeleportTo(targetPosition);
+
+        yield return WaitUntilPlayerSettled(player);
+
+        GameEvent.OnToggleFade(true);
+        yield return new WaitForSeconds(0.5f);
+
+        if (!keepLocked)
+        {
+            PlayerLock.Unlock(this);
+            PlayerLock.Unlock(this, PlayerLockType.Combat);
+        }
+    }
+
+    private IEnumerator WaitUntilPlayerSettled(PlayerController player, float timeout = 3f)
+    {
+        if (player == null) yield break;
+
+        float waited = 0f;
+        while (waited < timeout)
+        {
+            bool settled = player.isGrounded
+                           && player.currentState is IdleState
+                           && Mathf.Abs(player.rig.linearVelocity.y) < 0.1f;
+            if (settled) yield break;
+
+            waited += Time.deltaTime;
+            yield return null;
+        }
+
+        player.StopMovement();
     }
 
     private IEnumerator ShowCanvas(string text, float duration)
@@ -225,7 +250,7 @@ public class StartTutorial : MonoBehaviour
     public void TransitionToHookSpawn()
     {
         StartCoroutine(HookSpawn());
-        
+
     }
 
     private IEnumerator HookSpawn()
@@ -254,7 +279,7 @@ public class StartTutorial : MonoBehaviour
         HideObject(platforms);
         HideObject(vines);
         HideObjectsWithTween(hookTarget);
-        
+
     }
 
     private void ShowObject(GameObject[] objects)
