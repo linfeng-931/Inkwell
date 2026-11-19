@@ -91,7 +91,7 @@ MonoBehaviour:
     m_Value: 0.588
   tint:
     m_OverrideState: 1
-    m_Value: {r: 0.05571379, g: 0.05660379, b: 0.055268794, a: 1}
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   enableAdditionalLightsContribution:
     m_OverrideState: 1
     m_Value: 1
@@ -107,15 +107,6 @@ MonoBehaviour:
   renderPassEvent:
     m_OverrideState: 1
     m_Value: 450
-  fogStartZ:
-    m_OverrideState: 1
-    m_Value: 0
-  fogEndZ:
-    m_OverrideState: 1
-    m_Value: 10.7
-  fogFalloff:
-    m_OverrideState: 1
-    m_Value: 5
 --- !u!114 &-5101170219340456011
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -137,16 +128,16 @@ MonoBehaviour:
     m_Value: 0.6
   intensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.38
   scatter:
     m_OverrideState: 1
-    m_Value: 0.7
+    m_Value: 0.631
   clamp:
     m_OverrideState: 1
     m_Value: 65472
   tint:
     m_OverrideState: 1
-    m_Value: {r: 0.98732626, g: 1, b: 0.9386792, a: 1}
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   highQualityFiltering:
     m_OverrideState: 0
     m_Value: 0

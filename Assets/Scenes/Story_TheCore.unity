@@ -15,7 +15,7 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0.45490196, g: 0.49803922, b: 0.4, a: 1}
+  m_FogColor: {r: 0.5406519, g: 0.5622641, b: 0.49542892, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.01
   m_LinearFogStart: 7
@@ -1293,7 +1293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneEnvironmentManager
   sceneSkybox: {fileID: 2100000, guid: 728cf01d623a5429a8070f511957cef1, type: 2}
   enableFog: 1
-  fogColor: {r: 0.45490196, g: 0.49803922, b: 0.4, a: 1}
+  fogColor: {r: 0.5406519, g: 0.5622641, b: 0.49542892, a: 1}
   fogStart: 7
   fogEnd: 25
 --- !u!114 &340240712
@@ -8953,6 +8953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Teleporter
   targetSceneName: Story_Bridge
   targetSpawnPointID: Bridge_1
+  transitionType: 0
 --- !u!1 &856320595
 GameObject:
   m_ObjectHideFlags: 0
@@ -12489,6 +12490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraInitial
   cinemachineCamera: {fileID: 1334083310}
+  activateOnCameraStart: 0
 --- !u!4 &1393093880 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8872871862799904819, guid: 4afdbf6c4c27daf41872f1214c7108e7, type: 3}
@@ -21545,8 +21547,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 1
-  m_Color: {r: 0.7150328, g: 0.735849, b: 0.6976682, a: 1}
-  m_Intensity: 0.51
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -22294,6 +22296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraInitial
   cinemachineCamera: {fileID: 2073577283}
+  activateOnCameraStart: 0
 --- !u!114 &2073577281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23253,10 +23256,7 @@ SceneRoots:
   - {fileID: 895385262}
   - {fileID: 1118148334}
   - {fileID: 1492314231}
-<<<<<<< Updated upstream
   - {fileID: 1568595127}
-=======
   - {fileID: 1004439633}
   - {fileID: 623769829}
   - {fileID: 1189244782}
->>>>>>> Stashed changes
