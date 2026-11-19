@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d75924d76b05344aa410607bc57db98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineConfiner3D
-  BoundingVolume: {fileID: 1254285157}
+  BoundingVolume: {fileID: 1043812733}
   SlowingDistance: 0.5
 --- !u!114 &302701411
 MonoBehaviour:
@@ -537,6 +537,7 @@ MonoBehaviour:
   sceneName: "\u6839\u6E90\u904E\u6E21"
   spawnPointInfos:
   - {fileID: 1899186195}
+  - {fileID: 1707014757}
 --- !u!4 &355037380
 Transform:
   m_ObjectHideFlags: 0
@@ -1840,7 +1841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1707014757
 MonoBehaviour:
   m_ObjectHideFlags: 0
