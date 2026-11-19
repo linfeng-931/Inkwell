@@ -56,6 +56,7 @@ public class StartTutorial : MonoBehaviour
     [Header("SFX")]
     [SerializeField] private AudioManager audioManager;
     [SerializeField] private AudioClip branchOpenClip;
+    [SerializeField] private AudioClip vineClip;
 
     private Coroutine currentCanvasCoroutine;
 
@@ -139,6 +140,8 @@ public class StartTutorial : MonoBehaviour
         {
             playerController.playerHealth.ResetPlayerHealth();
         }
+
+        yield return new WaitForSeconds(1f);
 
         HookTutorial();
         yield return new WaitUntil(() => hasReachedDestination);
@@ -243,7 +246,7 @@ public class StartTutorial : MonoBehaviour
 
     public void HookTutorial()
     {
-
+        audioManager.PlaySFX(vineClip);
         StartCoroutine(SpawnHookTutorial());
     }
 
