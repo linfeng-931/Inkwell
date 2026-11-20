@@ -330,7 +330,7 @@ GameObject:
   - component: {fileID: 302701410}
   - component: {fileID: 302701409}
   m_Layer: 0
-  m_Name: PlayerFollowCamera_Close
+  m_Name: PlayerFollowCamera_Close_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -349,6 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraInitial
   cinemachineCamera: {fileID: 302701412}
+  activateOnCameraStart: 0
 --- !u!114 &302701410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,7 +447,7 @@ Transform:
   m_GameObject: {fileID: 302701408}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.07, y: 1.3, z: -4.83}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -606,6 +607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Teleporter
   targetSceneName: Story_Preface
   targetSpawnPointID: Prefsce_SpawnPoint_1F
+  transitionType: 0
 --- !u!4 &405770177
 Transform:
   m_ObjectHideFlags: 0
@@ -615,7 +617,7 @@ Transform:
   m_GameObject: {fileID: 405770174}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.944, y: 0.843, z: -0.424}
+  m_LocalPosition: {x: -18.41, y: 0.843, z: -0.424}
   m_LocalScale: {x: 1, y: 1, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -814,7 +816,7 @@ GameObject:
   - component: {fileID: 852301932}
   - component: {fileID: 852301931}
   m_Layer: 0
-  m_Name: PlayerFollowCamera_Close
+  m_Name: PlayerFollowCamera_Close_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -833,6 +835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraInitial
   cinemachineCamera: {fileID: 852301934}
+  activateOnCameraStart: 0
 --- !u!114 &852301932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -845,7 +848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d75924d76b05344aa410607bc57db98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineConfiner3D
-  BoundingVolume: {fileID: 1043812733}
+  BoundingVolume: {fileID: 1254285157}
   SlowingDistance: 0.5
 --- !u!114 &852301933
 MonoBehaviour:
@@ -930,7 +933,7 @@ Transform:
   m_GameObject: {fileID: 852301930}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.52, y: 1.3, z: -4.83}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1521,7 +1524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb250d21671a14f68bceb9c41a783d54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraRoomTrigger
-  targetCamera: {fileID: 302701412}
+  targetCamera: {fileID: 852301934}
   playerTag: Player
 --- !u!65 &1407592768
 BoxCollider:
@@ -1802,7 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb250d21671a14f68bceb9c41a783d54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraRoomTrigger
-  targetCamera: {fileID: 852301934}
+  targetCamera: {fileID: 302701412}
   playerTag: Player
 --- !u!65 &1650623176
 BoxCollider:
@@ -1937,6 +1940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Teleporter
   targetSceneName: Story_TheCore
   targetSpawnPointID: TheCore_1
+  transitionType: 0
 --- !u!4 &1845639906
 Transform:
   m_ObjectHideFlags: 0
@@ -1946,7 +1950,7 @@ Transform:
   m_GameObject: {fileID: 1845639904}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.41, y: 0.843, z: -0.424}
+  m_LocalPosition: {x: 3.89, y: 0.843, z: -0.424}
   m_LocalScale: {x: 1, y: 1, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2084,6 +2088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraInitial
   cinemachineCamera: {fileID: 1972609337}
+  activateOnCameraStart: 0
 --- !u!114 &1972609335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2181,7 +2186,7 @@ Transform:
   m_GameObject: {fileID: 1972609333}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.81, y: 1.3, z: -4.83}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2277,8 +2282,8 @@ SceneRoots:
   - {fileID: 697679097}
   - {fileID: 1732492352}
   - {fileID: 288150980}
-  - {fileID: 302701413}
-  - {fileID: 1972609338}
   - {fileID: 852301935}
+  - {fileID: 1972609338}
+  - {fileID: 302701413}
   - {fileID: 355037380}
   - {fileID: 133941943}
