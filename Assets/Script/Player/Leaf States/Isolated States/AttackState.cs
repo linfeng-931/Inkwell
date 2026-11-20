@@ -28,6 +28,7 @@ public class AttackState : PlayerState
 
         // animate
         manager.animator.Play(currentAttack.animationName[0], 0, 0f);
+        manager.attackEffectAni.Play(currentAttack.animationName[2], 0, 0f);
 
         // close gravity
         if (!manager.isGrounded)
@@ -127,6 +128,7 @@ public class AttackState : PlayerState
 
     private void ReturnToNormalState()
     {
+        manager.attackEffectAni.Play("Default", 0, 0f);
         manager.currentComboIndex = 0;
         if (manager.isGrounded)
             manager.TransitionToState<IdleState>();
