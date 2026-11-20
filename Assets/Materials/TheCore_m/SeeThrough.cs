@@ -30,6 +30,12 @@ public class SeeThrough : MonoBehaviour
 
     private readonly List<Material> removeMaterials = new();
 
+    // 儲存 Renderer 原本的材質
+    private readonly Dictionary<Renderer, Material[]> originalMaterials = new();
+
+    // 記錄目前哪些 Renderer 已經隱藏其他材質
+    private readonly HashSet<Renderer> reducedRenderers = new();
+
     private static readonly int OpacityID =
         Shader.PropertyToID("_Opacity");
 
@@ -62,7 +68,8 @@ public class SeeThrough : MonoBehaviour
 
         foreach (RaycastHit hit in hits)
         {
-            Renderer renderer = hit.transform.GetComponent<Renderer>();
+            Renderer renderer =
+                hit.transform.GetComponent<Renderer>();
 
             if (renderer == null)
                 renderer = hit.transform.GetComponentInChildren<Renderer>();
@@ -70,7 +77,29 @@ public class SeeThrough : MonoBehaviour
             if (renderer == null)
                 continue;
 
-            foreach (Material mat in renderer.materials)
+            // 儲存原始材質
+            if (!originalMaterials.ContainsKey(renderer))
+            {
+                originalMaterials[renderer] = renderer.sharedMaterials;
+            }
+
+            // 只使用 Element 0
+            if (!reducedRenderers.Contains(renderer))
+            {
+                Material[] mats = renderer.sharedMaterials;
+
+                if (mats.Length > 1)
+                {
+                    renderer.sharedMaterials = new Material[]
+                    {
+                        mats[0]
+                    };
+
+                    reducedRenderers.Add(renderer);
+                }
+            }
+
+            foreach (Material mat in originalMaterials[renderer])
             {
                 if (mat == null || !mat.HasProperty(OpacityID))
                     continue;
@@ -80,8 +109,9 @@ public class SeeThrough : MonoBehaviour
             }
         }
 
-        // 沒有再遮擋的材質，目標恢復為 1
-        List<Material> materials = new List<Material>(targetOpacity.Keys);
+        // 恢復沒有遮擋的材質
+        List<Material> materials =
+            new List<Material>(targetOpacity.Keys);
 
         foreach (var mat in materials)
         {
@@ -91,20 +121,13 @@ public class SeeThrough : MonoBehaviour
             }
         }
 
-        // 平滑改變 Opacity
         removeMaterials.Clear();
 
         foreach (var item in targetOpacity)
         {
             Material mat = item.Key;
 
-            if (mat == null)
-            {
-                removeMaterials.Add(mat);
-                continue;
-            }
-
-            if (!mat.HasProperty(OpacityID))
+            if (mat == null || !mat.HasProperty(OpacityID))
             {
                 removeMaterials.Add(mat);
                 continue;
@@ -120,7 +143,6 @@ public class SeeThrough : MonoBehaviour
 
             mat.SetFloat(OpacityID, newOpacity);
 
-            // 已恢復正常，從管理清單移除
             if (item.Value == normalOpacity &&
                 Mathf.Approximately(newOpacity, normalOpacity))
             {
@@ -132,16 +154,70 @@ public class SeeThrough : MonoBehaviour
         {
             targetOpacity.Remove(mat);
         }
+
+        // 找出已經不再被遮擋的 Renderer
+        List<Renderer> restoreList = new();
+
+        foreach (Renderer renderer in reducedRenderers)
+        {
+            if (renderer == null)
+            {
+                restoreList.Add(renderer);
+                continue;
+            }
+
+            bool stillBlocked = false;
+
+            foreach (Material mat in originalMaterials[renderer])
+            {
+                if (mat != null &&
+                    targetOpacity.TryGetValue(mat, out float opacity) &&
+                    opacity == blockedOpacity)
+                {
+                    stillBlocked = true;
+                    break;
+                }
+            }
+
+            if (!stillBlocked)
+                restoreList.Add(renderer);
+        }
+
+        // 恢復原本所有 Material
+        foreach (Renderer renderer in restoreList)
+        {
+            if (renderer != null &&
+                originalMaterials.TryGetValue(renderer, out Material[] mats))
+            {
+                renderer.sharedMaterials = mats;
+            }
+
+            reducedRenderers.Remove(renderer);
+        }
     }
 
     private void OnDisable()
     {
         foreach (var item in targetOpacity)
         {
-            if (item.Key != null && item.Key.HasProperty(OpacityID))
+            if (item.Key != null &&
+                item.Key.HasProperty(OpacityID))
+            {
                 item.Key.SetFloat(OpacityID, normalOpacity);
+            }
+        }
+
+        // 恢復所有 Renderer 的材質
+        foreach (var item in originalMaterials)
+        {
+            if (item.Key != null)
+            {
+                item.Key.sharedMaterials = item.Value;
+            }
         }
 
         targetOpacity.Clear();
+        originalMaterials.Clear();
+        reducedRenderers.Clear();
     }
 }
