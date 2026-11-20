@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem rollParticle;
 
     [Header("Attack Setting")]
+    public Animator attackEffectAni;
     public AttackData[] groundCombo;
     public AttackData[] airCombo;
     public bool canAirAttack = true;
@@ -137,7 +138,7 @@ public class PlayerController : MonoBehaviour
 
     public float bounceAmplitude = 1.2f;
     public float bounceFrequency = 45f;
-     public Vector3 currentRopeVisualPos;
+    public Vector3 currentRopeVisualPos;
 
     [Header("Rope Retract Shape")]
     public float ropeSAmount = 2f; // width
