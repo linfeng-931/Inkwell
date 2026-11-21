@@ -6,7 +6,6 @@ public class PlayerAnimateHash
     public static readonly int Walk = Animator.StringToHash("Walk");
     public static readonly int Run = Animator.StringToHash("Run");
     public static readonly int JumpStart = Animator.StringToHash("Jump1");
-    public static readonly int Landing = Animator.StringToHash("Landing");
     public static readonly int Fall = Animator.StringToHash("Falling");
     public static readonly int DoubleJumpStart = Animator.StringToHash("Jump2");
     public static readonly int HoldingPen = Animator.StringToHash("HoldingPen");

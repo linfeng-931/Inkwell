@@ -35,7 +35,6 @@ public class PlayerStateFactory
         states[typeof(RollState)] = new RollState(context);
         states[typeof(SaveState)] = new SaveState(context);
         states[typeof(RebornState)] = new RebornState(context);
-        states[typeof(LandingState)] = new LandingState(context);
     }
 
     /// <summary>

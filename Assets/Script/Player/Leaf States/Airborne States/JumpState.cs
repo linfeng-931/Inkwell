@@ -44,7 +44,7 @@ public class JumpState : AirborneState
 
     private void CheckTransitionToFall()
     {
-        bool isFalling = manager.rig.linearVelocity.y <= 0f;
+        bool isFalling = manager.rig.linearVelocity.y < -0.2f;
         bool exceededMaxDuration = Time.time - stateEnterTime >= MAX_JUMP_DURATION;
 
         if (isFalling || exceededMaxDuration)

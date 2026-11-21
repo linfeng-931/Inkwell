@@ -10,6 +10,7 @@ public class HitBox : MonoBehaviour
 
     [Header("VFX")]
     public GameObject hitVfxPrefab;
+    private int hitTypeCount = 3;
 
     [Header("SFX")]
     public AudioManager audioManager;
@@ -68,6 +69,7 @@ public class HitBox : MonoBehaviour
     private void SpawnHitEffect(Vector3 position)
     {
         GameObject vfx = Instantiate(hitVfxPrefab, position, Quaternion.identity);
+        vfx.GetComponent<Animator>().Play("HitEffect"+Random.Range(0, hitTypeCount), 0, 0f);
         audioManager.PlaySFX(atkSfx);
         vfx.transform.rotation = Quaternion.Euler(0, 0, Random.Range(0f, 360f));
     }

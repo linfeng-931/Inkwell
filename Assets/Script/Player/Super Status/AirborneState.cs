@@ -14,7 +14,7 @@ public class AirborneState : PlayerState
 
         if (manager.isGrounded && isFalling)
         {
-            manager.TransitionToState<LandingState>();
+            manager.TransitionToState<IdleState>();
             return;
         }
 
