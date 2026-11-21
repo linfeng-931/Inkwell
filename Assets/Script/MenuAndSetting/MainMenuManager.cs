@@ -54,10 +54,6 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("BaseScene", LoadSceneMode.Single);
     }
 
-    public void OnClickSetting()
-    {
-        PlaySFX();
-    }
 
     public void OnClickQuit()
     {

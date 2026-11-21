@@ -23,8 +23,8 @@ public class PlayerLoadout : MonoBehaviour
 
     private void Start() // for test
     {
-        EnterArmedMode();
-        RunEnabled = true;
+        //EnterArmedMode();
+        //RunEnabled = true;
     }
 
     public void Initialize()

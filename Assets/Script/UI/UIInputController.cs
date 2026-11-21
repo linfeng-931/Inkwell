@@ -38,8 +38,6 @@ public class UIInputController : MonoBehaviour
 
     private void HandleUIInput(UIActionType type)
     {
-        Debug.Log($"[UIInputController] Μ块癟腹: {type}");
-
         switch (type)
         {
             case UIActionType.ToggleNote:
@@ -56,7 +54,6 @@ public class UIInputController : MonoBehaviour
                 break;
 
             case UIActionType.Cancel:
-                Debug.Log($"[UIInputController] 非称祇癳 OnEscapePressedヘ玡 isInCutscene = {isInCutscene}");
 
                 if (isInCutscene) return;
                 GameEvent.OnEscapePressed?.Invoke();
@@ -118,7 +115,6 @@ public class UIInputController : MonoBehaviour
 
         if(isNoteOpen || isInCutscene || !canInteract || isDialogue) // all condition you want to change input mod
         {
-            Debug.Log("[InputMode] ち传 UI 家Α");
             GameInputManager.Instance.EnableUIInput();
 
             var bufferManager = FindFirstObjectByType<InputBufferManager>();
@@ -129,7 +125,6 @@ public class UIInputController : MonoBehaviour
         }
         else
         {
-            Debug.Log("[InputMode] ち传 產(Player) 家Α");
             GameInputManager.Instance.EnablePlayerInput();
         }
     }
