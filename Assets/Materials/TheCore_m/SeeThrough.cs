@@ -14,7 +14,7 @@ public class SeeThrough : MonoBehaviour
 
     [Header("Opacity")]
     [SerializeField]
-    private float blockedOpacity = -1f;
+    private float blockedOpacity = 0f;
 
     [SerializeField]
     private float normalOpacity = 1f;
