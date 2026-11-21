@@ -95,6 +95,8 @@ public class PlayerController : MonoBehaviour
     public bool isHazardHurt = false;
     public Vector3 hazardRespawnPosition;
     public Vector3 lastCheckpointPosition;
+    public ParticleSystem deadStartEffect;
+    public ParticleSystem deadEndEffect;
 
     [Header("Hook Setting")]
     public float hookRange = 10f;

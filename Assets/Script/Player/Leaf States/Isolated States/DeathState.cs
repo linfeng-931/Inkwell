@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DeathState : PlayerState
 {
+    private int stage = 0;
     private float stateStartTime;
     private bool hasRelocated = false;
     private bool hasTriggeredFadeOut = false;
@@ -13,17 +14,10 @@ public class DeathState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        stateStartTime = Time.time;
         hasRelocated = false;
         hasTriggeredFadeOut = false;
+        stage = 0;
 
-        // 1. 關閉碰撞避免被鞭屍
-        if (manager.col != null)
-        {
-            manager.col.enabled = false;
-        }
-
-        // 2. 避免敵人射線/攻擊鎖定倒地玩家
         originalLayer = manager.gameObject.layer;
         manager.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
@@ -37,55 +31,68 @@ public class DeathState : PlayerState
     {
         base.Update();
 
-        float elapsedTime = Time.time - stateStartTime;
-
-        // 黑幕淡出
-        if (!hasTriggeredFadeOut && elapsedTime >= manager.fadeOutWaitTime)
+        switch (stage)
         {
-            hasTriggeredFadeOut = true;
-            GameEvent.OnToggleFade(false);
-        }
+            case 0:
+                AnimatorStateInfo stateInfo = manager.animator.GetCurrentAnimatorStateInfo(0);
+                if(stateInfo.normalizedTime >= 0.8f)
+                {
+                    manager.deadStartEffect.Play();
+                    stateStartTime = Time.time;
+                    stage++;
+                }
+                break;
+            case 1:
+                float elapsedTime1 = Time.time - stateStartTime;
+                if (elapsedTime1 >= 0.5f)
+                {
+                    manager.deadEndEffect.Play();
+                    stateStartTime = Time.time;
+                    stage++;
+                }
+                break;
+            case 2:
+                float elapsedTime = Time.time - stateStartTime;
+                if (!hasTriggeredFadeOut && elapsedTime >= manager.fadeOutWaitTime)
+                {
+                    hasTriggeredFadeOut = true;
+                    GameEvent.OnToggleFade(false);
+                }
 
-        // 移回存檔點 (黑幕蓋住畫面後)
-        if (!hasRelocated && elapsedTime >= manager.fadeOutWaitTime + 1.0f)
-        {
-            hasRelocated = true;
+                if (!hasRelocated && elapsedTime >= manager.fadeOutWaitTime + 3.0f)
+                {
+                    hasRelocated = true;
+                    Vector3 safeTarget = manager.lastCheckpointPosition + Vector3.up * 0.2f;
 
-            // 抬高 0.2f 避免直接陷進地面碰撞體內部導致判定穿模
-            Vector3 safeTarget = manager.lastCheckpointPosition + Vector3.up * 0.2f;
+                    manager.TeleportTo(safeTarget, true);
 
-            // 使用 PlayerController 統整的 TeleportTo 清空速度並定位
-            manager.TeleportTo(safeTarget, true);
+                    if (manager.col != null)
+                    {
+                        manager.col.enabled = true;
+                    }
+                    Physics.SyncTransforms();
 
-            // 【關鍵】在位置確定後，立刻開啟 Collider 並刷新物理
-            if (manager.col != null)
-            {
-                manager.col.enabled = true;
-            }
-            Physics.SyncTransforms();
+                    if (manager.mainCam != null && manager.mainCam.GetComponent<CinemachineBrain>().ActiveVirtualCamera is CinemachineVirtualCameraBase vcam)
+                    {
+                        vcam.PreviousStateIsValid = false;
+                    }
 
-            // 重置相機
-            if (manager.mainCam != null && manager.mainCam.GetComponent<CinemachineBrain>().ActiveVirtualCamera is CinemachineVirtualCameraBase vcam)
-            {
-                vcam.PreviousStateIsValid = false;
-            }
+                    manager.animator.Play(PlayerAnimateHash.Idle, 0, 0f);
+                    GameEvent.OnToggleFade(true);
+                }
 
-            manager.animator.Play(PlayerAnimateHash.Idle, 0, 0f);
-            GameEvent.OnToggleFade(true);
-        }
-
-        // 結束死亡狀態，切回 Idle
-        if (elapsedTime >= manager.fadeOutWaitTime + 3f)
-        {
-            manager.TransitionToState<IdleState>();
-        }
+                if (elapsedTime >= manager.fadeOutWaitTime + 3f)
+                {
+                    manager.TransitionToState<IdleState>();
+                }
+                break;
+        }   
     }
 
     public override void Exit()
     {
         base.Exit();
 
-        // 恢復原始圖層與操作
         manager.gameObject.layer = originalLayer;
         if (manager.col != null) manager.col.enabled = true;
 
