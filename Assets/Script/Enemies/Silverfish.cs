@@ -112,6 +112,11 @@ public class Silverfish : MonoBehaviour, IEnemy
         #if UNITY_EDITOR
         if(forceDead) TakeDamage(maxHealth);
         #endif
+        if (playerHealth.currentHealth == 0)
+        {
+            if(fsm.State != States.Idle) fsm.ChangeState(States.Idle);
+            return;
+        }
         if (fsm.State == States.Death) return;
     }
 
