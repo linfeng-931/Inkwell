@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Mark : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Mark : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
     
     public Color[] colors;
@@ -39,18 +39,20 @@ public class Mark : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         // change action and position
         button.enabled = !flag;
-        transform.localPosition = new Vector3(transform.localPosition.x, oriPosY, 0);
+        SetHoverOffset(false);
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    private void SetHoverOffset(bool hoveredOrSelected)
     {
-        if(!isAct)
-        transform.localPosition = new Vector3(transform.localPosition.x, oriPosY + 20f, 0);
+        float targetY = (!isAct && hoveredOrSelected) ? oriPosY + 20f : oriPosY;
+        transform.localPosition = new Vector3(transform.localPosition.x, targetY, 0);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if(!isAct)
-        transform.localPosition = new Vector3(transform.localPosition.x, oriPosY , 0);
-    }
+    // mouse
+    public void OnPointerEnter(PointerEventData eventData) => SetHoverOffset(true);
+    public void OnPointerExit(PointerEventData eventData) => SetHoverOffset(false);
+
+    // controller
+    public void OnSelect(BaseEventData eventData) => SetHoverOffset(true);
+    public void OnDeselect(BaseEventData eventData) => SetHoverOffset(false);
 }

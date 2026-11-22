@@ -29,6 +29,9 @@ public class UIFrameTracker : MonoBehaviour
     private void MoveToTarget(RectTransform targetRect)
     {
         if (targetRect == null) return;
+
+        if (targetRect.GetComponent<ItemCell>() == null) frameImage.enabled = false;
+        else if(!frameImage.enabled) frameImage.enabled = true;
         
         if (!frameImage.enabled) frameImage.enabled = true;
 
