@@ -124,6 +124,7 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
+    - _Circle_Density: 2
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
@@ -160,6 +161,7 @@ Material:
     - _StrokeRandomness: 1
     - _StrokeScale: 5.72
     - _Surface: 0
+    - _USE_SCREEN_SPACE: 0
     - _UVSec: 0
     - _UseBlendingNoise: 1
     - _Variation: 0.1
@@ -167,6 +169,7 @@ Material:
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     - _light_Strength: 0.2
+    - _rotation: 0
     m_Colors:
     - Color_9B881ED6: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
     - Color_CA4EAD0D: {r: 1, g: 1, b: 1, a: 1}
@@ -176,7 +179,7 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _VariationColorA: {r: 0, g: 0, b: 0, a: 0}
     - _VariationColorB: {r: 1, g: 1, b: 1, a: 0}
-    - _stroke_size: {r: 1, g: 1, b: 0, a: 0}
+    - _stroke_size: {r: 2, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &7858800948247382879
