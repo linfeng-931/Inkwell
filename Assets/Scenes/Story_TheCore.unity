@@ -1296,7 +1296,7 @@ Transform:
   m_GameObject: {fileID: 300325558}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.286, y: 0, z: 0.46000004}
+  m_LocalPosition: {x: 0.675, y: -0.065000005, z: 0.6619999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9381,6 +9381,18 @@ MonoBehaviour:
           m_StringArgument: open
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 760947429}
+        m_TargetAssemblyTypeName: StartTutorial, Assembly-CSharp
+        m_MethodName: UnlockNote
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: open
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &760947432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14206,7 +14218,7 @@ Transform:
   m_GameObject: {fileID: 1285171068}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.52, y: -0.75, z: 0}
+  m_LocalPosition: {x: -7.11, y: -0.75, z: 0}
   m_LocalScale: {x: 0.25, y: 0.1, z: 4.473549}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16443,7 +16455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePositionComposer
-  CameraDistance: 20
+  CameraDistance: 3.5
   DeadZoneDepth: 0
   Composition:
     ScreenPosition: {x: 0, y: 0}
@@ -17100,15 +17112,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4414354029304433156, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.17
+      value: 2.993
       objectReference: {fileID: 0}
     - target: {fileID: -4414354029304433156, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.14
+      value: -0.208
       objectReference: {fileID: 0}
     - target: {fileID: -4414354029304433156, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.77
+      value: -5.502
       objectReference: {fileID: 0}
     - target: {fileID: -4414354029304433156, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17142,6 +17154,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: 2914edcd8edb965428e8a9bedfbe1b80, type: 2}
+    - target: {fileID: -93718629561382365, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_Name
       value: tree3
@@ -17168,11 +17184,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5936264366698645999, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.288
+      value: 2.111
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936264366698645999, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.068
       objectReference: {fileID: 0}
     - target: {fileID: 5936264366698645999, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.85
+      value: -6.582
       objectReference: {fileID: 0}
     - target: {fileID: 5936264366698645999, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17197,6 +17217,10 @@ PrefabInstance:
     - target: {fileID: 7521898251169586404, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
       propertyPath: m_Layer
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521898251169586404, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

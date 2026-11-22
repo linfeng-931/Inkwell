@@ -225,12 +225,18 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
+
+        stateFactory = new PlayerStateFactory(this);
     }
 
     void Start()
     {
-        stateFactory = new PlayerStateFactory(this);
         lastCheckpointPosition = transform.position;
+
+        if (currentState == null)
+        {
+            TransitionToState<IdleState>();
+        }
 
         //original state
         TransitionToState<IdleState>();

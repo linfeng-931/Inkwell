@@ -8,6 +8,8 @@ public class NotePresenter : MonoBehaviour
     private CanvasGroup viewCanvasGroup;
     private NoteModel model;
 
+    private bool isNoteOpen = false;
+
     // for story
     public bool canOpenNote {get; set;} = true;
 
@@ -36,12 +38,22 @@ public class NotePresenter : MonoBehaviour
         GameEvent.OnToggleNote -= ToggleNote;
     }
 
+    public void SetCanOpenNote(bool canOpen)
+    {
+        if (!canOpen && isNoteOpen)
+        {
+            ToggleNote();
+        }
+        canOpenNote = canOpen;
+    }
+
     public void ToggleNote()
     {
         if(!canOpenNote) return;
-        
-        if (viewCanvasGroup.alpha > 0)
+
+        if (isNoteOpen)
         {
+            isNoteOpen = false;
             itemIntroViewForNote.RefreshItemPage(false);
             UIManager.Instance.CloseTopPanel();
             GameEvent.OnInteractStateChanged.Invoke(false);
@@ -50,6 +62,7 @@ public class NotePresenter : MonoBehaviour
         }
         else
         {
+            isNoteOpen = true;
             UIManager.Instance.OpenPanel(view);
             itemIntroViewForNote.RefreshItemPage(true);
             GameEvent.OnInteractStateChanged.Invoke(true);

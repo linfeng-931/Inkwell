@@ -17,6 +17,7 @@ public class PlayerLoadout : MonoBehaviour
     [SerializeField] private bool canJump = false;
 
     [SerializeField] private PlayerController playerController;
+    public NotePresenter notePresenter;
 
     public bool CombatEnabled { get; private set; }
     public bool RunEnabled { get; private set; }
@@ -38,6 +39,9 @@ public class PlayerLoadout : MonoBehaviour
         playerEnergy.enabled = false;
         playerHealth.enabled = false;
         gamePlayHUD.gameObject.SetActive(false);
+
+        // Lock note event
+        notePresenter.SetCanOpenNote(false);
 
         // Hide Weapon Particle
         //foreach (GameObject particle in weaponParticle) {

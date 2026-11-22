@@ -138,7 +138,7 @@ public class StartTutorial : MonoBehaviour
 
         if (playerController.playerHealth != null)
         {
-            playerController.playerHealth.ResetPlayerHealth();
+            playerController.playerHealth.ResetHealth();
         }
 
         yield return new WaitForSeconds(1f);
@@ -403,5 +403,11 @@ public class StartTutorial : MonoBehaviour
     public void PlayBranchSFX()
     {
         audioManager.PlaySFX(branchOpenClip);
+    }
+
+    public void UnlockNote()
+    {
+        PlayerLoadout loadout = MapManager.Instance.player.GetComponent<PlayerLoadout>();
+        loadout.notePresenter.SetCanOpenNote(true);
     }
 }

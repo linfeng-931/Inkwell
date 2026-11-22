@@ -39,4 +39,10 @@ public class MenuButtonEvent : MonoBehaviour, IPointerEnterHandler, IPointerExit
         gameObject.GetComponent<Image>().sprite = menuBtnGray;
         gameObject.GetComponentInChildren<TextMeshProUGUI>().color = new Color(205, 205, 205, 255);
     }
+
+    public void SetDefaultColor()
+    {
+        gameObject.GetComponent<Image>().sprite = menuBtnGray;
+        gameObject.GetComponentInChildren<TextMeshProUGUI>().color = new Color(205, 205, 205, 255);
+    }
 }

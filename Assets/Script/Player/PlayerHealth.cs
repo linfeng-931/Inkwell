@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
     private float invincibilityTimer = 0f;
 
     private PlayerController playerController;
-    public event Action OnDeath;
+    // public event Action OnDeath;
 
     [Header("Visual Effects")]
     public DamageGlitchEffect damageGlitchEffect;
@@ -60,19 +60,22 @@ public class PlayerHealth : MonoBehaviour
     /// <param name="sourcePosition">enemy position</param>
     public void TakeDamage(int damage, Vector3 sourcePosition)
     {
-        if(isInvincible || currentHealth <= 0) return;
+        if (playerController.currentState is DeathState) return;
+        if (isInvincible || currentHealth <= 0) return;
 
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
 
-        CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
+        PlayHurtFeedback(includeGlitch: false);
 
-        hurtEffectAnimator.Play("PlayerHurtEffect", -1, 0f);
-        hurtParticleEffect.Play();
+        //CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
 
-        if(currentHealth <= 0)
+        //hurtEffectAnimator.Play("PlayerHurtEffect", -1, 0f);
+        //hurtParticleEffect.Play();
+
+        if (currentHealth <= 0)
         {
             Die();
         }
@@ -82,20 +85,45 @@ public class PlayerHealth : MonoBehaviour
             playerController.TransitionToState<HurtState>();
             isInvincible = true;
             invincibilityTimer = invincibilityDuration;
-            damageGlitchEffect.TakeDamage();
+            //damageGlitchEffect.TakeDamage();
+
+            if (damageGlitchEffect != null) damageGlitchEffect.TakeDamage();
         }
     }
 
     private void Die()
     {
         playerController.TransitionToState<DeathState>();
-
-        StartCoroutine(ResetHealth(1.5f));
     }
 
-    public void ResetPlayerHealth()
+    public void ResetHealth()
     {
-        StartCoroutine(ResetHealth(1f));
+        currentHealth = maxHealth;
+        playerController.playerEnergy.RefillEnergy();
+        GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
+    }
+
+    private void PlayHurtFeedback(bool includeGlitch)
+    {
+        if (CombatFeedbackManager.Instance != null)
+        {
+            CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
+        }
+
+        if (hurtEffectAnimator != null)
+        {
+            hurtEffectAnimator.Play("PlayerHurtEffect", -1, 0f);
+        }
+
+        if (hurtParticleEffect != null)
+        {
+            hurtParticleEffect.Play();
+        }
+
+        if (includeGlitch && damageGlitchEffect != null)
+        {
+            damageGlitchEffect.TakeDamage();
+        }
     }
 
     /// <summary>
@@ -103,12 +131,12 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     /// <param name="waitTime">suit to fade ani or other need</param>
     /// <returns></returns>
-    private IEnumerator ResetHealth(float waitTime) {
-        yield return new WaitForSeconds(waitTime);
-        currentHealth = maxHealth;
-        playerController.playerEnergy.RefillEnergy();
-        GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
-    }
+    //private IEnumerator ResetHealth(float waitTime) {
+    //    yield return new WaitForSeconds(waitTime);
+    //    currentHealth = maxHealth;
+    //    playerController.playerEnergy.RefillEnergy();
+    //    GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
+    //}
 
     /// <summary>
     /// Hurt and respawn at specific point, handle health and enter hurt state
@@ -117,18 +145,23 @@ public class PlayerHealth : MonoBehaviour
     /// <param name="hazardDamage"></param>
     public bool RespawnFromHazard(Vector3 hazardRespawnPos, int hazardDamage = 1)
     {
+        if (playerController.currentState is DeathState) return false;
+
+
         currentHealth = Mathf.Clamp(currentHealth - hazardDamage, 0, maxHealth);
         GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
 
-        CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
+        PlayHurtFeedback(includeGlitch: true);
 
-        if (hurtEffectAnimator != null)
-        {
-            hurtEffectAnimator.Play("PlayerHurtEffect", -1, 0f);
-        }
+        // CombatFeedbackManager.Instance.TriggerHitFeedback(0.06f, 1.5f);
 
-        hurtParticleEffect.Play();
-        damageGlitchEffect.TakeDamage();
+        //if (hurtEffectAnimator != null)
+        //{
+        //    hurtEffectAnimator.Play("PlayerHurtEffect", -1, 0f);
+        //}
+
+        //hurtParticleEffect.Play();
+        //damageGlitchEffect.TakeDamage();
 
         if (currentHealth <= 0)
         {

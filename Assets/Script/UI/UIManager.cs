@@ -50,18 +50,9 @@ public class UIManager : MonoBehaviour
         BasePanel topPanel = panelStack.Pop();
         topPanel.OnExit();
 
-        Debug.Log($"�����F: {topPanel.gameObject.name}, Stack �ѤU {panelStack.Count} ��");
-
         if (panelStack.Count > 0)
         {
             BasePanel nextPanel = panelStack.Peek();
-            Debug.Log($"�ǳƳ��: {nextPanel.gameObject.name}");
-
-            if (topPanel == nextPanel)
-            {
-                Debug.LogError("ĵ�i�GStack ���s�b��Ӥ@�Ҥ@�˪����O�ѦҡI");
-            }
-
             nextPanel.OnResume();
         }
         else if(panelStack.Count == 0)

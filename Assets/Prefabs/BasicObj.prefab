@@ -16448,6 +16448,7 @@ MonoBehaviour:
   isRunEnabled: 0
   canJump: 0
   playerController: {fileID: 1572666921265124869}
+  notePresenter: {fileID: 0}
 --- !u!114 &2695460089783884585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67997,6 +67998,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6d7ceb76662433bb951bf0117a9b96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlipPage
+  audioManager: {fileID: 0}
+  flip: {fileID: 0}
 --- !u!1 &8699009176446807350
 GameObject:
   m_ObjectHideFlags: 0

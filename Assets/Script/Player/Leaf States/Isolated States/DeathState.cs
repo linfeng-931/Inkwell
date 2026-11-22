@@ -38,21 +38,21 @@ public class DeathState : PlayerState
                 if(stateInfo.normalizedTime >= 0.8f)
                 {
                     manager.deadStartEffect.Play();
-                    stateStartTime = Time.time;
+                    stateStartTime = Time.unscaledTime;
                     stage++;
                 }
                 break;
             case 1:
-                float elapsedTime1 = Time.time - stateStartTime;
+                float elapsedTime1 = Time.unscaledTime - stateStartTime;
                 if (elapsedTime1 >= 0.5f)
                 {
                     manager.deadEndEffect.Play();
-                    stateStartTime = Time.time;
+                    stateStartTime = Time.unscaledTime;
                     stage++;
                 }
                 break;
             case 2:
-                float elapsedTime = Time.time - stateStartTime;
+                float elapsedTime = Time.unscaledTime - stateStartTime;
                 if (!hasTriggeredFadeOut && elapsedTime >= manager.fadeOutWaitTime)
                 {
                     hasTriggeredFadeOut = true;
@@ -65,6 +65,8 @@ public class DeathState : PlayerState
                     Vector3 safeTarget = manager.lastCheckpointPosition + Vector3.up * 0.2f;
 
                     manager.TeleportTo(safeTarget, true);
+
+                    manager.playerHealth.ResetHealth();
 
                     if (manager.col != null)
                     {
