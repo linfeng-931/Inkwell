@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class BookMovement : MonoBehaviour
 {
-    [Header("¤W¤U¯B°Ê")]
+    [Header("ï¿½Wï¿½Uï¿½Bï¿½ï¿½")]
     public float floatHeight = 0.2f;
     public float floatSpeed = 2f;
 
-    [Header("ª±®a°»´ú")]
+    [Header("ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½")]
     public float detectionRange = 1f;
 
-    [Header("²¾°Ê³]©w")]
+    [Header("ï¿½ï¿½ï¿½Ê³]ï¿½w")]
     public Vector3 moveOffset = new Vector3(0, 0, 0);
     public float moveSpeed = 3f;
 
@@ -25,13 +25,13 @@ public class BookMovement : MonoBehaviour
     {
         originalPosition = transform.position;
 
-        // ­pºâ¥Ø¼Ð¦ì¸m = ­ì¥»¦ì¸m + XYZ ¦ì²¾
+        // ï¿½pï¿½ï¿½Ø¼Ð¦ï¿½m = ï¿½ì¥»ï¿½ï¿½m + XYZ ï¿½ì²¾
         targetPosition = originalPosition + moveOffset;
 
         FindPlayer();
     }
 
-    // «ùÄò´M§ä Player
+    // ï¿½ï¿½ï¿½ï¿½Mï¿½ï¿½ Player
     void FindPlayer()
     {
         GameObject playerObject =
@@ -40,7 +40,7 @@ public class BookMovement : MonoBehaviour
         if (playerObject != null)
         {
             player = playerObject.transform;
-            Debug.Log("¦¨¥\§ä¨ì Player¡I");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Playerï¿½I");
         }
     }
 
@@ -52,7 +52,7 @@ public class BookMovement : MonoBehaviour
             return;
         }
 
-        // ¨Ï¥Î Global X ®y¼Ð§PÂ_¶ZÂ÷
+        // ï¿½Ï¥ï¿½ Global X ï¿½yï¿½Ð§Pï¿½_ï¿½Zï¿½ï¿½
         float distance = Mathf.Abs(
             player.position.x - originalPosition.x
         );
@@ -61,7 +61,7 @@ public class BookMovement : MonoBehaviour
 
         if (isNear)
         {
-            // ª±®a¾aªñ¡G²¾°Ê¨ì°¾²¾«áªº¦ì¸m
+            // ï¿½ï¿½ï¿½aï¿½aï¿½ï¿½Gï¿½ï¿½ï¿½Ê¨ì°¾ï¿½ï¿½ï¿½áªºï¿½ï¿½m
             transform.position = Vector3.Lerp(
                 transform.position,
                 targetPosition,
@@ -70,7 +70,7 @@ public class BookMovement : MonoBehaviour
         }
         else
         {
-            // ª±®a»·Â÷¡G¦^¨ì­ì¦ì¨Ã«ì´_¤W¤UÄÆ°Ê
+            // ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½^ï¿½ï¿½ï¿½ï¿½Ã«ï¿½_ï¿½Wï¿½Uï¿½Æ°ï¿½
             Vector3 floatPosition = originalPosition;
 
             floatPosition.y += Mathf.Sin(
