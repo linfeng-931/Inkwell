@@ -55,6 +55,11 @@ public class VineAttack : MonoBehaviour
         PlayerLock.Lock(this, PlayerLockType.Combat);
         vineCollider.enabled = false;
 
+        if (playerController.rig != null)
+        {
+            playerController.rig.linearVelocity = Vector3.zero;
+        }
+
         CombatFeedbackManager.Instance.TriggerHitFeedback(0.08f, 1.5f);
         if (playerHealth.damageGlitchEffect != null) playerHealth.damageGlitchEffect.TakeDamage();
         if (playerHealth.hurtEffectAnimator != null) playerHealth.hurtEffectAnimator.Play("PlayerHurtEffect", -1, 0f); 

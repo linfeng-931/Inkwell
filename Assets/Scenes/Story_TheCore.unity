@@ -7237,7 +7237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5093070152026831828, guid: cd39aa6fde2b97b47862a44e0f5de6ed, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.072
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5093070152026831828, guid: cd39aa6fde2b97b47862a44e0f5de6ed, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7289,7 +7289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5613148684733931886, guid: cd39aa6fde2b97b47862a44e0f5de6ed, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5582542229804062883, guid: cd39aa6fde2b97b47862a44e0f5de6ed, type: 3}
@@ -8908,6 +8908,8 @@ MonoBehaviour:
   damageAmount: 1
   fallDelayTime: 1
   fadeWaitTime: 1
+  audioManager: {fileID: 0}
+  vineAtkClip: {fileID: 0}
 --- !u!65 &683930762
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11421,6 +11423,8 @@ MonoBehaviour:
   damageAmount: 1
   fallDelayTime: 1
   fadeWaitTime: 1
+  audioManager: {fileID: 0}
+  vineAtkClip: {fileID: 0}
 --- !u!65 &957950546
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12500,7 +12504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 757043630651692487, guid: 1b0342194f82ac74fb77e692ca2ea163, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.446
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 757043630651692487, guid: 1b0342194f82ac74fb77e692ca2ea163, type: 3}
       propertyPath: m_LocalRotation.w
@@ -12873,7 +12877,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
       propertyPath: m_LocalRotation.w
@@ -13083,10 +13087,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4b2ba2dc9659d4ea8d08f500d4c936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VineAttack
-  hazardRespawnPoint: {fileID: 1582002510}
+  hazardRespawnPoint: {fileID: 309974068}
   damageAmount: 1
   fallDelayTime: 1
   fadeWaitTime: 1
+  audioManager: {fileID: 0}
+  vineAtkClip: {fileID: 8300000, guid: ec1f9a72374b253439aeddf10678983a, type: 3}
 --- !u!65 &1187740086
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13948,6 +13954,8 @@ MonoBehaviour:
   damageAmount: 1
   fallDelayTime: 1
   fadeWaitTime: 1
+  audioManager: {fileID: 0}
+  vineAtkClip: {fileID: 0}
 --- !u!1 &1256180083 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7521898251169586404, guid: a3407db1b7657424693dd3ae5aaaf04c, type: 3}
@@ -14332,10 +14340,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4b2ba2dc9659d4ea8d08f500d4c936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VineAttack
-  hazardRespawnPoint: {fileID: 1582002510}
+  hazardRespawnPoint: {fileID: 309974068}
   damageAmount: 1
   fallDelayTime: 1
   fadeWaitTime: 1
+  audioManager: {fileID: 0}
+  vineAtkClip: {fileID: 8300000, guid: ec1f9a72374b253439aeddf10678983a, type: 3}
 --- !u!65 &1295693748
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14480,7 +14490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5093070152026831828, guid: cd39aa6fde2b97b47862a44e0f5de6ed, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.05
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5093070152026831828, guid: cd39aa6fde2b97b47862a44e0f5de6ed, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14520,7 +14530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5613148684733931886, guid: cd39aa6fde2b97b47862a44e0f5de6ed, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14791,7 +14801,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6909519680666539502, guid: 1107df74b22018b47836504419033199, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16005,7 +16015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1582002510
 Transform:
   m_ObjectHideFlags: 0
@@ -24372,6 +24382,8 @@ MonoBehaviour:
   damageAmount: 1
   fallDelayTime: 1
   fadeWaitTime: 1
+  audioManager: {fileID: 0}
+  vineAtkClip: {fileID: 0}
 --- !u!1 &1968402892
 GameObject:
   m_ObjectHideFlags: 0
@@ -25703,6 +25715,8 @@ MonoBehaviour:
   damageAmount: 1
   fallDelayTime: 1
   fadeWaitTime: 1
+  audioManager: {fileID: 0}
+  vineAtkClip: {fileID: 8300000, guid: ec1f9a72374b253439aeddf10678983a, type: 3}
 --- !u!65 &2126033192
 BoxCollider:
   m_ObjectHideFlags: 0
