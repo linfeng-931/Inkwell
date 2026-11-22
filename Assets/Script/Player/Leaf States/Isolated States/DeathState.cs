@@ -38,6 +38,7 @@ public class DeathState : PlayerState
                 if(stateInfo.normalizedTime >= 0.8f)
                 {
                     manager.deadStartEffect.Play();
+                    
                     stateStartTime = Time.unscaledTime;
                     stage++;
                 }
@@ -47,6 +48,7 @@ public class DeathState : PlayerState
                 if (elapsedTime1 >= 0.5f)
                 {
                     manager.deadEndEffect.Play();
+                    manager.sfxAudioSource.PlayOneShot(manager.hurtClip);
                     stateStartTime = Time.unscaledTime;
                     stage++;
                 }
@@ -59,7 +61,7 @@ public class DeathState : PlayerState
                     GameEvent.OnToggleFade(false);
                 }
 
-                if (!hasRelocated && elapsedTime >= manager.fadeOutWaitTime + 3.0f)
+                if (!hasRelocated && elapsedTime >= manager.fadeOutWaitTime + 1.5f)
                 {
                     hasRelocated = true;
                     Vector3 safeTarget = manager.lastCheckpointPosition + Vector3.up * 0.2f;
@@ -83,7 +85,7 @@ public class DeathState : PlayerState
                     GameEvent.OnToggleFade(true);
                 }
 
-                if (elapsedTime >= manager.fadeOutWaitTime + 3f)
+                if (elapsedTime >= manager.fadeOutWaitTime + 1.5f)
                 {
                     manager.TransitionToState<IdleState>();
                 }
@@ -98,6 +100,7 @@ public class DeathState : PlayerState
         manager.gameObject.layer = originalLayer;
         if (manager.col != null) manager.col.enabled = true;
 
+        manager.isHazardHurt = false;
         manager.isPlayerInputEnabled = true;
         manager.canTurn = true;
     }

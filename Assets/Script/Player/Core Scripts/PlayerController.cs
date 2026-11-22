@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     [Header("Turn Setting")]
-    [SerializeField] private bool sceneScaleFacesRight = false;
+    public bool sceneScaleFacesRight = false;
     public bool canTurn = true;
     public bool isFacingRight = true; //should check your player image direction
 
@@ -185,6 +185,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip dashClip;
     public AudioClip outOffEnergy;
     public AudioClip fullOffEnergy;
+    public AudioClip hurtClip;
 
     [Header("Time line Control")]
     private PlayerLoadout loadout;
@@ -368,7 +369,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Flip()
+    public void Flip()
     {
         Vector3 playerScale = transform.localScale;
         playerScale.x *= -1;

@@ -133,7 +133,6 @@ public class StartTutorial : MonoBehaviour
         SpawnEnemies();
 
         yield return new WaitUntil(() => aliveEnemies.Count == 0);
-        Debug.Log("蟲子已經全部死光，WaitUntil 成功結束！");
         yield return new WaitForSeconds(1.5f);
 
         if (playerController.playerHealth != null)
@@ -178,9 +177,13 @@ public class StartTutorial : MonoBehaviour
         GameEvent.OnToggleFade(false);
         yield return new WaitForSeconds(1f);
 
-        if (player != null) player.TeleportTo(targetPosition);
+        if (player != null)
+        {
+            player.TeleportTo(targetPosition);
+            player.HandleTurning(true);
+        }
 
-        yield return WaitUntilPlayerSettled(player);
+            yield return WaitUntilPlayerSettled(player);
 
         GameEvent.OnToggleFade(true);
         yield return new WaitForSeconds(0.5f);

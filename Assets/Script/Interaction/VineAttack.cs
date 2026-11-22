@@ -16,9 +16,14 @@ public class VineAttack : MonoBehaviour
     private Collider vineCollider;
     private bool isTriggered = false; 
 
+    [Header("Sound Effect")]
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private AudioClip vineAtkClip;
+
     private void Awake()
     {
         vineCollider = GetComponent<Collider>();
+        if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,7 +48,7 @@ public class VineAttack : MonoBehaviour
     private IEnumerator HazardRespawnSequence(PlayerHealth playerHealth, PlayerController playerController)
     {
         isTriggered = true;
-
+        audioManager.PlaySFX(vineAtkClip);
         playerController.isHazardHurt = true;
 
         PlayerLock.Lock(this);
@@ -74,6 +79,7 @@ public class VineAttack : MonoBehaviour
             !(playerController.currentState is HurtState) &&
             !(playerController.currentState is DeathState));
 
+        playerController.isHazardHurt = false;
         PlayerLock.Unlock(this);
         PlayerLock.Unlock(this, PlayerLockType.Combat);
         vineCollider.enabled = true;
