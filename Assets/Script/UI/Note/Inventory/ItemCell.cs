@@ -26,7 +26,7 @@ public class ItemCell : MonoBehaviour, IPointerEnterHandler, ISelectHandler
 
     private void UpdateInfoPanel()
     {
-        GameEvent.OnRefreshItemPage?.Invoke(itemID);
+        if(itemID != null) GameEvent.OnRefreshItemPage?.Invoke(itemID);
         RectTransform target = faceRectTransform != null ? faceRectTransform : rectTransform;
         GameEvent.OnUpdateSelectionFrame?.Invoke(target);
     }
