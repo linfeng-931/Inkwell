@@ -2,9 +2,18 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 
+public enum DialogueType
+{
+    Large,
+    Medium,
+    Small
+}
+
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance;
+
+    [SerializeField] private WorldDialogueView smallDialogueView;
 
     // save all loading dialogue
     private Dictionary<string, DialogueData> dialogueDictionary = new Dictionary<string, DialogueData>();
@@ -19,7 +28,7 @@ public class DialogueManager : MonoBehaviour
         Instance = this;
     }
 
-    public void TryPlayDialogue(string targetId, bool fromTimeline = false)
+    public void TryPlayDialogue(string targetId, DialogueType type = DialogueType.Large, Transform followTarget = null, bool fromTimeline = false)
     {
         isFromTimeline = fromTimeline;
         string[] splitStrings = targetId.Split('_');
@@ -35,7 +44,7 @@ public class DialogueManager : MonoBehaviour
         {
             if (CheckCondition(data.playCondition))
             {
-                ExecuteDialogue(data);
+                ExecuteDialogue(data, type, followTarget, fromTimeline);
             }
         }
     }
@@ -81,8 +90,23 @@ public class DialogueManager : MonoBehaviour
     /// start to play dialogue
     /// </summary>
     /// <param name="data"></param>
-    private void ExecuteDialogue(DialogueData data)
+    private void ExecuteDialogue(DialogueData data, DialogueType type, Transform followTarget, bool fromTimeline)
     {
+        // small
+        if (type == DialogueType.Small)
+        {
+            if (smallDialogueView == null) return;
+
+            smallDialogueView.PlaySmallDialogue(followTarget, data.texts, () => ExecuteDialogueActions(data));
+            return;
+        }
+
+        // large and mid
+        if (smallDialogueView != null)
+        {
+            smallDialogueView.Close();
+        }
+
         currentPlayingDialogue = data;
         currentLineIndex = 0;
 
@@ -94,7 +118,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         // show ui
-        GameEvent.OnDialogueOpened.Invoke();
+        GameEvent.OnDialogueOpened?.Invoke(type, followTarget);
         ShowCurrentLine();
     }
 
@@ -144,6 +168,16 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private void ExecuteDialogueActions(DialogueData data)
+    {
+        if (data.actions == null) return;
+
+        foreach (var action in data.actions)
+        {
+            ProcessAction(action);
+        }
+    }
+
     private void ProcessAction(DialogueAction action)
     {
         switch (action.type)
@@ -168,5 +202,15 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueDictionary.Clear();
         loadedFiles.Clear();
+    }
+
+    public void CloseSmallDialogue(Transform target = null)
+    {
+        if (smallDialogueView == null) return;
+
+        if (target == null || smallDialogueView.CurrentTarget == target)
+        {
+            smallDialogueView.Close();
+        }
     }
 }

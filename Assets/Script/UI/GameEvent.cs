@@ -35,7 +35,7 @@ public static class GameEvent
     public static Action<bool> OnCutsceneStateChanged;
 
     // dialogue
-    public static Action OnDialogueOpened;
+    public static Action<DialogueType, Transform> OnDialogueOpened;
     public static Action OnDialogueClosed;
     public static Action<string> OnDialogueLineUpdated;
     public static Action OnDialogueNextPressed;

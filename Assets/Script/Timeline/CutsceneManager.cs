@@ -98,7 +98,7 @@ public class CutsceneManager : MonoBehaviour
             currentDirector.Pause();
         }
 
-        DialogueManager.Instance.TryPlayDialogue(dialogueId, true);
+        DialogueManager.Instance.TryPlayDialogue(dialogueId, DialogueType.Large, null, true);
     }
 
     private void ResumeTimeline()

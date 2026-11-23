@@ -44,7 +44,7 @@ public class DialogueEndTrigger : MonoBehaviour
         }
     }
 
-    private void HandleDialogueOpened()
+    private void HandleDialogueOpened(DialogueType type, Transform target)
     {
         isDialogueOpen = true;
         if (!isWatching && armedFrame == Time.frameCount) BeginWatching();

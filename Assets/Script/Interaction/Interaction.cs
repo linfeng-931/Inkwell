@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using TriInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,19 +16,26 @@ public class InteractAction
 {
     public InteractActionType actionType;
 
+    [ShowIf(nameof(actionType), InteractActionType.Dialogue)]
     public string dialogueId;
+
+    [ShowIf(nameof(actionType), InteractActionType.Dialogue)]
+    public DialogueType dialogueType = DialogueType.Large;
+
+    [ShowIf(nameof(actionType), InteractActionType.Timeline)]
     public TimelineSequenceController timeline;
+
+    [ShowIf(nameof(actionType), InteractActionType.Other)]
     public UnityEvent otherInteract;
 }
 
 public class Interaction : MonoBehaviour
 {
-
-
     [Header("Setting")]
     public float detectionRange;
     public GameObject interactionKeyUI;
     public Animator keyAnimator;
+    public Transform dialogueAnchor;
     public bool interactOnce = true;
 
     [Header("After Interact")]
@@ -95,12 +104,19 @@ public class Interaction : MonoBehaviour
             GameEvent.OnWorldInteractPressed -= HandleInteractPressed;
         }
 
+        Transform targetAnchor = dialogueAnchor != null ? dialogueAnchor : transform;
+
         foreach (var action in interactionSequence)
         {
             switch (action.actionType)
             {
                 case InteractActionType.Dialogue:
-                    DialogueManager.Instance.TryPlayDialogue(action.dialogueId, false);
+                    DialogueManager.Instance.TryPlayDialogue(
+                        action.dialogueId,
+                        action.dialogueType,
+                        targetAnchor,
+                        false
+                    );
                     break;
 
                 case InteractActionType.Timeline:

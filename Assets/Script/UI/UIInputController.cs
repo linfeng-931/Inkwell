@@ -82,7 +82,7 @@ public class UIInputController : MonoBehaviour
         UpdateInputMode();
     }
 
-    private void HandleDialogueOpened()
+    private void HandleDialogueOpened(DialogueType type, Transform target)
     {
         isDialogue = true;
         UpdateInputMode();

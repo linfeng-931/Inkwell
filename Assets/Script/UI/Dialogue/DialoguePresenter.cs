@@ -2,17 +2,21 @@ using UnityEngine;
 
 public class DialoguePresenter : MonoBehaviour
 {
-    [SerializeField] private DialogueView view;
+    [SerializeField] private DialogueView largeView;
+    [SerializeField] private WorldDialogueView mediumView;
 
     [Header("Game Object Visual")]
     [SerializeField] private GamePlayHUD gamePlayHUD; // Player UI
     [SerializeField] private PlayerEnergy playerEnergy;
     [SerializeField] private PlayerHealth playerHealth;
 
+    private IDialogueView currentView;
+    private DialogueType currentType;
 
     void Start()
     {
-        view.OnExit();
+        largeView.OnExit();
+        mediumView.Close();
     }
 
     private void OnEnable()
@@ -31,37 +35,56 @@ public class DialoguePresenter : MonoBehaviour
         GameEvent.OnDialogueNextPressed -= HandleNextPressed;
     }
 
-    private void HandleDialogueOpened()
+    private void HandleDialogueOpened(DialogueType type, Transform target)
     {
-        HidePlayerUI();
-        UIManager.Instance.OpenPanel(view);
+        currentType = type;
+
+        if (type == DialogueType.Large)
+        {
+            currentView = largeView;
+            HidePlayerUI();
+            UIManager.Instance.OpenPanel(largeView);
+        }
+        else if (type == DialogueType.Medium)
+        {
+            currentView = mediumView;
+            mediumView.Open(target);
+        }
     }
     
     private void HandleLineUpdated(string text)
     {
-        view.UpdateDialogueText(text);
+        currentView?.UpdateDialogueText(text);
     }
 
     private void HandleNextPressed()
     {
-        if (view.IsTyping)
+        if (currentView == null) return;
+        if (Time.time - currentView.StartTypingTime < 0.15f) return;
+
+        if (currentView.IsTyping)
         {
-            if (Time.time - view.startTypingTime >= 0.15f){
-                view.CompleteText();
-            }
+            currentView.CompleteText();
         }
         else
         {
-            if (Time.time - view.startTypingTime >= 0.15f){
-                DialogueManager.Instance.NextLine();
-            }
+            DialogueManager.Instance.NextLine();
         }
     }
 
     private void HandleDialogueClosed()
     {
-        UIManager.Instance.CloseTopPanel();
-        ShowPlayerUI();
+        if (currentType == DialogueType.Large)
+        {
+            UIManager.Instance.CloseTopPanel();
+            ShowPlayerUI();
+        }
+        else if (currentType == DialogueType.Medium)
+        {
+            mediumView.Close();
+        }
+
+        currentView = null;
     }
 
     private void HidePlayerUI()

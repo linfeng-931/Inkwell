@@ -73,12 +73,12 @@ public class ShowCanvas : MonoBehaviour
     private void PlayAfterHide()
     {
         bool canPlayDialogue = !string.IsNullOrEmpty(dialogueIdAfterHide)
-                               && !(playDialogueOnce && hasPlayedDialogue);
+                                && !(playDialogueOnce && hasPlayedDialogue);
 
         if (canPlayDialogue)
         {
             hasPlayedDialogue = true;
-            DialogueManager.Instance.TryPlayDialogue(dialogueIdAfterHide, false);
+            DialogueManager.Instance.TryPlayDialogue(dialogueIdAfterHide, DialogueType.Large, null, false);
         }
 
         onHidden?.Invoke();
