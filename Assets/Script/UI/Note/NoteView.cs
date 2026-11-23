@@ -159,4 +159,10 @@ public class NoteView : BasePanel
         arrowL.SetActive(currentSubPage > 0);
         arrowR.SetActive(currentSubPage < maxSubPages - 1);
     }
+
+    public override void OnExit()
+    {
+        base.OnExit();
+        notePresenter?.OnNoteClosedByUI();
+    }
 }

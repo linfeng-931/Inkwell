@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     private Stack<BasePanel> panelStack = new Stack<BasePanel>();  // record current windows
     
     private void Awake() => Instance = this;
+    private int lastCloseFrame = -1;
 
     private void OnEnable()
     {
@@ -27,8 +28,6 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        //Debug.Log($"��ҤF: {panel.gameObject.name}, Stack �ѤU {panelStack.Count} ��");
-
         foreach(BasePanel basePanel in panelStack)
         {
             Debug.Log(basePanel.gameObject.name);
@@ -41,10 +40,15 @@ public class UIManager : MonoBehaviour
 
         panelStack.Push(panel);
         panel.OnEnter();
+
+        GameEvent.OnInteractStateChanged?.Invoke(true);
     }
 
     public void CloseTopPanel()
     {
+        if (Time.frameCount == lastCloseFrame) return;
+        lastCloseFrame = Time.frameCount;
+
         if (panelStack.Count == 0) return;
 
         BasePanel topPanel = panelStack.Pop();
@@ -62,5 +66,10 @@ public class UIManager : MonoBehaviour
             GameEvent.currentCloseCallback?.Invoke();
             GameEvent.currentCloseCallback = null;
         }
+    }
+
+    public bool IsTopPanel(BasePanel panel)
+    {
+        return panelStack.Count > 0 && panelStack.Peek() == panel;
     }
 }

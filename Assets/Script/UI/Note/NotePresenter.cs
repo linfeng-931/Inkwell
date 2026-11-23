@@ -53,12 +53,8 @@ public class NotePresenter : MonoBehaviour
 
         if (isNoteOpen)
         {
-            isNoteOpen = false;
-            itemIntroViewForNote.RefreshItemPage(false);
+            if (!UIManager.Instance.IsTopPanel(view)) return;
             UIManager.Instance.CloseTopPanel();
-            GameEvent.OnInteractStateChanged.Invoke(false);
-            GameEvent.OnNoteStateChanged?.Invoke(false);
-            EventSystem.current.SetSelectedGameObject(null);
         }
         else
         {
@@ -102,5 +98,19 @@ public class NotePresenter : MonoBehaviour
         model.subPageIndexMemory[model.majorIndex] = currentSubPage;
 
         view.SwitchSubPage(model.majorIndex, lastSubPage, currentSubPage, model.subPageAmount[model.majorIndex]);
+    }
+
+    public void OnNoteClosedByUI()
+    {
+        if (!isNoteOpen) return;
+
+        isNoteOpen = false;
+        itemIntroViewForNote.RefreshItemPage(false);
+        GameEvent.OnInteractStateChanged?.Invoke(false);
+        GameEvent.OnNoteStateChanged?.Invoke(false);
+        if (EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
     }
 }

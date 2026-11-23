@@ -54,15 +54,8 @@ public class UIInputController : MonoBehaviour
                 break;
 
             case UIActionType.Cancel:
-
                 if (isInCutscene) return;
                 GameEvent.OnEscapePressed?.Invoke();
-                //GameEvent.currentCloseCallback?.Invoke();
-                //GameEvent.currentCloseCallback = null;
-
-                if (isNoteOpen){
-                    GameEvent.OnToggleNote?.Invoke();
-                }
                 break;
         }
     }

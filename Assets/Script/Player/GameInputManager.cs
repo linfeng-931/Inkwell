@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -59,6 +60,9 @@ public class GameInputManager : MonoBehaviour
     public bool IsWalking => walkAction.action.IsPressed();
     public bool IsJumpHeld => jumpAction.action.IsPressed();
 
+    private const string REBINDS_KEY = "PlayerInputRebinds";
+    private InputActionRebindingExtensions.RebindingOperation currentRebindOperation;
+
     private void Awake()
     {
         if (Instance == null)
@@ -74,6 +78,9 @@ public class GameInputManager : MonoBehaviour
         playerMap = inputAsset.FindActionMap("Player");
         uiMap = inputAsset.FindActionMap("UI");
         globalMap = inputAsset.FindActionMap("Global");
+
+        LoadBindingOverrides();
+
         globalMap.Enable();
 
         EnablePlayerInput();
@@ -141,4 +148,116 @@ public class GameInputManager : MonoBehaviour
         uiMap.Disable();
         playerMap.Enable();
     }
+
+    #region Get, Save, Reset Key Binding
+    public void SaveBindingOverrides()
+    {
+        string rebinds = inputAsset.SaveBindingOverridesAsJson();
+        PlayerPrefs.SetString(REBINDS_KEY, rebinds);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadBindingOverrides()
+    {
+        string rebinds = PlayerPrefs.GetString(REBINDS_KEY, string.Empty);
+        if (!string.IsNullOrEmpty(rebinds))
+        {
+            inputAsset.LoadBindingOverridesFromJson(rebinds);
+        }
+    }
+
+    public void ResetAllBindings()
+    {
+        inputAsset.RemoveAllBindingOverrides();
+        PlayerPrefs.DeleteKey(REBINDS_KEY);
+        PlayerPrefs.Save();
+    }
+    #endregion
+
+    #region Customize, Check Key Binding
+    public void StartRebind(
+        InputActionReference actionRef,
+        int bindingIndex,
+        Action onComplete,
+        Action onCancel = null,
+        Action onDuplicate = null
+    )
+    {
+        InputAction action = actionRef.action;
+        if (action == null || bindingIndex < 0 || bindingIndex >= action.bindings.Count)
+            return;
+
+        // has current action => cancel
+        currentRebindOperation?.Cancel();
+
+        // record current key
+        string previousOverridePath = action.bindings[bindingIndex].overridePath;
+
+        // stop listening key action (global)
+        bool wasEnabled = action.enabled;
+        action.Disable();
+
+        currentRebindOperation = action.PerformInteractiveRebinding(bindingIndex)
+            // exclude some mouse action
+            .WithControlsExcluding("<Mouse>/position")
+            .WithControlsExcluding("<Mouse>/delta")
+            .WithControlsExcluding("<Mouse>/scroll")
+            // cancel action
+            .WithCancelingThrough("<Keyboard>/escape")
+            .OnComplete(operation =>
+            {
+                operation.Dispose();
+                currentRebindOperation = null;
+
+                // if has repeat binding key
+                if (CheckDuplicateBindings(action, bindingIndex))
+                {
+                    // reset
+                    if (string.IsNullOrEmpty(previousOverridePath))
+                        action.RemoveBindingOverride(bindingIndex);
+                    else
+                        action.ApplyBindingOverride(bindingIndex, previousOverridePath);
+
+                    if (wasEnabled) action.Enable();
+                    onDuplicate?.Invoke();
+                    return;
+                }
+
+                // save
+                SaveBindingOverrides();
+                if (wasEnabled) action.Enable();
+                onComplete?.Invoke();
+            })
+            .OnCancel(operation =>
+            {
+                operation.Dispose();
+                currentRebindOperation = null;
+
+                if (wasEnabled) action.Enable();
+                onCancel?.Invoke();
+            })
+            .Start();
+    }    
+
+    private bool CheckDuplicateBindings(InputAction targetAction, int targetBindingIndex)
+    {
+        InputBinding newBinding = targetAction.bindings[targetBindingIndex];
+
+        foreach (InputBinding binding in targetAction.actionMap.bindings)
+        {
+            if (binding.id == newBinding.id || binding.isComposite)
+                continue;
+
+            if (binding.effectivePath == newBinding.effectivePath) return true;
+        }
+        return false;
+    }
+
+    public string GetBindingName(InputActionReference actionRef, int bindingIndex)
+    {
+        if (actionRef?.action == null) return string.Empty;
+        return actionRef.action.GetBindingDisplayString(bindingIndex);
+    }
+
+    #endregion
 }
