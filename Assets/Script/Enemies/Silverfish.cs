@@ -35,6 +35,18 @@ public class Silverfish : MonoBehaviour, IEnemy
     public float separationRadius = 0.65f; // detect enemy
     public LayerMask enemyLayer;
 
+    [Header("Stuck Setting")]
+    public float stuckTime = 2f;
+    public float stuckMoveThreshold = 0.05f;
+    public float stuckEscapeDuration = 0.8f;
+
+    private float stuckTimer = 0f;
+    private float escapeTimer = 0f;
+
+    private float lastCheckX;
+    private bool hasLastCheckPosition = false;
+    private float patrolBlockedTimer = 0f;
+
     [Header("Attack Setting")]
     public float attackCastTime = 0.3f;
     public float attackInterval = 1f;
@@ -84,16 +96,12 @@ public class Silverfish : MonoBehaviour, IEnemy
         rig.constraints = RigidbodyConstraints.FreezeRotation;
 
         facingRight = startFacingRight;
+
         Vector3 currentScale = transform.localScale;
-        if (facingRight)
-        {
-            currentScale.x = -Mathf.Abs(currentScale.x);
-        }
-        else
-        {
-            currentScale.x = Mathf.Abs(currentScale.x);
-        }
+        currentScale.x = Mathf.Abs(currentScale.x);
         transform.localScale = currentScale;
+
+        spriteRenderer.flipX = facingRight;
 
         fsm = StateMachine<States>.Initialize(this, States.Idle);
         if (audioManager == null) audioManager = FindFirstObjectByType<AudioManager>();
@@ -157,9 +165,7 @@ public class Silverfish : MonoBehaviour, IEnemy
     private void Turn()
     {
         facingRight = !facingRight;
-        Vector3 currentScale = transform.localScale;
-        currentScale.x *= -1;
-        transform.localScale = currentScale;
+        spriteRenderer.flipX = facingRight;
     }
 
     private void FlipToward(float targetX)
@@ -180,19 +186,77 @@ public class Silverfish : MonoBehaviour, IEnemy
         Turn();
     }
 
+    private bool UpdateStuckRecovery(bool isTryingToMove)
+    {
+        if (escapeTimer > 0f)
+        {
+            escapeTimer -= Time.deltaTime;
+            return true;
+        }
+
+        if (!isTryingToMove)
+        {
+            stuckTimer = 0f;
+            lastCheckX = transform.position.x;
+            hasLastCheckPosition = true;
+
+            return false;
+        }
+
+        if (!hasLastCheckPosition)
+        {
+            lastCheckX = transform.position.x;
+            hasLastCheckPosition = true;
+
+            return false;
+        }
+
+        float movedDistance = Mathf.Abs(
+            transform.position.x - lastCheckX
+        );
+
+        if (movedDistance < stuckMoveThreshold)
+        {
+            stuckTimer += Time.deltaTime;
+        }
+        else
+        {
+            stuckTimer = 0f;
+        }
+
+        lastCheckX = transform.position.x;
+
+        if (stuckTimer >= stuckTime)
+        {
+            Debug.Log("Silverfish 卡住，強制轉向");
+
+            Turn();
+
+            stuckTimer = 0f;
+            escapeTimer = stuckEscapeDuration;
+
+            return true;
+        }
+
+        return false;
+    }
+
     private bool IsPlayerInSight()
     {
         Vector3 dirToPlayer = player.position - transform.position;
         float distToPlayer = dirToPlayer.sqrMagnitude;
 
-        bool checkY = player.position.y >= (transform.position.y - 0.5f);
+        bool checkY =
+            player.position.y >= (transform.position.y - 0.5f);
 
         return (distToPlayer <= sightRange * sightRange) && checkY;
     }
 
     private bool IsPlayerInAttackRange()
     {
-        float sqrDistance = (player.position - transform.position).sqrMagnitude;
+        float sqrDistance =
+            (player.position - transform.position).sqrMagnitude;
+
         return sqrDistance <= attackRange * attackRange;
     }
 
@@ -219,8 +283,15 @@ public class Silverfish : MonoBehaviour, IEnemy
     /// <returns></returns>
     private bool IsAllyAhead()
     {
-        Vector3 forwardDir = facingRight ? Vector3.right : Vector3.left;
-        return Physics.Raycast(transform.position, forwardDir, separationRadius, enemyLayer);
+        Vector3 forwardDir =
+            facingRight ? Vector3.right : Vector3.left;
+
+        return Physics.Raycast(
+            transform.position,
+            forwardDir,
+            separationRadius,
+            enemyLayer
+        );
     }
 
     #region State
@@ -253,7 +324,7 @@ public class Silverfish : MonoBehaviour, IEnemy
     void Patrol_Enter()
     {
         animator.Play(walkAni, 0);
-        Turn();
+        patrolBlockedTimer = 0f;
     }
 
     void Patrol_Update()
@@ -264,12 +335,23 @@ public class Silverfish : MonoBehaviour, IEnemy
             return;
         }
 
-        if (IsPathBlockedOrEdge())
+        bool isBlocked = IsPathBlockedOrEdge();
+
+        if (isBlocked)
         {
             StopHorizontalMovement();
-            fsm.ChangeState(States.Idle);
+            patrolBlockedTimer += Time.deltaTime;
+            if (patrolBlockedTimer >= stuckTime)
+            {
+                Turn();
+
+                patrolBlockedTimer = 0f;
+            }
+
             return;
         }
+
+        patrolBlockedTimer = 0f;
 
         rig.linearVelocity = new Vector3(
             (facingRight ? 1f : -1f) * patrolSpeed,
@@ -278,11 +360,54 @@ public class Silverfish : MonoBehaviour, IEnemy
         );
     }
 
+    private bool IsWallAhead()
+    {
+        Vector3 dir = facingRight ? Vector3.right : Vector3.left;
+
+        // 暫時使用 ~0，代表偵測所有 Layer
+        bool hit = Physics.Raycast(
+            transform.position,
+            dir,
+            out RaycastHit hitInfo,
+            rayDistance,
+            ~0,
+            QueryTriggerInteraction.Ignore
+        );
+
+        Debug.DrawRay(
+            transform.position,
+            dir * rayDistance,
+            hit ? Color.red : Color.green
+        );
+
+        if (hit)
+            Debug.Log($"Raycast 擊中：{hitInfo.collider.name}");
+
+        return hit;
+    }
+
+    private bool IsEdgeAhead()
+    {
+        return !Physics.Raycast(
+            edgeCheckPoint.position,
+            Vector3.down,
+            rayDistance,
+            groundLayer,
+            QueryTriggerInteraction.Ignore
+        );
+    }
+
     // Chase
     void Chase_Enter()
     {
         animator.Play(walkAni, 0);
         StopHorizontalMovement();
+
+        stuckTimer = 0f;
+        escapeTimer = 0f;
+
+        lastCheckX = transform.position.x;
+        hasLastCheckPosition = true;
     }
 
     void Chase_Update()
@@ -296,26 +421,27 @@ public class Silverfish : MonoBehaviour, IEnemy
         if (IsPlayerInAttackRange())
         {
             StopHorizontalMovement();
-
             fsm.ChangeState(States.Attack);
             return;
         }
 
-        // check player dir compared by this pos
-        float dirToPlayer = player.position.x - transform.position.x;
+        bool isEscaping = UpdateStuckRecovery(true);
 
-        // if too close with player, don't flip
-        float deadZone = 0.8f;
-
-        if (Mathf.Abs(dirToPlayer) > deadZone)
+        if (!isEscaping)
         {
-            FlipToward(player.position.x);
+            float dirToPlayer =
+                player.position.x - transform.position.x;
+
+            float deadZone = 0.8f;
+
+            if (Mathf.Abs(dirToPlayer) > deadZone)
+            {
+                FlipToward(player.position.x);
+            }
         }
 
-        // prevent enemy from walking into wall or edge or other enemy
         if (IsPathBlockedOrEdge() || IsAllyAhead())
         {
-            // stop, prevent to touch wall or drop from platform
             StopHorizontalMovement();
         }
         else
@@ -331,6 +457,9 @@ public class Silverfish : MonoBehaviour, IEnemy
     void Chase_Exit()
     {
         StopHorizontalMovement();
+
+        stuckTimer = 0f;
+        escapeTimer = 0f;
     }
 
     // Attack
@@ -421,6 +550,8 @@ public class Silverfish : MonoBehaviour, IEnemy
         afterDead?.Invoke();
         Destroy(gameObject);
     }
+
+
 
     #endregion
 
