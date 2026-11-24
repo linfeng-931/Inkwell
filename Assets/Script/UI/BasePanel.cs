@@ -68,8 +68,7 @@ public class BasePanel : MonoBehaviour
     /// </summary>
     public virtual void OnPause()
     {
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
+        SetCanvasVisible(false);
     }
 
     /// <summary>
@@ -77,10 +76,17 @@ public class BasePanel : MonoBehaviour
     /// </summary>
     public virtual void OnResume()
     {
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
+        SetCanvasVisible(true);
 
         SetFocusToDefault();
+    }
+
+    protected void SetCanvasVisible(bool visible)
+    {
+        if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.alpha = visible ? 1f : 0f;
+        canvasGroup.interactable = visible;
+        canvasGroup.blocksRaycasts = visible;
     }
 
     protected virtual void SetFocusToDefault()

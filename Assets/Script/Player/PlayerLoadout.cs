@@ -24,9 +24,9 @@ public class PlayerLoadout : MonoBehaviour
 
     private void Start() // for test
     {
-        //EnterArmedMode();
-        //RunEnabled = true;
-        //notePresenter.SetCanOpenNote(true);
+        // EnterArmedMode();
+        // RunEnabled = true;
+        // notePresenter.SetCanOpenNote(true);
     }
 
     public void Initialize()
