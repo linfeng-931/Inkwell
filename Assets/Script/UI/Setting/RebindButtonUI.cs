@@ -1,3 +1,4 @@
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,7 +13,9 @@ public class RebindButtonUI : MonoBehaviour
 
     [Header("UI References")]
     public Button rebindButton;
+    public Image bindingIconImage;
     public TMP_Text bindingDisplayText;
+    public KeyIconDatabase iconDatabase;
     public GameObject waitingOverlay;
     public TMP_Text statusTipText;
 
@@ -31,7 +34,8 @@ public class RebindButtonUI : MonoBehaviour
     {
         // hint when enter listening
         rebindButton.interactable = false;
-        bindingDisplayText.text = "監聽中...";
+        bindingDisplayText.text = "監聽中......";
+        if (bindingIconImage != null) bindingIconImage.enabled = false;
         if (waitingOverlay != null) waitingOverlay.SetActive(true);
         if (statusTipText != null) statusTipText.text = "請按下想綁定的按鍵 (按 ESC 取消)";
 
@@ -59,14 +63,21 @@ public class RebindButtonUI : MonoBehaviour
         rebindButton.interactable = true;
         if (waitingOverlay != null) waitingOverlay.SetActive(false);
         if (statusTipText != null) statusTipText.text = message;
+        bindingDisplayText.text = "";
         UpdateUI();
     }
 
     public void UpdateUI()
     {
-        if (GameInputManager.Instance != null && actionReference != null)
-        {
-            bindingDisplayText.text = GameInputManager.Instance.GetBindingName(actionReference, bindingIndex);
-        }
+        if(iconDatabase == null || bindingIconImage == null || actionReference == null) return;
+
+        var bindings = actionReference.action.bindings;
+        if(bindingIndex < 0 || bindingIndex >= bindings.Count)return;
+
+        string path = bindings[bindingIndex].effectivePath;
+        Sprite icon = iconDatabase.GetIcon(path);
+
+        bindingIconImage.sprite = icon;
+        bindingIconImage.enabled = icon != null;
     }
 }
