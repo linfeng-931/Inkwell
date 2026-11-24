@@ -282,7 +282,6 @@ public class StartTutorial : MonoBehaviour
 
     public void HideAllHookObject()
     {
-        audioManager.PlaySFX(vineClip);
         HideObject(platforms);
         HideObject(vines);
         HideObjectsWithTween(hookTarget);
@@ -308,12 +307,6 @@ public class StartTutorial : MonoBehaviour
             {
                 Animator anim = obj.GetComponent<Animator>();
                 anim.SetTrigger("back");
-
-                Collider[] colliders = obj.GetComponents<Collider>();
-                foreach (Collider col in colliders)
-                {
-                    col.enabled = false;
-                }
             }
         }
     }

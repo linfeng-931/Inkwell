@@ -1,12 +1,11 @@
 using System.Collections;
 using UnityEngine;
-using Live2D.Cubism.Rendering;
 
 public class WeaponSwapFade : MonoBehaviour
 {
-    [SerializeField] private GameObject stoneWeapon;
+    [SerializeField] private FadeableObject stoneWeapon;
 
-    [SerializeField] private float stoneFadeOutDuration = 0.5f;
+    [SerializeField] private float stoneFadeOutDuration = 0.1f;
     [SerializeField] private float playerFadeInDuration = 0.1f;
 
     [SerializeField] private bool playerFadesInAfterStone = true;
@@ -26,10 +25,7 @@ public class WeaponSwapFade : MonoBehaviour
     {
         Debug.Log("[WeaponSwapFade] stone weapon fade out");
         if (textEffect != null) textEffect.StopBlinking();
-        if (stoneWeapon != null)
-        {
-            yield return StartCoroutine(FadeOutLive2D(stoneWeapon, stoneFadeOutDuration));
-        }
+        if (stoneWeapon != null) stoneWeapon.FadeOut(stoneFadeOutDuration);
 
         if (playerFadesInAfterStone)
         {
@@ -43,29 +39,6 @@ public class WeaponSwapFade : MonoBehaviour
         yield return new WaitForSeconds(playerFadeInDuration);
 
         
-    }
-
-    private IEnumerator FadeOutLive2D(GameObject target, float duration)
-    {
-        CubismRenderController renderController = target.GetComponent<CubismRenderController>();
-        if (renderController == null)
-        {
-            yield break;
-        }
-
-        float startOpacity = renderController.Opacity;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
-            renderController.Opacity = Mathf.Lerp(startOpacity, 0f, t);
-            yield return null;
-        }
-
-        renderController.Opacity = 0f;
-        target.SetActive(false);
     }
 
     public bool HasFadePlayed() {

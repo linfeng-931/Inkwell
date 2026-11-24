@@ -21,8 +21,7 @@ public class BasePanel : MonoBehaviour
     }
 
     private IEnumerator EnterCoroutine()
-    {   
-
+    {
         float timer = 0f;
         canvasGroup.alpha = 0;
 
@@ -60,7 +59,6 @@ public class BasePanel : MonoBehaviour
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
-
     }
 
     /// <summary>
