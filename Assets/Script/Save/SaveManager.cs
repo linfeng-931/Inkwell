@@ -28,6 +28,7 @@ public class SaveManager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -88,7 +89,7 @@ public class SaveManager : MonoBehaviour
         }
         currentSaveFileName = fileName;
         currentSave = new GameSaveData();
-
+        startTime = Time.time;
         UpdateLastPlayedSaveName(fileName);
 
         bool isSuccess = SaveGame();

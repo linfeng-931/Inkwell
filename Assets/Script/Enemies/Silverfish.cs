@@ -55,6 +55,8 @@ public class Silverfish : MonoBehaviour, IEnemy
     public float hurtForceH = 0.1f;
     public float hurtForceV = 0.1f;
     public float hurtStunTime = 0.3f;
+    public float noTurnAfterHurt = 0f;
+    private float noTurnUntil = 0f;
 
     [Header("Animate")]
     public Animator animator;
@@ -166,6 +168,7 @@ public class Silverfish : MonoBehaviour, IEnemy
     {
         facingRight = !facingRight;
         spriteRenderer.flipX = facingRight;
+        // Debug.Log($"[Silverfish] Turn → facingRight={facingRight}\n{StackTraceUtility.ExtractStackTrace()}", this);
     }
 
     private void FlipToward(float targetX)
@@ -228,7 +231,6 @@ public class Silverfish : MonoBehaviour, IEnemy
 
         if (stuckTimer >= stuckTime)
         {
-            Debug.Log("Silverfish 卡住，強制轉向");
 
             Turn();
 
@@ -364,7 +366,6 @@ public class Silverfish : MonoBehaviour, IEnemy
     {
         Vector3 dir = facingRight ? Vector3.right : Vector3.left;
 
-        // 暫時使用 ~0，代表偵測所有 Layer
         bool hit = Physics.Raycast(
             transform.position,
             dir,
@@ -380,8 +381,6 @@ public class Silverfish : MonoBehaviour, IEnemy
             hit ? Color.red : Color.green
         );
 
-        if (hit)
-            Debug.Log($"Raycast 擊中：{hitInfo.collider.name}");
 
         return hit;
     }
@@ -427,11 +426,9 @@ public class Silverfish : MonoBehaviour, IEnemy
 
         bool isEscaping = UpdateStuckRecovery(true);
 
-        if (!isEscaping)
+        if (!isEscaping && Time.time >= noTurnUntil)
         {
-            float dirToPlayer =
-                player.position.x - transform.position.x;
-
+            float dirToPlayer = player.position.x - transform.position.x;
             float deadZone = 0.8f;
 
             if (Mathf.Abs(dirToPlayer) > deadZone)
@@ -494,14 +491,23 @@ public class Silverfish : MonoBehaviour, IEnemy
     IEnumerator Hurt_Enter()
     {
         StopMovement();
+
         animator.Play(damagedAni, 0);
         spriteRenderer.material = hurtMaterial;
         hurtParticle.Play();
-        FlipToward(player.position.x);
-        Vector3 knockbackDirection = new Vector3(facingRight ? -1f : 1f, 0f, 0f);
+
+        // FlipToward(player.position.x);
+        noTurnUntil = Time.time + hurtStunTime + 0.1f + noTurnAfterHurt;
+
+        float knockbackDirX =
+            transform.position.x >= player.position.x ? 1f : -1f;
+
+        Vector3 knockbackDirection =
+            new Vector3(knockbackDirX, 0f, 0f);
 
         rig.AddForce(
-            knockbackDirection * hurtForceH + Vector3.up * hurtForceV,
+            knockbackDirection * hurtForceH +
+            Vector3.up * hurtForceV,
             ForceMode.Impulse
         );
 
@@ -509,7 +515,7 @@ public class Silverfish : MonoBehaviour, IEnemy
 
         spriteRenderer.material = originalMaterial;
 
-        yield return new WaitForSeconds(hurtStunTime); // hit stun
+        yield return new WaitForSeconds(hurtStunTime);
 
         if (IsPlayerInSight())
         {
