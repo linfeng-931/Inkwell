@@ -63,6 +63,22 @@ public class GameInputManager : MonoBehaviour
     private const string REBINDS_KEY = "PlayerInputRebinds";
     private InputActionRebindingExtensions.RebindingOperation currentRebindOperation;
 
+    // the key can't be binding
+    private static readonly System.Collections.Generic.HashSet<string> ForbiddenPaths =
+    new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "<Keyboard>/escape",
+        "<Keyboard>/tab",
+        "<Keyboard>/leftMeta",
+        "<Keyboard>/rightMeta", 
+        "<Keyboard>/contextMenu",
+        "<Keyboard>/printScreen",
+        "<Keyboard>/scrollLock",
+        "<Keyboard>/pause",
+        "<Keyboard>/capsLock",
+        "<Keyboard>/numLock"
+    };
+
     private void Awake()
     {
         if (Instance == null)
@@ -79,7 +95,7 @@ public class GameInputManager : MonoBehaviour
         uiMap = inputAsset.FindActionMap("UI");
         globalMap = inputAsset.FindActionMap("Global");
 
-        LoadBindingOverrides();
+        LoadBinding();
 
         globalMap.Enable();
 
@@ -150,19 +166,22 @@ public class GameInputManager : MonoBehaviour
     }
 
     #region Get, Save, Reset Key Binding
-    public void SaveBindingOverrides()
+    public void SaveBinding()
     {
         string rebinds = inputAsset.SaveBindingOverridesAsJson();
         PlayerPrefs.SetString(REBINDS_KEY, rebinds);
         PlayerPrefs.Save();
     }
 
-    public void LoadBindingOverrides()
+    public void LoadBinding()
     {
-        string rebinds = PlayerPrefs.GetString(REBINDS_KEY, string.Empty);
-        if (!string.IsNullOrEmpty(rebinds))
+        if (PlayerPrefs.HasKey(REBINDS_KEY))
         {
-            inputAsset.LoadBindingOverridesFromJson(rebinds);
+            string rebinds = PlayerPrefs.GetString(REBINDS_KEY, string.Empty);
+            if (!string.IsNullOrEmpty(rebinds))
+            {
+                inputAsset.LoadBindingOverridesFromJson(rebinds);
+            }
         }
     }
 
@@ -172,6 +191,14 @@ public class GameInputManager : MonoBehaviour
         PlayerPrefs.DeleteKey(REBINDS_KEY);
         PlayerPrefs.Save();
     }
+
+    public string GetBindingPath(InputActionReference actionRef, int bindingIndex)
+    {
+        if (actionRef?.action == null || bindingIndex < 0 || bindingIndex >= actionRef.action.bindings.Count)
+            return string.Empty;
+
+        return actionRef.action.bindings[bindingIndex].effectivePath;
+    }
     #endregion
 
     #region Customize, Check Key Binding
@@ -180,7 +207,9 @@ public class GameInputManager : MonoBehaviour
         int bindingIndex,
         Action onComplete,
         Action onCancel = null,
-        Action onDuplicate = null
+        Action onDuplicate = null,
+        Action onInvalid = null,
+        Func<string, bool> isPathAllowed = null
     )
     {
         InputAction action = actionRef.action;
@@ -209,22 +238,31 @@ public class GameInputManager : MonoBehaviour
                 operation.Dispose();
                 currentRebindOperation = null;
 
-                // if has repeat binding key
+                string newPath = action.bindings[bindingIndex].effectivePath;
+
+                // check key avalible
+                bool isForbidden = ForbiddenPaths.Contains(newPath);
+                bool isAllowedByDb = isPathAllowed == null || isPathAllowed(newPath);
+
+                if (isForbidden || !isAllowedByDb)
+                {
+                    RestoreBinding(action, bindingIndex, previousOverridePath);
+                    if (wasEnabled) action.Enable();
+                    onInvalid?.Invoke();
+                    return;
+                }
+
+                // check key repeat
                 if (CheckDuplicateBindings(action, bindingIndex))
                 {
-                    // reset
-                    if (string.IsNullOrEmpty(previousOverridePath))
-                        action.RemoveBindingOverride(bindingIndex);
-                    else
-                        action.ApplyBindingOverride(bindingIndex, previousOverridePath);
-
+                    RestoreBinding(action, bindingIndex, previousOverridePath);
                     if (wasEnabled) action.Enable();
                     onDuplicate?.Invoke();
                     return;
                 }
 
                 // save
-                SaveBindingOverrides();
+                SaveBinding();
                 if (wasEnabled) action.Enable();
                 onComplete?.Invoke();
             })
@@ -239,6 +277,14 @@ public class GameInputManager : MonoBehaviour
             .Start();
     }    
 
+    private void RestoreBinding(InputAction action, int bindingIndex, string previousOverridePath)
+    {
+        if (string.IsNullOrEmpty(previousOverridePath))
+            action.RemoveBindingOverride(bindingIndex);
+        else
+            action.ApplyBindingOverride(bindingIndex, previousOverridePath);
+    }
+
     private bool CheckDuplicateBindings(InputAction targetAction, int targetBindingIndex)
     {
         InputBinding newBinding = targetAction.bindings[targetBindingIndex];
@@ -248,7 +294,8 @@ public class GameInputManager : MonoBehaviour
             if (binding.id == newBinding.id || binding.isComposite)
                 continue;
 
-            if (binding.effectivePath == newBinding.effectivePath) return true;
+            if (string.Equals(binding.effectivePath, newBinding.effectivePath, StringComparison.OrdinalIgnoreCase)) 
+                return true;
         }
         return false;
     }

@@ -1,4 +1,3 @@
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,6 +18,11 @@ public class RebindButtonUI : MonoBehaviour
     public GameObject waitingOverlay;
     public TMP_Text statusTipText;
 
+    private void Start()
+    {
+        UpdateUI();
+    }
+
     private void OnEnable()
     {
         UpdateUI();
@@ -34,7 +38,7 @@ public class RebindButtonUI : MonoBehaviour
     {
         // hint when enter listening
         rebindButton.interactable = false;
-        bindingDisplayText.text = "監聽中......";
+        if (bindingDisplayText != null) bindingDisplayText.text = "監聽中......";
         if (bindingIconImage != null) bindingIconImage.enabled = false;
         if (waitingOverlay != null) waitingOverlay.SetActive(true);
         if (statusTipText != null) statusTipText.text = "請按下想綁定的按鍵 (按 ESC 取消)";
@@ -45,7 +49,7 @@ public class RebindButtonUI : MonoBehaviour
             bindingIndex,
             onComplete: () =>
             {
-                FinishRebind("綁定成功！");
+                FinishRebind("綁定成功");
             },
             onCancel: () =>
             {
@@ -53,8 +57,13 @@ public class RebindButtonUI : MonoBehaviour
             },
             onDuplicate: () =>
             {
-                FinishRebind("此按鍵已被使用，已還原設定！");
-            }
+                FinishRebind("此按鍵已被使用, 已還原設定");
+            },
+            onInvalid: () =>
+            {
+                FinishRebind("無效按鍵, 請重新操作");
+            },
+            isPathAllowed: path => iconDatabase != null && iconDatabase.GetIcon(path) != null
         );
     }
 
@@ -63,7 +72,7 @@ public class RebindButtonUI : MonoBehaviour
         rebindButton.interactable = true;
         if (waitingOverlay != null) waitingOverlay.SetActive(false);
         if (statusTipText != null) statusTipText.text = message;
-        bindingDisplayText.text = "";
+        if (bindingDisplayText != null) bindingDisplayText.text = "";
         UpdateUI();
     }
 
