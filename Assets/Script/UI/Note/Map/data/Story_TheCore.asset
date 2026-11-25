@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c9e06a09a24d465caa2175a5c3b0605, type: 3}
+  m_Name: Story_TheCore
+  m_EditorClassIdentifier: Assembly-CSharp::MapRoomData
+  roomId: Story_TheCore
+  mapSprite: {fileID: 21300000, guid: 8cd4d6b9248b94344962cbf14728074c, type: 3}
+  mapRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 320
+    height: 180
+  priority: 0
+  zoneRects:
+  - zoneId: room1
+    mapRect:
+      serializedVersion: 2
+      x: 0
+      y: 77.99672
+      width: 320
+      height: 102.00328
+  - zoneId: room2
+    mapRect:
+      serializedVersion: 2
+      x: 0.00002610828
+      y: 0
+      width: 319.99994
+      height: 72.75487
+  markers: []
