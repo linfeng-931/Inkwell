@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 currentHookTarget { get; set; }
     public float lastHookTime { get; set; } = -100f;
 
-    public CursorManager cursorManager; 
+    public CursorManager cursorManager;
     public Transform hookLineStartPoint;
 
     //hook Visuals
@@ -198,6 +198,8 @@ public class PlayerController : MonoBehaviour
     public bool CanFight => (loadout == null || loadout.CombatEnabled)
                             && !PlayerLock.IsLocked(PlayerLockType.Combat);
     public bool CanRun => loadout == null || loadout.RunEnabled;
+    public bool CanShoot => loadout == null || loadout.ShootEnabled;
+
     public bool canJump = false;
     private bool wasCanMove = true;
     [SerializeField] private float jumpGraceAfterUnlock = 0.25f;
@@ -292,6 +294,12 @@ public class PlayerController : MonoBehaviour
         // Lock Player Attack or Jump
         if (IsJumpState(typeof(T)) && (!canJump || !CanMove)) { return; }
         if (!CanFight && IsCombatState(typeof(T))) { return; }
+
+        // Look Player Shoot State
+        if(typeof(T) == typeof(ShootState) && !CanShoot)
+        {
+            return;
+        }
 
         PlayerState newState = stateFactory.GetState<T>();
 

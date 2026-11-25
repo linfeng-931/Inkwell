@@ -31,7 +31,7 @@ public class FlagListener : MonoBehaviour
 
     private void CheckFlag()
     {
-        var flags = SaveManager.Instance.currentSave.flags;
+        var flags = SaveManager.Instance.CurrentSave.flags;
 
         bool isUnlocked = flags.ContainsKey(flagID) && flags[flagID] == true;
 

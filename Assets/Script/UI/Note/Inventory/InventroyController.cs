@@ -62,7 +62,7 @@ public class InventroyController : MonoBehaviour
 
     private void Load()
     {
-        NoteData noteData = SaveManager.Instance.currentSave.note;
+        NoteData noteData = SaveManager.Instance.CurrentSave.note;
 
         // get item data (text, imagePath)
         foreach (string id in noteData.items.Keys)
@@ -93,34 +93,34 @@ public class InventroyController : MonoBehaviour
         // item aleardy in inventory
         if (itemDatas.Find(item => item.id == id) != null)
         {
-            int currentAmount = SaveManager.Instance.currentSave.note.items[id];
-            SaveManager.Instance.currentSave.note.items[id] += addAmount;
+            int currentAmount = SaveManager.Instance.CurrentSave.note.items[id];
+            SaveManager.Instance.CurrentSave.note.items[id] += addAmount;
 
             // if spend item
             if(addAmount < 0 && currentAmount >= Math.Abs(addAmount))
             {
                 int finalAmount = currentAmount + addAmount;
                 if(finalAmount > 0){
-                    SaveManager.Instance.currentSave.note.items[id] = finalAmount;
+                    SaveManager.Instance.CurrentSave.note.items[id] = finalAmount;
                     UpdateTextAmount(id, finalAmount);
                 }
                 else
                 {
-                    SaveManager.Instance.currentSave.note.items.Remove(id);
+                    SaveManager.Instance.CurrentSave.note.items.Remove(id);
                     RemoveItem(id);
                 }
             }
             else if(addAmount > 0)
             {
-                SaveManager.Instance.currentSave.note.items[id] += addAmount;
-                UpdateTextAmount(id, SaveManager.Instance.currentSave.note.items[id]);
+                SaveManager.Instance.CurrentSave.note.items[id] += addAmount;
+                UpdateTextAmount(id, SaveManager.Instance.CurrentSave.note.items[id]);
             }
         }
         else if(addAmount > 0)
         {
             // handle new item
             LoadNewItem(id);
-            SaveManager.Instance.currentSave.note.items[id] = addAmount;
+            SaveManager.Instance.CurrentSave.note.items[id] = addAmount;
             UpdateTextAmount(id, addAmount);
         }
     }

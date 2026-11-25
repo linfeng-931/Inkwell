@@ -24,7 +24,7 @@ public class SceneController : MonoBehaviour
 
     private void Save()
     {
-        var data = SaveManager.Instance.currentSave.meta;
+        var data = SaveManager.Instance.CurrentSave.meta;
 
         data.currentLocation = sceneName;
     }

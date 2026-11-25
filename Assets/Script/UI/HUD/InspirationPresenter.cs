@@ -10,7 +10,7 @@ public class InspirationPresenter : MonoBehaviour
     void Start()
     {
         // Debug.Log($"Instance:{SaveManager.Instance != null}, Save:{SaveManager.Instance?.currentSave != null}, Note:{SaveManager.Instance?.currentSave?.note != null}, Items:{SaveManager.Instance?.currentSave?.note?.items != null}");
-        currentValue = SaveManager.Instance.currentSave.note.items.GetValueOrDefault("inspiration", 0);
+        currentValue = SaveManager.Instance.CurrentSave.note.items.GetValueOrDefault("inspiration", 0);
         view.Initialize(currentValue);
         view.OnExit();
     }
@@ -30,7 +30,7 @@ public class InspirationPresenter : MonoBehaviour
         currentValue += value;
 
         // update data
-        SaveManager.Instance.currentSave.note.items["inspiration"] = currentValue;
+        SaveManager.Instance.CurrentSave.note.items["inspiration"] = currentValue;
 
         if (!view.IsRunning)
         {

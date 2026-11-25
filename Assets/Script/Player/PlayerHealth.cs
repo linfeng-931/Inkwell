@@ -179,14 +179,14 @@ public class PlayerHealth : MonoBehaviour
 
     private void Load()
     {
-        var data = SaveManager.Instance.currentSave.player;
+        var data = SaveManager.Instance.CurrentSave.player;
         this.currentHealth = data.health;
         this.maxHealth = data.maxHealth;
     }
 
     public void Save()
     {
-        var data = SaveManager.Instance.currentSave;
+        var data = SaveManager.Instance.CurrentSave;
 
         if(data.player == null)
         {

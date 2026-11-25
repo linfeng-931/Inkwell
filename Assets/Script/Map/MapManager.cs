@@ -450,7 +450,7 @@ public class MapManager : MonoBehaviour
         Transform finalSpawnPos = null;
         SceneController sceneController = FindAnyObjectByType<SceneController>();
         SpawnPointInfo[] allSpawnPoints = sceneController.spawnPointInfos;
-        string targetSpawnID = SaveManager.Instance.currentSave.player?.spawnPoint;
+        string targetSpawnID = SaveManager.Instance.CurrentSave.player?.spawnPoint;
         if(targetSpawnID == null) targetSpawnID = startingSpawnID;
 
         foreach(var spawnPoint in allSpawnPoints)

@@ -79,18 +79,18 @@ public class ItemManager : MonoBehaviour
     /// <param name="amount"></param>
     public void PlayerGetItem(string id, bool autoSave = true, int amount = 1)
     {
-        if(SaveManager.Instance.currentSave.note == null)
+        if(SaveManager.Instance.CurrentSave.note == null)
         {
-            SaveManager.Instance.currentSave.note = new NoteData();
+            SaveManager.Instance.CurrentSave.note = new NoteData();
         }
         else
         {
-            if (SaveManager.Instance.currentSave.note.items.ContainsKey(id))
+            if (SaveManager.Instance.CurrentSave.note.items.ContainsKey(id))
             {
-                SaveManager.Instance.currentSave.note.items[id] += amount;
+                SaveManager.Instance.CurrentSave.note.items[id] += amount;
             }
             else{
-                SaveManager.Instance.currentSave.note.items.Add(id, amount);
+                SaveManager.Instance.CurrentSave.note.items.Add(id, amount);
             }
         }
 

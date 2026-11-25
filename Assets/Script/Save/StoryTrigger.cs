@@ -8,7 +8,7 @@ public class StoryTrigger : MonoBehaviour
 
     public void ExecuteTrigger()
     {
-        var flags = SaveManager.Instance.currentSave.flags;
+        var flags = SaveManager.Instance.CurrentSave.flags;
         flags[flagToSet] = targetState;
 
         GameEvent.OnFlagUpdated?.Invoke(flagToSet);

@@ -19,9 +19,6 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource uiSource;
 
-    private const string MASTER_KEY = "Master_Volume";
-    private const string BGM_KEY = "BGM_Volume";
-    private const string SFX_KEY = "SFX_Volume";
 
     private readonly Dictionary<LoopChannel, AudioSource> loopSources = new Dictionary<LoopChannel, AudioSource>();
 
@@ -34,37 +31,6 @@ public class AudioManager : MonoBehaviour
         }
         Instance = this;
         // DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-        // Set default music volume
-        SetMasterVolume(PlayerPrefs.GetFloat(MASTER_KEY, 0.5f));
-        SetBGMVolume(PlayerPrefs.GetFloat(BGM_KEY, 0.5f));
-        SetSFXVolume(PlayerPrefs.GetFloat(SFX_KEY, 0.5f));
-    }
-
-    public void SetMasterVolume(float sliderValue)
-    {
-        ApplyVolume(MASTER_KEY, sliderValue);
-    }
-
-    public void SetBGMVolume(float sliderValue)
-    {
-        ApplyVolume(BGM_KEY, sliderValue);
-    }
-
-    public void SetSFXVolume(float sliderValue)
-    {
-        ApplyVolume(SFX_KEY, sliderValue);
-    }
-
-    private void ApplyVolume(string paramName, float sliderValue)
-    {
-        sliderValue = Mathf.Clamp(sliderValue, 0.0001f, 1f);
-        float dB = Mathf.Log10(sliderValue) * 20f;
-        masterMixer.SetFloat(paramName, dB);
-        PlayerPrefs.SetFloat(paramName, sliderValue);
     }
 
     public void PlayBGM(AudioClip clip, bool loop = true)

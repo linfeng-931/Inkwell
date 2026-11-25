@@ -11,7 +11,7 @@ public class SaveManager : MonoBehaviour
     public bool canSave = true; // for Demo
 
     public static SaveManager Instance;
-    public GameSaveData currentSave{get; private set;} = new GameSaveData();
+    public GameSaveData CurrentSave{get; private set;} = new GameSaveData();
     
     // global parameter (prevent destory)
     public static string currentSaveFileName {get; private set;}
@@ -88,7 +88,7 @@ public class SaveManager : MonoBehaviour
             return false;
         }
         currentSaveFileName = fileName;
-        currentSave = new GameSaveData();
+        CurrentSave = new GameSaveData();
         startTime = Time.time;
         UpdateLastPlayedSaveName(fileName);
 
@@ -109,11 +109,11 @@ public class SaveManager : MonoBehaviour
         GameEvent.OnGameSaved?.Invoke();
         
         try{
-            currentSave.meta.saveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-            currentSave.meta.playTime += Time.time - startTime;
+            CurrentSave.meta.saveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            CurrentSave.meta.playTime += Time.time - startTime;
             startTime = Time.time;
             
-            string json = JsonConvert.SerializeObject(currentSave, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(CurrentSave, Formatting.Indented);
             string filePath = Path.Combine(SaveDirectory, $"{fileName}.json");
             File.WriteAllText(filePath, json);
 
@@ -136,7 +136,7 @@ public class SaveManager : MonoBehaviour
 
         try{
             string json = File.ReadAllText(filePath);
-            currentSave = JsonConvert.DeserializeObject<GameSaveData>(json);
+            CurrentSave = JsonConvert.DeserializeObject<GameSaveData>(json);
 
             currentSaveFileName = fileName;
             UpdateLastPlayedSaveName(fileName);

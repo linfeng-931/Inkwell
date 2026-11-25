@@ -23,7 +23,7 @@ public class SavePoint : MonoBehaviour
 
     public void Trigger(Transform startPoint)
     {
-        SaveManager.Instance.currentSave.player.spawnPoint = this.spawnPointID;
+        SaveManager.Instance.CurrentSave.player.spawnPoint = this.spawnPointID;
         GameEvent.OnPlayerSave.Invoke(startPoint);
         StartCoroutine(HandleAni());
     }
@@ -38,7 +38,7 @@ public class SavePoint : MonoBehaviour
 
     private void Load()
     {
-        var data = SaveManager.Instance.currentSave.player;
+        var data = SaveManager.Instance.CurrentSave.player;
         if(this.spawnPointID == data.spawnPoint)
         {
             inkAni.ResetTrigger("inkDown");
@@ -48,8 +48,17 @@ public class SavePoint : MonoBehaviour
 
     private void Save()
     {
-        var data = SaveManager.Instance.currentSave.player;
-        if(this.spawnPointID != data.spawnPoint)
+        var data = SaveManager.Instance.CurrentSave.player;
+
+        if (data == null || inkAni == null)
+        {
+            if (data == null) Debug.Log("沒有對應的儲存資料");
+            if (inkAni == null) Debug.Log("沒有對應的動畫");
+            return;
+        }
+
+
+        if (this.spawnPointID != data.spawnPoint)
         {
             inkAni.ResetTrigger("inkUp");
             inkAni.SetTrigger("inkDown");

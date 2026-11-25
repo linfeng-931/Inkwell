@@ -14,6 +14,7 @@ public class PlayerLoadout : MonoBehaviour
     [SerializeField] private bool isCombatEnabled = false;
     [SerializeField] private bool isWeaponVisible = false;
     [SerializeField] private bool isRunEnabled = false;
+    [SerializeField] private bool isShootEnabled = false;
     [SerializeField] private bool canJump = false;
 
     [SerializeField] private PlayerController playerController;
@@ -21,6 +22,8 @@ public class PlayerLoadout : MonoBehaviour
 
     public bool CombatEnabled { get; private set; }
     public bool RunEnabled { get; private set; }
+
+    public bool ShootEnabled { get; private set; }
 
     private void Start() // for test
     {
@@ -33,6 +36,7 @@ public class PlayerLoadout : MonoBehaviour
     {
         RunEnabled = isRunEnabled;
         CombatEnabled = isCombatEnabled;
+        ShootEnabled = isShootEnabled;
         SetWeaponVisible(isWeaponVisible);
 
         // Hide Player UI
@@ -94,5 +98,24 @@ public class PlayerLoadout : MonoBehaviour
         if (fader == null) fader = weaponVisual.AddComponent<FadeableObject>();
         fader.FadeIn(duration);
         // EnterArmedMode();
+    }
+
+    private void OnEnable()
+    {
+        GameEvent.OnGameLoaded += ApplySaveState;
+    }
+
+    private void OnDisable()
+    {
+        GameEvent.OnGameLoaded -= ApplySaveState;
+    }
+
+    private void ApplySaveState()
+    {
+        var playerData = SaveManager.Instance?.CurrentSave?.player;
+        if (playerData != null && playerData.isArmed)
+        {
+            EnterArmedMode();
+        }
     }
 }

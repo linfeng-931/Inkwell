@@ -78,6 +78,12 @@ public class StartTutorial : MonoBehaviour
         PlayerLoadout loadout = MapManager.Instance.player.GetComponent<PlayerLoadout>();
         loadout.EnterArmedMode();
 
+        if (SaveManager.Instance != null && SaveManager.Instance.CurrentSave?.player != null)
+        {
+            SaveManager.Instance.CurrentSave.player.isArmed = true;
+            SaveManager.Instance.SaveGame();
+        }
+
         yield return StartCoroutine(TransitionSequence(playerSpawn.position));
         DisplayHint("A D鍵進行移動,空白鍵進行跳躍", 4f);
 

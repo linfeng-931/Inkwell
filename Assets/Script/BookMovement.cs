@@ -3,14 +3,11 @@ using UnityEngine;
 
 public class BookMovement : MonoBehaviour
 {
-    [Header("�W�U�B��")]
     public float floatHeight = 0.2f;
     public float floatSpeed = 2f;
 
-    [Header("���a����")]
     public float detectionRange = 1f;
 
-    [Header("���ʳ]�w")]
     public Vector3 moveOffset = new Vector3(0, 0, 0);
     public float moveSpeed = 3f;
 
@@ -25,7 +22,6 @@ public class BookMovement : MonoBehaviour
     {
         originalPosition = transform.position;
 
-        // �p��ؼЦ�m = �쥻��m + XYZ �첾
         targetPosition = originalPosition + moveOffset;
 
         FindPlayer();
@@ -40,7 +36,6 @@ public class BookMovement : MonoBehaviour
         if (playerObject != null)
         {
             player = playerObject.transform;
-            Debug.Log("������ Player�I");
         }
     }
 
@@ -52,7 +47,6 @@ public class BookMovement : MonoBehaviour
             return;
         }
 
-        // �ϥ� Global X �y�ЧP�_�Z��
         float distance = Mathf.Abs(
             player.position.x - originalPosition.x
         );
@@ -61,7 +55,6 @@ public class BookMovement : MonoBehaviour
 
         if (isNear)
         {
-            // ���a�a��G���ʨ찾���᪺��m
             transform.position = Vector3.Lerp(
                 transform.position,
                 targetPosition,
@@ -70,7 +63,6 @@ public class BookMovement : MonoBehaviour
         }
         else
         {
-            // ���a�����G�^����ë�_�W�U�ư�
             Vector3 floatPosition = originalPosition;
 
             floatPosition.y += Mathf.Sin(

@@ -78,7 +78,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(condition)) return true;
 
-        var flags = SaveManager.Instance.currentSave.flags;
+        var flags = SaveManager.Instance.CurrentSave.flags;
         if (flags.TryGetValue(condition, out bool isTrue))
         {
             return isTrue;

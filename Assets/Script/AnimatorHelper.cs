@@ -13,7 +13,7 @@ public class AnimatorHelper : MonoBehaviour
     {
         if (isPlayingNow) return;
 
-        var flags = SaveManager.Instance.currentSave.flags;
+        var flags = SaveManager.Instance.CurrentSave.flags;
         bool hasPlayedBefore = flags.ContainsKey(playedFlagID) && flags[playedFlagID];
 
         if (hasPlayedBefore)

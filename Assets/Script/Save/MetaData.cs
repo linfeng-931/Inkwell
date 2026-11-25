@@ -22,6 +22,7 @@ public class PlayerStateData
     public float energy = 100f;
     public float maxEnergy = 100f;
     public string spawnPoint = "TheCore_1";
+    public bool isArmed = false;
 }
 
 [Serializable]
@@ -46,7 +47,7 @@ public class NoteData
 public class GameSaveData
 {
     public SaveMetaData meta = new SaveMetaData();
-    public PlayerStateData player = null;
+    public PlayerStateData player = new PlayerStateData();
     public NoteData note = new NoteData();
 
     // story flag
