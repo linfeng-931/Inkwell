@@ -168,7 +168,6 @@ public class Silverfish : MonoBehaviour, IEnemy
     {
         facingRight = !facingRight;
         spriteRenderer.flipX = facingRight;
-        // Debug.Log($"[Silverfish] Turn ¡÷ facingRight={facingRight}\n{StackTraceUtility.ExtractStackTrace()}", this);
     }
 
     private void FlipToward(float targetX)
@@ -496,8 +495,7 @@ public class Silverfish : MonoBehaviour, IEnemy
         spriteRenderer.material = hurtMaterial;
         hurtParticle.Play();
 
-        // FlipToward(player.position.x);
-        noTurnUntil = Time.time + hurtStunTime + 0.1f + noTurnAfterHurt;
+        FlipToward(player.position.x);
 
         float knockbackDirX =
             transform.position.x >= player.position.x ? 1f : -1f;
