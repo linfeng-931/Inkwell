@@ -11,7 +11,7 @@ public class FadeableObject : MonoBehaviour
         AlphaAndScale
     }
 
-    [SerializeField] private FadeMode mode = FadeMode.AlphaAndScale;
+    [SerializeField] private FadeMode mode = FadeMode.Scale;
     [SerializeField] private Transform scaleTarget;
 
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
