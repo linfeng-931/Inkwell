@@ -27,6 +27,7 @@ public class HurtState : PlayerState
         {
             hasTriggeredFadeOut = true;
             GameEvent.OnToggleFade(false);
+            manager.rig.linearVelocity = Vector3.zero;
         }
         
         manager.rig.useGravity = false;
