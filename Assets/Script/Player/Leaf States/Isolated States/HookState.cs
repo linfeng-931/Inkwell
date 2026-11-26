@@ -161,6 +161,9 @@ public class HookState : PlayerState
     {
         base.Exit();
         manager.rig.isKinematic = false;
+        manager.rig.linearVelocity = Vector3.zero;
+        manager.rig.angularVelocity = Vector3.zero;
+        
         manager.hookPenObject.SetActive(false);
 
         if (manager.hookLineRenderer != null)

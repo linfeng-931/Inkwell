@@ -19,6 +19,9 @@ public class HurtState : PlayerState
         // animate
         manager.animator.Play(PlayerAnimateHash.Hurt, 0, 0f);
 
+        manager.rig.isKinematic = false;
+        manager.rig.angularVelocity = Vector3.zero;
+
         if(!manager.isHazardHurt) {
             float knockbackDir = manager.isFacingRight ? -1f : 1f;
             manager.rig.linearVelocity = new Vector3(knockbackDir * manager.hurtKnockbackForce, 0f, 0f);
@@ -27,6 +30,7 @@ public class HurtState : PlayerState
         {
             hasTriggeredFadeOut = true;
             GameEvent.OnToggleFade(false);
+            manager.rig.linearVelocity = Vector3.zero;
         }
         
         manager.rig.useGravity = false;
@@ -43,7 +47,7 @@ public class HurtState : PlayerState
         // stop knockback
         if(elapsedTime >= manager.hurtKnockbackDuration)
         {
-            manager.rig.linearVelocity = new Vector3(0f, manager.rig.linearVelocity.y, 0f);
+            manager.rig.linearVelocity = Vector3.zero;
         }
 
         // end of hurt state
