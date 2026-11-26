@@ -165,4 +165,32 @@ public class NoteView : BasePanel
         base.OnExit();
         notePresenter?.OnNoteClosedByUI();
     }
+
+    public void ResetNote(int lastIndex, int targetSubPage, int maxSubPages)
+    {
+        marks[lastIndex].SetVisualAct(false);
+        marks[0].SetVisualAct(true);
+
+        // disable current page
+        majorPages[lastIndex].SetActive(false); 
+
+        // disable current mark
+        marks[lastIndex].transform.SetParent(disActMarkParent, false);
+
+        // enable new mark
+        if (targetSubPage == 0)
+        {
+            marks[0].transform.SetParent(actMarkParent, false);
+        }
+
+        // enable new page
+        majorPages[0].SetActive(true);
+
+        for (int i = 0; i < majorPages[0].transform.childCount; i++)
+        {
+            majorPages[0].transform.GetChild(i).gameObject.SetActive(i == targetSubPage);
+        }
+
+        UpdateArrows(targetSubPage, maxSubPages);
+    }
 }

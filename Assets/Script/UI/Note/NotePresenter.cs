@@ -5,6 +5,7 @@ public class NotePresenter : MonoBehaviour
 {
     [SerializeField] private NoteView view;
     [SerializeField] private ItemIntroViewForNote itemIntroViewForNote;
+    [SerializeField] private SettingView settingView;
     private CanvasGroup viewCanvasGroup;
     private NoteModel model;
 
@@ -61,6 +62,7 @@ public class NotePresenter : MonoBehaviour
             isNoteOpen = true;
             UIManager.Instance.OpenPanel(view);
             itemIntroViewForNote.RefreshItemPage(true);
+            Reset();
             GameEvent.OnInteractStateChanged.Invoke(true);
             GameEvent.OnNoteStateChanged?.Invoke(true);
         }
@@ -112,5 +114,14 @@ public class NotePresenter : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(null);
         }
+    }
+
+    public void Reset()
+    {
+        int lastIndex = model.majorIndex;
+        model.majorIndex = 0;
+
+        view.ResetNote(lastIndex, model.GetCurrentSubPage(), model.subPageAmount[0]);
+        settingView.Reset();
     }
 }
