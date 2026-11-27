@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Live2D.Cubism.Core;
 
 public class PlayerLoadout : MonoBehaviour
 {
     [Header("Game Object Visual")]
+    public CubismModel _model;
+    public CubismParameter _weaponOpacity;
     [SerializeField] private GameObject weaponVisual;
     [SerializeField] private GamePlayHUD gamePlayHUD; // Player UI
     [SerializeField] private PlayerEnergy playerEnergy;
@@ -19,6 +22,7 @@ public class PlayerLoadout : MonoBehaviour
 
     [SerializeField] private PlayerController playerController;
     public NotePresenter notePresenter;
+    private float _targetWeaponOpacity = 0f;
 
     public bool CombatEnabled { get; private set; }
     public bool RunEnabled { get; private set; }
@@ -27,10 +31,12 @@ public class PlayerLoadout : MonoBehaviour
 
     private void Start() // for test
     {
-        // EnterArmedMode();
-        // RunEnabled = true;
-        // ShootEnabled = true;
-        // notePresenter.SetCanOpenNote(true);
+        EnterArmedMode();
+        RunEnabled = true;
+        ShootEnabled = true;
+        notePresenter.SetCanOpenNote(true);
+
+        _weaponOpacity = _model.Parameters.FindById("ParamWeaponOpacity");
     }
 
     public void Initialize()
@@ -94,11 +100,19 @@ public class PlayerLoadout : MonoBehaviour
     {
         if (weaponVisual == null) return;
 
-        // Show Weapon and open combat system
         FadeableObject fader = weaponVisual.GetComponent<FadeableObject>();
         if (fader == null) fader = weaponVisual.AddComponent<FadeableObject>();
         fader.FadeIn(duration);
-        // EnterArmedMode();
+
+        _targetWeaponOpacity = 1f;
+    }
+
+    private void LateUpdate()
+    {
+        if (_weaponOpacity != null)
+        {
+            _weaponOpacity.Value = _targetWeaponOpacity;
+        }
     }
 
     private void OnEnable()
