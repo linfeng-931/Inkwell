@@ -29,6 +29,7 @@ public class PlayerLoadout : MonoBehaviour
     {
         // EnterArmedMode();
         // RunEnabled = true;
+        // ShootEnabled = true;
         // notePresenter.SetCanOpenNote(true);
     }
 

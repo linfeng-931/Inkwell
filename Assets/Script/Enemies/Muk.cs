@@ -34,8 +34,10 @@ public class Muk : MonoBehaviour, IEnemy
     public ParticleSystem hurtParticle;
     public ParticleSystem deadParticle;
     public Material hurtMaterial;
+    public float flashTime = 0.1f; 
 
     private Material originalMaterial;
+    private Coroutine flashRoutine;
 
     [Header("SFX")]
     public AudioManager audioManager;
@@ -77,6 +79,8 @@ public class Muk : MonoBehaviour, IEnemy
         if (fsm.State == States.Death) return;
 
         currentHealth -= damage;
+        PlayFlash(); 
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -86,6 +90,20 @@ public class Muk : MonoBehaviour, IEnemy
         {
             fsm.ChangeState(States.Hurt, StateTransition.Overwrite);
         }
+    }
+
+    private void PlayFlash()
+    {
+        if (flashRoutine != null) StopCoroutine(flashRoutine);
+        flashRoutine = StartCoroutine(FlashRoutine());
+    }
+
+    private IEnumerator FlashRoutine()
+    {
+        spriteRenderer.material = hurtMaterial;
+        yield return new WaitForSeconds(flashTime);
+        spriteRenderer.material = originalMaterial;
+        flashRoutine = null;
     }
 
     // Idle
@@ -128,12 +146,8 @@ public class Muk : MonoBehaviour, IEnemy
     IEnumerator Hurt_Enter()
     {
         animator.Play(damagedAni, 0);
-        spriteRenderer.material = hurtMaterial;
         hurtParticle.Play();
-        yield return new WaitForSeconds(0.1f);
-
-        spriteRenderer.material = originalMaterial;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
 
         fsm.ChangeState(States.Idle);
     }

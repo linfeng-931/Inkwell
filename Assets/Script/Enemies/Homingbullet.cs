@@ -22,6 +22,10 @@ public class Homingbullet : MonoBehaviour, IEnemy
     public ParticleSystem readyExplodeParticle;
     public ParticleSystem explodeParticle;
 
+    [Header("Homing Setting")]
+    public float lockDistance = 3f;
+    private bool directionLocked = false;
+
     private Transform target;
     private Rigidbody rig;
     private Animator animator;
@@ -66,18 +70,34 @@ public class Homingbullet : MonoBehaviour, IEnemy
     {
         if(readyExplode) return;
 
-        // if lost target
+        if (directionLocked)
+        {
+            rig.linearVelocity = direction * speed;
+            return;
+        }
+
         if (target == null)
         {
             rig.linearVelocity = transform.right * speed;
             return;
         }
 
-        // direction to target
-        direction = (target.position - transform.position).normalized;
-        direction.z = 0f;
+        Vector3 toTarget = target.position - transform.position;
+        toTarget.z = 0f;
 
+        // lock direction in range
+        if (toTarget.sqrMagnitude <= lockDistance * lockDistance)
+        {
+            direction = toTarget.normalized;
+            directionLocked = true;
+            rig.linearVelocity = direction * speed;
+            return;
+        }
+
+        // homing
+        direction = toTarget.normalized;
         rig.linearVelocity = direction * speed;
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,6 +112,10 @@ public class Homingbullet : MonoBehaviour, IEnemy
         else if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             TriggerExplosion();
+        }
+        else if (other.CompareTag("Weapon"))
+        {
+            TakeDamage(1);
         }
     }
 
@@ -115,35 +139,34 @@ public class Homingbullet : MonoBehaviour, IEnemy
         yield return new WaitForSeconds(explodeWaitTime);
 
         if (endAni != "") animator.Play(endAni);
-        if (readyExplodeParticle != null) 
-        {
-            readyExplodeParticle.Stop();
-        }
-        if (explodeParticle != null)
-        {
-            // isolate particle obj
-            explodeParticle.transform.SetParent(null); 
-            explodeParticle.Play();
-            
-            Destroy(explodeParticle.gameObject, 2f); 
-        }
+        if (readyExplodeParticle != null) readyExplodeParticle.Stop();
+
+        DetachParticles();
+        Destroy(gameObject, 0.3f);
 
         // handle explosion
-        if (Vector3.Distance(transform.position, target.position) <= explodeZone)
+        if (target != null && Vector3.Distance(transform.position, target.position) <= explodeZone)
         {
             if (target.CompareTag("Player"))
             {
                 target.GetComponent<PlayerHealth>().TakeDamage(damage, transform.position);
             }
         }
+    }
 
-        yield return new WaitForSeconds(0.3f);
-
-        Destroy(gameObject);
+    private void DetachParticles()
+    {
+        if (explodeParticle == null) return;
+        explodeParticle.transform.SetParent(null);
+        explodeParticle.Play();
+        Destroy(explodeParticle.gameObject, 2f);
+        explodeParticle = null;
     }
 
     public void TakeDamage(int damage)
     {
+        if(readyExplode) return;
+
         readyExplode = true;
         rig.linearVelocity = Vector3.zero;
         animator.Play(endAni);
@@ -156,6 +179,8 @@ public class Homingbullet : MonoBehaviour, IEnemy
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explodeZone);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, lockDistance);
     }
 
     #endregion

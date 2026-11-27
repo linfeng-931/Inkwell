@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     private bool isInvincible = false;
     private float invincibilityTimer = 0f;
 
-    private PlayerController playerController;
+    public PlayerController playerController;
     // public event Action OnDeath;
 
     [Header("Visual Effects")]
@@ -22,13 +22,19 @@ public class PlayerHealth : MonoBehaviour
     public Animator hurtEffectAnimator;
     public ParticleSystem hurtParticleEffect;
 
+    void Awake()
+    {
+        currentHealth = maxHealth;
+    }
+
     void Start()
     {
-        playerController = GetComponent<PlayerController>();
-        currentHealth = maxHealth;
-
         //init player health
-        GameEvent.OnHealthChanged.Invoke(currentHealth, maxHealth);
+        GameEvent.OnHealthChanged?.Invoke(currentHealth, maxHealth);
+    }
+
+    void OnEnable()
+    {
         GameEvent.OnGameLoaded += Load;
         GameEvent.OnGameSaved += Save;
         GameEvent.OnPlayerSave += HandlePlayerSave;
