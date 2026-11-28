@@ -7,6 +7,7 @@ public class PlayerLoadout : MonoBehaviour
     [Header("Game Object Visual")]
     public CubismModel _model;
     public CubismParameter _weaponOpacity;
+    public CubismParameter _playerOpacity;
     [SerializeField] private GameObject weaponVisual;
     [SerializeField] private GamePlayHUD gamePlayHUD; // Player UI
     [SerializeField] private PlayerEnergy playerEnergy;
@@ -23,20 +24,42 @@ public class PlayerLoadout : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     public NotePresenter notePresenter;
     private float _targetWeaponOpacity = 0f;
+    private float _targetPlayerOpacity = 1f;
 
     public bool CombatEnabled { get; private set; }
     public bool RunEnabled { get; private set; }
 
     public bool ShootEnabled { get; private set; }
 
+    private void Awake()
+    {
+        if (_model != null)
+        {
+            _weaponOpacity = _model.Parameters.FindById("ParamWeaponOpacity");
+            _playerOpacity = _model.Parameters.FindById("ParamAllOpacity");
+        }
+    }
+
     private void Start() // for test
     {
-        EnterArmedMode();
-        RunEnabled = true;
-        ShootEnabled = true;
-        notePresenter.SetCanOpenNote(true);
+        //EnterArmedMode();
+        //RunEnabled = true;
+        //ShootEnabled = true;
+        //notePresenter.SetCanOpenNote(true);
+    }
 
-        _weaponOpacity = _model.Parameters.FindById("ParamWeaponOpacity");
+    public void HidePlayer()
+    {
+        _targetPlayerOpacity = 0f;
+        _playerOpacity.Value = 0;
+        PlayerLock.Lock(this, PlayerLockType.Movement);
+    }
+
+    public void ShowPlayer()
+    {
+        _targetPlayerOpacity = 1f;
+        _playerOpacity.Value = 1f;
+        PlayerLock.Unlock(this, PlayerLockType.Movement);
     }
 
     public void Initialize()
@@ -109,9 +132,9 @@ public class PlayerLoadout : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_weaponOpacity != null)
+        if (_playerOpacity != null)
         {
-            _weaponOpacity.Value = _targetWeaponOpacity;
+            _playerOpacity.Value = _targetPlayerOpacity;
         }
     }
 
