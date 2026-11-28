@@ -146,7 +146,8 @@ public class SaveManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message);
+            Debug.LogException(e);
+            // Debug.LogError(e.Message);
             return false;
         }
     }
@@ -190,6 +191,7 @@ public class SaveManager : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.LogException(e);
             Debug.LogError(e.Message);
             return null;
         }

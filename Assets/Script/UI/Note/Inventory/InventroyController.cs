@@ -30,7 +30,7 @@ public class InventroyController : MonoBehaviour
     // public bool[] diaries {get; private set;}
     // public Dictionary<string, int> items {get; private set;}
 
-    void Start()
+    void Awake()
     {
         foreach (Transform item in itemContainer)
         {
@@ -44,10 +44,7 @@ public class InventroyController : MonoBehaviour
             diaryImage.Add(diary.GetComponent<Image>());
             diaryCell.Add(diary.GetComponent<ItemCell>());
         }
-    }
 
-    void OnEnable()
-    {
         GameEvent.OnGameLoaded += Load;
         GameEvent.OnGameSaved += Save;
         GameEvent.OnNormalItemChanged += UpdateItem;
