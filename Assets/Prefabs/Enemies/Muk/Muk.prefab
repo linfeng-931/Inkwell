@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6845023366606878756
 Transform:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4378d3e78fc42425f9cb4cddf466fb66, type: 2}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,6 +150,7 @@ MonoBehaviour:
   hurtParticle: {fileID: 5544293536887587518}
   deadParticle: {fileID: 3813292928109485755}
   hurtMaterial: {fileID: 2100000, guid: 28e0dea49106d41fe827aa68e09a1804, type: 2}
+  flashTime: 0.1
   audioManager: {fileID: 0}
   atkSfx: {fileID: 0}
 --- !u!95 &867804083103808702

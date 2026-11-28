@@ -33,10 +33,10 @@ public class PlayerLoadout : MonoBehaviour
     {
         EnterArmedMode();
         RunEnabled = true;
+        ShootEnabled = true;
         notePresenter.SetCanOpenNote(true);
 
         _weaponOpacity = _model.Parameters.FindById("ParamWeaponOpacity");
-
     }
 
     public void Initialize()
