@@ -17,6 +17,10 @@ public class ZoneTrigger : MonoBehaviour
     public DialogueType dialogueType = DialogueType.Large;
     [ShowIf(nameof(actionType), InteractActionType.Dialogue)]
     public Transform dialogueAnchor;
+    [ShowIf(nameof(dialogueType), DialogueType.Small)]
+    public UnityEvent otherDialogueEffectEnter;
+    [ShowIf(nameof(dialogueType), DialogueType.Small)]
+    public UnityEvent otherDialogueEffectExit;
 
     [Tooltip("other")]
     [ShowIf(nameof(actionType), InteractActionType.Other)]
@@ -48,6 +52,7 @@ public class ZoneTrigger : MonoBehaviour
                     TargetAnchor,
                     false
                 );
+                otherDialogueEffectEnter?.Invoke();
                 break;
 
             case InteractActionType.Other:
@@ -65,6 +70,7 @@ public class ZoneTrigger : MonoBehaviour
                 if (dialogueType == DialogueType.Small)
                 {
                     DialogueManager.Instance.CloseSmallDialogue(TargetAnchor);
+                    otherDialogueEffectExit?.Invoke();
                 }
                 break;
 
