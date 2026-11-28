@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System;
 using MonsterLove.StateMachine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Bee : MonoBehaviour, IEnemy
@@ -45,12 +47,29 @@ public class Bee : MonoBehaviour, IEnemy
     public float separationWeight = 2f;
     public LayerMask enemyLayer;
 
+    [Header("Hurt Setting")]
+    public float hurtForceH = 5f;
+    public float hurtForceV = 2f;
+    public float hurtStunTime = 0.6f;
+    public float hurtFlashTime = 0.1f;
+
+    [Header("Hurt and Death Effect")]
+    public ParticleSystem hurtParticle;
+    public ParticleSystem deadParticle;
+    public Material hurtMaterial;
+    public SpriteRenderer[] spriteRenderers;
+
+    private Material[] originalMaterials;
+
     [Header("SFX")]
     public AudioManager audioManager;
     public AudioClip atkSfx;
 
+    [Header("Event")]
+    public UnityEvent afterDead;
+    public event Action<Bee> OnDied;
+
     private Coroutine idleCoroutine;
-    private Coroutine hurtCoroutine;
     private Coroutine attackCoroutine;
 
     // prevent repeated damage from OnTriggerEnter
@@ -65,6 +84,13 @@ public class Bee : MonoBehaviour, IEnemy
 
         rig.useGravity = false;
         rig.linearDamping = 2f; // flying drag
+
+        if (spriteRenderers == null || spriteRenderers.Length == 0)
+            spriteRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+
+        originalMaterials = new Material[spriteRenderers.Length];
+        for (int i = 0; i < spriteRenderers.Length; i++)
+            originalMaterials[i] = spriteRenderers[i].sharedMaterial;
 
         fsm = StateMachine<States>.Initialize(this);
     }
@@ -94,7 +120,6 @@ public class Bee : MonoBehaviour, IEnemy
         }
     }
 
-
     /// <summary>
     /// when idle state, enemy go to new pos radomly
     /// </summary>
@@ -104,7 +129,7 @@ public class Bee : MonoBehaviour, IEnemy
         for (int i = 0; i < 5; i++) // find five times
         {
             // find random point according to x, y and radius
-            Vector2 randomCircle = Random.insideUnitCircle * idleRadius;
+            Vector2 randomCircle = UnityEngine.Random.insideUnitCircle * idleRadius;
 
             Vector3 randomPoint =
                 bornPos + new Vector3(randomCircle.x, randomCircle.y, 0f);
@@ -178,6 +203,21 @@ public class Bee : MonoBehaviour, IEnemy
         );
     }
 
+    private bool IsPlayerInSight()
+    {
+        Vector3 toPlayer = player.position - transform.position;
+        toPlayer.z = 0f;
+        return toPlayer.sqrMagnitude <= sightRange * sightRange;
+    }
+
+    private void SetHurtMaterial(bool isHurt)
+    {
+        for (int i = 0; i < spriteRenderers.Length; i++)
+        {
+            spriteRenderers[i].sharedMaterial = isHurt ? hurtMaterial : originalMaterials[i];
+        }
+    }
+
 
     #region state
 
@@ -208,7 +248,7 @@ public class Bee : MonoBehaviour, IEnemy
             StopMovement();
 
             yield return new WaitForSeconds(
-                Random.Range(1f, 2.5f)
+                UnityEngine.Random.Range(1f, 2.5f)
             );
 
             if (fsm.State != States.Idle)
@@ -387,53 +427,68 @@ public class Bee : MonoBehaviour, IEnemy
 
 
     // Hurt
-    void Hurt_Enter()
+    IEnumerator Hurt_Enter()
     {
         StopMovement();
-        hurtCoroutine = StartCoroutine(HurtRoutine());
+
+        bodyAnimator.Play(damagedAni, 0);
+        SetHurtMaterial(true);
+        if (hurtParticle != null) hurtParticle.Play();
+
+        FlipToward(player.position.x);
+
+        float knockbackDirX = transform.position.x >= player.position.x ? 1f : -1f;
+
+        rig.AddForce(
+            new Vector3(knockbackDirX * hurtForceH, hurtForceV, 0f),
+            ForceMode.Impulse
+        );
+
+        yield return new WaitForSeconds(hurtFlashTime);
+        SetHurtMaterial(false);
+
+        yield return new WaitForSeconds(hurtStunTime);
+
+        if (IsPlayerInSight())
+            fsm.ChangeState(States.Chase);
+        else
+            fsm.ChangeState(States.Idle);
     }
 
     void Hurt_Exit()
     {
-        StopCoroutine(hurtCoroutine);
-        hurtCoroutine = null;
+        SetHurtMaterial(false);
         StopMovement();
     }
-
-    IEnumerator HurtRoutine()
-    {
-        bodyAnimator.Play(damagedAni, 0);
-
-        Vector3 knockbackDir = new Vector3((facingRight ? -1 : 1), 0.5f, 0f).normalized;
-        rig.AddForce(knockbackDir * 5f, ForceMode.Impulse);
-
-        yield return new WaitForSeconds(1f);
-
-        if (fsm.State == States.Hurt)
-        {
-            fsm.ChangeState(States.Chase);
-        }
-    }
-
 
     // Death
     void Death_Enter()
     {
+        OnDied?.Invoke(this);
+
         StopAllCoroutines();
-
         StopMovement();
+        rig.isKinematic = true;
 
-        rig.useGravity = true;
-
-        // disable collider so dead Bee doesn't block or damage player
-        Collider[] colliders = GetComponentsInChildren<Collider>();
-
-        foreach (Collider col in colliders)
+        foreach (Collider col in GetComponentsInChildren<Collider>())
         {
             col.enabled = false;
         }
 
-        Destroy(gameObject, 3f);
+        deadParticle.transform.SetParent(null, true);
+        deadParticle.Play(true);
+
+        var main = deadParticle.main;
+        float lifeTime = main.duration + main.startLifetime.constantMax;
+        Destroy(deadParticle.gameObject, lifeTime);
+
+        foreach (Renderer r in GetComponentsInChildren<Renderer>(true))
+        {
+            r.enabled = false;
+        }
+
+        afterDead?.Invoke();
+        Destroy(gameObject);
     }
 
     #endregion

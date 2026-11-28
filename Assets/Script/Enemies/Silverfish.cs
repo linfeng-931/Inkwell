@@ -79,6 +79,7 @@ public class Silverfish : MonoBehaviour, IEnemy
 
     [Header("Event")]
     public UnityEvent afterDead;
+    public event Action<Silverfish> OnDied; // for story
 
     private Rigidbody rig;
     public bool facingRight = false;
@@ -589,6 +590,4 @@ public class Silverfish : MonoBehaviour, IEnemy
         // Keep Y velocity for gravity
         rig.linearVelocity = new Vector3(0f, rig.linearVelocity.y, 0f);
     }
-
-    public event Action<Silverfish> OnDied;
 }
