@@ -10,6 +10,7 @@ public class Teleporter : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            GameEvent.OnInteractStateChanged(true);
             MapManager.Instance.ChangeMap(targetSceneName, targetSpawnPointID, transitionType);
         }
     }

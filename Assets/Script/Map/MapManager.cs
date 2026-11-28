@@ -407,9 +407,10 @@ public class MapManager : MonoBehaviour
 
         OnMapSetupComplete?.Invoke();
         player.SetActive(true);
-
+        
         GameEvent.OnToggleFade(true);
         playerController.UpdateCheckpoint(finalSpawnPos.position);
+        GameEvent.OnInteractStateChanged(false);
 
         isTeleporting = false;
     }

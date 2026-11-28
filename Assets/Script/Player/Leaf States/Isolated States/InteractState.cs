@@ -9,6 +9,8 @@ public class InteractState : PlayerState
         base.Enter();
         manager.isPlayerInputEnabled = false;
         manager.canTurn = false;
+        manager.animator.Play(PlayerAnimateHash.Idle, 0, 0f);
+        manager.rig.linearVelocity = Vector3.zero;
     }
 
     public override void Update()
