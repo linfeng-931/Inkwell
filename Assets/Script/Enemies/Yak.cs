@@ -1,6 +1,8 @@
 
 using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
+using System;
 using MonsterLove.StateMachine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -9,13 +11,20 @@ public class Yak : MonoBehaviour, IEnemy
     public enum States { Idle, Patrol, Chase, Ready, Attack, Cooldown, Hurt, Death }
     private StateMachine<States> fsm;
 
-    [Header("Move & Attack Setting")]
+    [Header("Attribute")]
+    public int maxHealth = 5;
+    private int currentHealth;
+
+    [Header("Move Setting")]
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4.5f;
+
+    [Header("Attack Setting")]
     public float attackSpeed = 12f;
     public float readyTime = 1f;
     public float attackDuration = 1f;
     public float cooldownTime = 1.5f;
+    public float faceDeadZone = 0.8f;
 
     private float attackStartTime = -100;
     private float attackDirectionX = 1f;
@@ -27,15 +36,25 @@ public class Yak : MonoBehaviour, IEnemy
     public Transform hurtPlayerPoint;
 
     private Transform player;
+    private PlayerHealth playerHealth;
 
     [Header("Prevent Setting")]
     public Transform edgeCheckPoint;
     public float rayDistance = 0.5f;
     public LayerMask groundLayer;
 
-    [Header("Attribute")]
-    public int maxHealth = 5;
-    private int currentHealth;
+    [Header("Hurt Setting")]
+    public float hurtStunTime = 0.2f;
+    public float hurtFlashTime = 0.1f; 
+
+    [Header("Hurt and Death Effect")]
+    public ParticleSystem hurtParticle;
+    public ParticleSystem deadParticle;
+    public Material hurtMaterial;
+
+    private SpriteRenderer spriteRenderer;
+    private Material originalMaterial;
+    private Coroutine flashCoroutine;
 
     [Header("Animate")]
     public Animator animator;
@@ -50,16 +69,20 @@ public class Yak : MonoBehaviour, IEnemy
     public AudioManager audioManager;
     public AudioClip atkSfx;
 
+    [Header("Event")]
+    public UnityEvent afterDead;
+    public event Action<Yak> OnDied;
+
     private Rigidbody rig;
     private bool facingRight = false;
-    private PlayerHealth playerHealth;
 
     void Awake()
     {
         rig = GetComponent<Rigidbody>();
         currentHealth = maxHealth;
-        fsm = StateMachine<States>.Initialize(this, States.Idle);
-        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
+        fsm = StateMachine<States>.Initialize(this);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalMaterial = spriteRenderer.sharedMaterial;
     }
 
     void Start()
@@ -68,11 +91,6 @@ public class Yak : MonoBehaviour, IEnemy
         playerHealth = player.GetComponent<PlayerHealth>();
         audioManager = MapManager.Instance.audioManager;
         fsm.ChangeState(States.Idle);
-    }
-
-    void Update()
-    {
-        if (fsm.State == States.Death) return;
     }
 
     private bool IsPathBlockedOrEdge()
@@ -105,8 +123,15 @@ public class Yak : MonoBehaviour, IEnemy
         return isWallAhead || isEdgeAhead;
     }
 
+    private bool IsPlayerAlive()
+    {
+        return playerHealth != null && playerHealth.currentHealth > 0;
+    }
+
     private bool IsPlayerInSight()
     {
+        if (!IsPlayerAlive()) return false;
+
         Vector3 dirToPlayer = player.position - transform.position;
         float distToPlayer = dirToPlayer.sqrMagnitude;
 
@@ -135,13 +160,26 @@ public class Yak : MonoBehaviour, IEnemy
         transform.localScale = currentScale;
     }
 
-    private void FacePlayer()
+    private void FacePlayer(float deadZone = 0.05f)
     {
         float dirToPlayer = player.position.x - transform.position.x;
+
+        if (Mathf.Abs(dirToPlayer) < deadZone) return;
+
         if ((dirToPlayer > 0 && !facingRight) || (dirToPlayer < 0 && facingRight))
         {
             Turn();
         }
+    }
+
+    private void StopMovement()
+    {
+        rig.linearVelocity = Vector3.zero;
+    }
+
+    private void StopHorizontalMovement()
+    {
+        rig.linearVelocity = new Vector3(0f, rig.linearVelocity.y, 0f);
     }
 
     public void TakeDamage(int damage)
@@ -154,14 +192,38 @@ public class Yak : MonoBehaviour, IEnemy
         {
             currentHealth = 0;
             fsm.ChangeState(States.Death, StateTransition.Overwrite);
+            return;
         }
-        else
+
+        // don't stop attack if yak is ready state
+        if(fsm.State == States.Ready || fsm.State == States.Attack)
         {
-            if(fsm.State != States.Ready && fsm.State != States.Attack)
-            {
-                fsm.ChangeState(States.Hurt, StateTransition.Overwrite);
-            }
+            PlayHurtFeedback();
+            return;
         }
+
+        fsm.ChangeState(States.Hurt, StateTransition.Overwrite);
+    }
+
+    private void PlayHurtFeedback()
+    {
+        hurtParticle.Play();
+
+        if (flashCoroutine != null) StopCoroutine(flashCoroutine);
+        flashCoroutine = StartCoroutine(FlashRoutine());
+    }
+
+    private IEnumerator FlashRoutine()
+    {
+        SetHurtMaterial(true);
+        yield return new WaitForSeconds(hurtFlashTime);
+        SetHurtMaterial(false);
+        flashCoroutine = null;
+    }
+
+    private void SetHurtMaterial(bool isHurt)
+    {
+        spriteRenderer.sharedMaterial = isHurt ? hurtMaterial : originalMaterial;
     }
 
     #region State
@@ -169,8 +231,9 @@ public class Yak : MonoBehaviour, IEnemy
     IEnumerator Idle_Enter()
     {
         animator.Play(idleAni, 0);
-        rig.linearVelocity = new Vector3(0f, rig.linearVelocity.y, 0f);
-        yield return new WaitForSeconds(Random.Range(1.5f, 3f));
+        StopHorizontalMovement();
+
+        yield return new WaitForSeconds(UnityEngine.Random.Range(1.5f, 3f));
 
         fsm.ChangeState(States.Patrol);
     }
@@ -206,6 +269,11 @@ public class Yak : MonoBehaviour, IEnemy
         rig.linearVelocity = new Vector3((facingRight ? 1 : -1) * patrolSpeed, rig.linearVelocity.y, 0f);
     }
 
+    void Patrol_Exit()
+    {
+        StopHorizontalMovement();
+    }
+
     // Chase
     void Chase_Enter()
     {
@@ -229,11 +297,11 @@ public class Yak : MonoBehaviour, IEnemy
         }
 
         // chase logic
-        FacePlayer();
+        FacePlayer(faceDeadZone);
 
         if (IsPathBlockedOrEdge())
         {
-            rig.linearVelocity = new Vector3(0f, rig.linearVelocity.y, 0f);
+            StopHorizontalMovement();
         }
         else
         {
@@ -241,10 +309,15 @@ public class Yak : MonoBehaviour, IEnemy
         }
     }
 
+    void Chase_Exit()
+    {
+        StopHorizontalMovement();
+    }
+
     // Ready
     IEnumerator Ready_Enter()
     {
-        rig.linearVelocity = new Vector3(0f, rig.linearVelocity.y, 0f);
+        StopHorizontalMovement();
 
         // check face
         FacePlayer();
@@ -261,32 +334,31 @@ public class Yak : MonoBehaviour, IEnemy
     {
         attackStartTime = Time.time;
         animator.Play(attackAni, 0);
+
+        if (audioManager != null && atkSfx != null) audioManager.PlaySFX(atkSfx);
     }
 
     void Attack_Update()
     {
-        if (attackStartTime + attackDuration < Time.time)
+        if (attackStartTime + attackDuration <= Time.time || IsPathBlockedOrEdge())
         {
             fsm.ChangeState(States.Cooldown);
             return;
         }
-        else
+
+        if (IsPlayerAlive() && IsPlayerInHurtRange())
         {
-            if (IsPathBlockedOrEdge())
-            {
-                fsm.ChangeState(States.Cooldown);
-                return;
-            }
-
-            if (IsPlayerInHurtRange())
-            {
-                playerHealth.TakeDamage(1, transform.position);
-                fsm.ChangeState(States.Cooldown);
-                return;
-            }
-
-            rig.linearVelocity = new Vector3(attackDirectionX * attackSpeed, rig.linearVelocity.y, 0f);
+            playerHealth.TakeDamage(1, transform.position);
+            fsm.ChangeState(States.Cooldown);
+            return;
         }
+
+        rig.linearVelocity = new Vector3(attackDirectionX * attackSpeed, rig.linearVelocity.y, 0f);
+    }
+
+    void Attack_Exit()
+    {
+        StopHorizontalMovement();
     }
 
     // Cooldown
@@ -294,7 +366,7 @@ public class Yak : MonoBehaviour, IEnemy
     {
         // stop ani
         animator.Play(attackEndAni, 0);
-        rig.linearVelocity = new Vector3(0f, rig.linearVelocity.y, 0f);
+        StopHorizontalMovement();
         yield return new WaitForSeconds(0.2f);
 
         // wait ani
@@ -307,24 +379,56 @@ public class Yak : MonoBehaviour, IEnemy
     // Hurt
     IEnumerator Hurt_Enter()
     {
+        StopHorizontalMovement();
         FacePlayer();
+
         animator.Play(damagedAni, 0);
+        PlayHurtFeedback();
 
-        rig.linearVelocity = Vector3.zero;
-        Vector3 knockbackDir = new Vector3((facingRight ? -1 : 1), 0.3f, 0f).normalized;
-        rig.AddForce(knockbackDir * 5f, ForceMode.Impulse);
+        yield return new WaitForSeconds(hurtStunTime);
 
-        yield return new WaitForSeconds(0.2f); // stun time
+        if (IsPlayerInSight()) fsm.ChangeState(States.Chase);
+        else fsm.ChangeState(States.Idle);
+    }
 
-        fsm.ChangeState(States.Chase);
+    void Hurt_Exit()
+    {
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
+        SetHurtMaterial(false);
     }
 
     // Death
     void Death_Enter()
     {
-        rig.linearVelocity = Vector3.zero;
-        GetComponent<Collider>().enabled = false;
-        Destroy(gameObject, 2f);
+        OnDied?.Invoke(this);
+
+        StopAllCoroutines();
+        StopMovement();
+        rig.isKinematic = true;
+
+        foreach (Collider col in GetComponentsInChildren<Collider>())
+        {
+            col.enabled = false;
+        }
+        
+        deadParticle.transform.SetParent(null, true);
+        deadParticle.Play(true);
+
+        var main = deadParticle.main;
+        float lifeTime = main.duration + main.startLifetime.constantMax;
+        Destroy(deadParticle.gameObject, lifeTime);
+
+        foreach (Renderer r in GetComponentsInChildren<Renderer>(true))
+        {
+            r.enabled = false;
+        }
+
+        afterDead?.Invoke();
+        Destroy(gameObject);
     }
     #endregion
 

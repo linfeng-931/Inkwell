@@ -14,7 +14,7 @@ public class Silverfish : MonoBehaviour, IEnemy
     [SerializeField] private bool forceDead = false;
     #endif
 
-    [Header("Attribute Setting")]
+    [Header("Attribute")]
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4f;
     public int maxHealth = 3;

@@ -10,6 +10,10 @@ public class Bee : MonoBehaviour, IEnemy
     public enum States { Idle, Chase, Attack, Hurt, Death }
     private StateMachine<States> fsm;
 
+    [Header("Attribute")]
+    public int maxHealth = 3;
+    private int currentHealth;
+    
     [Header("Move Setting")]
     public float dartSpeed = 10f;
     public float chaseSpeed = 3.5f;
@@ -26,10 +30,6 @@ public class Bee : MonoBehaviour, IEnemy
     [Header("Attack Setting")]
     public GameObject needlePrefab;
     public Transform attackStartPoint;
-
-    [Header("Attribute")]
-    public int maxHealth = 3;
-    private int currentHealth;
 
     private Rigidbody rig;
     private bool facingRight = false;
