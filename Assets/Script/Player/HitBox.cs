@@ -4,7 +4,7 @@ using UnityEngine;
 public class HitBox : MonoBehaviour
 {
     public Transform hitBoxCenter;
-    public Vector3 hitBoxSize = new Vector3(1.5f, 1.5f, 1f);
+    public Vector3 hitBoxSize = new Vector3(1.5f, 1.5f, 2f);
     public LayerMask enemyLayer;
     public LayerMask hookObjectLayer;
 
@@ -20,9 +20,10 @@ public class HitBox : MonoBehaviour
     private bool isHitBoxActive = false;
     private int currentDamage = 1;
     private Vector3 currentSize;
-    private Vector3 currentOffset;
 
-    void Update()
+    private readonly Collider[] hitBuffer = new Collider[32];
+
+    void FixedUpdate()
     {
         if (isHitBoxActive)
         {
@@ -32,23 +33,30 @@ public class HitBox : MonoBehaviour
 
     private void DetectHits()
     {
-        Collider[] hitColliders = Physics.OverlapBox(hitBoxCenter.position, hitBoxSize / 2f, hitBoxCenter.rotation, enemyLayer);
+        Vector3 center = hitBoxCenter.position;
+        Vector3 halfExtents = hitBoxSize / 2f;
+        Quaternion rotation = hitBoxCenter.rotation;
 
-        foreach (Collider col in hitColliders)
+        // enemy
+        int count = Physics.OverlapBoxNonAlloc(
+            center, halfExtents, hitBuffer, rotation, enemyLayer,
+            QueryTriggerInteraction.Collide);
+
+        for (int i = 0; i < count; i++)
         {
+            Collider col = hitBuffer[i];
+
             IEnemy enemy = col.GetComponent<IEnemy>();
-            if (enemy == null) enemy = col.GetComponentInParent<IEnemy>(); 
+            if (enemy == null) enemy = col.GetComponentInParent<IEnemy>();
 
-            if (enemy != null && !alreadyHitEnemies.Contains(enemy))
+            if (enemy != null && alreadyHitEnemies.Add(enemy))
             {
-                alreadyHitEnemies.Add(enemy);
-
                 CombatFeedbackManager.Instance.TriggerHitFeedback(0.08f, 1.5f);
                 enemy.TakeDamage(currentDamage);
 
                 if (hitVfxPrefab != null)
                 {
-                    Vector3 hitPoint = col.ClosestPoint(hitBoxCenter.position);
+                    Vector3 hitPoint = col.ClosestPoint(center);
                     SpawnHitEffect(hitPoint);
                 }
             }
@@ -76,13 +84,18 @@ public class HitBox : MonoBehaviour
 
     public void EnableHitBox(int damage)
     {
-        isHitBoxActive = true;
         currentDamage = damage;
         alreadyHitEnemies.Clear();
+        isHitBoxActive = true;
+
+        DetectHits();
     }
 
     public void DisableHitBox()
     {
+        if (!isHitBoxActive) return;
+
+        DetectHits();
         isHitBoxActive = false;
     }
 

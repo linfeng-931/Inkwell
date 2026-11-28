@@ -4,8 +4,8 @@ using UnityEngine;
 
 public enum PlayerLockType
 {
-    Movement, // ¤ô¥­²¾°Ê + ¸õÅD
-    Combat    // §ðÀ»¡B½Ä¨ë¡B¹_¯Á¡B®gÀ»
+    Movement, // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½D
+    Combat    // ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½Ä¨ï¿½Bï¿½_ï¿½ï¿½ï¿½Bï¿½gï¿½ï¿½
 }
 
 public static class PlayerLock
@@ -36,7 +36,7 @@ public static class PlayerLock
 
     public static void Unlock(object owner, PlayerLockType type = PlayerLockType.Movement)
     {
-        Debug.Log(owner);
+        // Debug.Log(owner);
         if (owner == null) return;
         if (owners[type].Remove(owner))
         {
